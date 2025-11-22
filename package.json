@@ -6,8 +6,7 @@
     "dev": "turbo run start:dev --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types",
-    "postinstall": "npm run build -w packages/shared"
+    "check-types": "turbo run check-types"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",

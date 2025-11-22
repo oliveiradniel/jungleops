@@ -269,7 +269,13 @@ cp .env.example .env
 npm install
 ```
 
-Esse comando instalará as dependências e em seguida executará o script `postinstall` que iniciará o build da pasta `shared`.
+- Em seguida gere o build da pasta `shared`:
+
+```bash
+cd packages/shared
+
+npm run build
+```
 
 5. Iniciar o ambiente:
 
