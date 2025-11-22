@@ -295,6 +295,9 @@ Isso sobe:
 - Tasks Service
 - Notifications Service
 
+- O front-end ficará disponível em `http://localhost:3000/auth`
+- A documentação do Swagger em `http://localhost:3001/docs`
+
 ---
 
 ## 📄 Variáveis de Ambiente (Docker Compose)
