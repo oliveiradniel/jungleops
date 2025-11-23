@@ -8,89 +8,101 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root';
-import { Route as PublicRouteImport } from './routes/_public';
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated';
-import { Route as SplatRouteImport } from './routes/$';
-import { Route as PublicRegisterRouteImport } from './routes/_public/register';
-import { Route as PublicLoginRouteImport } from './routes/_public/login';
-import { Route as AuthenticatedTasksRouteImport } from './routes/_authenticated/tasks';
-import { Route as AuthenticatedTasksAuditLogsRouteImport } from './routes/_authenticated/tasks_/audit-logs';
-import { Route as AuthenticatedTasksTaskIdRouteImport } from './routes/_authenticated/tasks_/$taskId';
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as PublicRouteImport } from './routes/_public'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as SplatRouteImport } from './routes/$'
+import { Route as PublicRegisterRouteImport } from './routes/_public/register'
+import { Route as PublicLoginRouteImport } from './routes/_public/login'
+import { Route as AuthenticatedTasksRouteImport } from './routes/_authenticated/tasks'
+import { Route as AuthenticatedTasksAuditLogsRouteImport } from './routes/_authenticated/tasks_/audit-logs'
+import { Route as AuthenticatedTasksTaskIdRouteImport } from './routes/_authenticated/tasks_/$taskId'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const SplatRoute = SplatRouteImport.update({
   id: '/$',
   path: '/$',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const PublicRegisterRoute = PublicRegisterRouteImport.update({
   id: '/register',
   path: '/register',
   getParentRoute: () => PublicRoute,
-} as any);
+} as any)
 const PublicLoginRoute = PublicLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => PublicRoute,
-} as any);
+} as any)
 const AuthenticatedTasksRoute = AuthenticatedTasksRouteImport.update({
   id: '/tasks',
   path: '/tasks',
   getParentRoute: () => AuthenticatedRoute,
-} as any);
+} as any)
 const AuthenticatedTasksAuditLogsRoute =
   AuthenticatedTasksAuditLogsRouteImport.update({
     id: '/tasks_/audit-logs',
     path: '/tasks/audit-logs',
     getParentRoute: () => AuthenticatedRoute,
-  } as any);
+  } as any)
 const AuthenticatedTasksTaskIdRoute =
   AuthenticatedTasksTaskIdRouteImport.update({
     id: '/tasks_/$taskId',
     path: '/tasks/$taskId',
     getParentRoute: () => AuthenticatedRoute,
-  } as any);
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/$': typeof SplatRoute;
-  '/tasks': typeof AuthenticatedTasksRoute;
-  '/login': typeof PublicLoginRoute;
-  '/register': typeof PublicRegisterRoute;
-  '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute;
-  '/tasks/audit-logs': typeof AuthenticatedTasksAuditLogsRoute;
+  '/$': typeof SplatRoute
+  '/tasks': typeof AuthenticatedTasksRoute
+  '/login': typeof PublicLoginRoute
+  '/register': typeof PublicRegisterRoute
+  '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
+  '/tasks/audit-logs': typeof AuthenticatedTasksAuditLogsRoute
 }
 export interface FileRoutesByTo {
-  '/$': typeof SplatRoute;
-  '/tasks': typeof AuthenticatedTasksRoute;
-  '/login': typeof PublicLoginRoute;
-  '/register': typeof PublicRegisterRoute;
-  '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute;
-  '/tasks/audit-logs': typeof AuthenticatedTasksAuditLogsRoute;
+  '/$': typeof SplatRoute
+  '/tasks': typeof AuthenticatedTasksRoute
+  '/login': typeof PublicLoginRoute
+  '/register': typeof PublicRegisterRoute
+  '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
+  '/tasks/audit-logs': typeof AuthenticatedTasksAuditLogsRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  '/$': typeof SplatRoute;
-  '/_authenticated': typeof AuthenticatedRouteWithChildren;
-  '/_public': typeof PublicRouteWithChildren;
-  '/_authenticated/tasks': typeof AuthenticatedTasksRoute;
-  '/_public/login': typeof PublicLoginRoute;
-  '/_public/register': typeof PublicRegisterRoute;
-  '/_authenticated/tasks_/$taskId': typeof AuthenticatedTasksTaskIdRoute;
-  '/_authenticated/tasks_/audit-logs': typeof AuthenticatedTasksAuditLogsRoute;
+  __root__: typeof rootRouteImport
+  '/$': typeof SplatRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_public': typeof PublicRouteWithChildren
+  '/_authenticated/tasks': typeof AuthenticatedTasksRoute
+  '/_public/login': typeof PublicLoginRoute
+  '/_public/register': typeof PublicRegisterRoute
+  '/_authenticated/tasks_/$taskId': typeof AuthenticatedTasksTaskIdRoute
+  '/_authenticated/tasks_/audit-logs': typeof AuthenticatedTasksAuditLogsRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/tasks' | '/auth' | '/tasks/$taskId';
-  fileRoutesByTo: FileRoutesByTo;
-  to: '/tasks' | '/auth' | '/tasks/$taskId';
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/$'
+    | '/tasks'
+    | '/login'
+    | '/register'
+    | '/tasks/$taskId'
+    | '/tasks/audit-logs'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/$'
+    | '/tasks'
+    | '/login'
+    | '/register'
+    | '/tasks/$taskId'
+    | '/tasks/audit-logs'
   id:
     | '__root__'
     | '/$'
@@ -100,110 +112,110 @@ export interface FileRouteTypes {
     | '/_public/login'
     | '/_public/register'
     | '/_authenticated/tasks_/$taskId'
-    | '/_authenticated/tasks_/audit-logs';
-  fileRoutesById: FileRoutesById;
+    | '/_authenticated/tasks_/audit-logs'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  SplatRoute: typeof SplatRoute;
-  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren;
-  PublicRoute: typeof PublicRouteWithChildren;
+  SplatRoute: typeof SplatRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  PublicRoute: typeof PublicRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/_public': {
-      id: '/_public';
-      path: '';
-      fullPath: '';
-      preLoaderRoute: typeof PublicRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/_public'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PublicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
-      id: '/_authenticated';
-      path: '';
-      fullPath: '';
-      preLoaderRoute: typeof AuthenticatedRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$': {
-      id: '/$';
-      path: '/$';
-      fullPath: '/$';
-      preLoaderRoute: typeof SplatRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_public/register': {
-      id: '/_public/register';
-      path: '/register';
-      fullPath: '/register';
-      preLoaderRoute: typeof PublicRegisterRouteImport;
-      parentRoute: typeof PublicRoute;
-    };
+      id: '/_public/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof PublicRegisterRouteImport
+      parentRoute: typeof PublicRoute
+    }
     '/_public/login': {
-      id: '/_public/login';
-      path: '/login';
-      fullPath: '/login';
-      preLoaderRoute: typeof PublicLoginRouteImport;
-      parentRoute: typeof PublicRoute;
-    };
+      id: '/_public/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicLoginRouteImport
+      parentRoute: typeof PublicRoute
+    }
     '/_authenticated/tasks': {
-      id: '/_authenticated/tasks';
-      path: '/tasks';
-      fullPath: '/tasks';
-      preLoaderRoute: typeof AuthenticatedTasksRouteImport;
-      parentRoute: typeof AuthenticatedRoute;
-    };
+      id: '/_authenticated/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof AuthenticatedTasksRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/tasks_/audit-logs': {
-      id: '/_authenticated/tasks_/audit-logs';
-      path: '/tasks/audit-logs';
-      fullPath: '/tasks/audit-logs';
-      preLoaderRoute: typeof AuthenticatedTasksAuditLogsRouteImport;
-      parentRoute: typeof AuthenticatedRoute;
-    };
+      id: '/_authenticated/tasks_/audit-logs'
+      path: '/tasks/audit-logs'
+      fullPath: '/tasks/audit-logs'
+      preLoaderRoute: typeof AuthenticatedTasksAuditLogsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/tasks_/$taskId': {
-      id: '/_authenticated/tasks_/$taskId';
-      path: '/tasks/$taskId';
-      fullPath: '/tasks/$taskId';
-      preLoaderRoute: typeof AuthenticatedTasksTaskIdRouteImport;
-      parentRoute: typeof AuthenticatedRoute;
-    };
+      id: '/_authenticated/tasks_/$taskId'
+      path: '/tasks/$taskId'
+      fullPath: '/tasks/$taskId'
+      preLoaderRoute: typeof AuthenticatedTasksTaskIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedTasksRoute: typeof AuthenticatedTasksRoute;
-  AuthenticatedTasksTaskIdRoute: typeof AuthenticatedTasksTaskIdRoute;
-  AuthenticatedTasksAuditLogsRoute: typeof AuthenticatedTasksAuditLogsRoute;
+  AuthenticatedTasksRoute: typeof AuthenticatedTasksRoute
+  AuthenticatedTasksTaskIdRoute: typeof AuthenticatedTasksTaskIdRoute
+  AuthenticatedTasksAuditLogsRoute: typeof AuthenticatedTasksAuditLogsRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedTasksRoute: AuthenticatedTasksRoute,
   AuthenticatedTasksTaskIdRoute: AuthenticatedTasksTaskIdRoute,
   AuthenticatedTasksAuditLogsRoute: AuthenticatedTasksAuditLogsRoute,
-};
+}
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
-);
+)
 
 interface PublicRouteChildren {
-  PublicLoginRoute: typeof PublicLoginRoute;
-  PublicRegisterRoute: typeof PublicRegisterRoute;
+  PublicLoginRoute: typeof PublicLoginRoute
+  PublicRegisterRoute: typeof PublicRegisterRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicLoginRoute: PublicLoginRoute,
   PublicRegisterRoute: PublicRegisterRoute,
-};
+}
 
 const PublicRouteWithChildren =
-  PublicRoute._addFileChildren(PublicRouteChildren);
+  PublicRoute._addFileChildren(PublicRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   SplatRoute: SplatRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   PublicRoute: PublicRouteWithChildren,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
