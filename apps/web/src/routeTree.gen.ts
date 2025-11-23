@@ -11,8 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as PublicAuthRouteImport } from './routes/_public/auth'
+import { Route as SplatRouteImport } from './routes/$'
+import { Route as PublicRegisterRouteImport } from './routes/_public/register'
+import { Route as PublicLoginRouteImport } from './routes/_public/login'
 import { Route as AuthenticatedTasksRouteImport } from './routes/_authenticated/tasks'
+import { Route as AuthenticatedTaskAuditLogsRouteImport } from './routes/_authenticated/task-audit-logs'
 import { Route as AuthenticatedTasksTaskIdRouteImport } from './routes/_authenticated/tasks_/$taskId'
 
 const PublicRoute = PublicRouteImport.update({
@@ -23,9 +26,19 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PublicAuthRoute = PublicAuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicRegisterRoute = PublicRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicLoginRoute = PublicLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => PublicRoute,
 } as any)
 const AuthenticatedTasksRoute = AuthenticatedTasksRouteImport.update({
@@ -33,6 +46,12 @@ const AuthenticatedTasksRoute = AuthenticatedTasksRouteImport.update({
   path: '/tasks',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedTaskAuditLogsRoute =
+  AuthenticatedTaskAuditLogsRouteImport.update({
+    id: '/task-audit-logs',
+    path: '/task-audit-logs',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedTasksTaskIdRoute =
   AuthenticatedTasksTaskIdRouteImport.update({
     id: '/tasks_/$taskId',
@@ -41,38 +60,63 @@ const AuthenticatedTasksTaskIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/$': typeof SplatRoute
+  '/task-audit-logs': typeof AuthenticatedTaskAuditLogsRoute
   '/tasks': typeof AuthenticatedTasksRoute
-  '/auth': typeof PublicAuthRoute
+  '/login': typeof PublicLoginRoute
+  '/register': typeof PublicRegisterRoute
   '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
 }
 export interface FileRoutesByTo {
+  '/$': typeof SplatRoute
+  '/task-audit-logs': typeof AuthenticatedTaskAuditLogsRoute
   '/tasks': typeof AuthenticatedTasksRoute
-  '/auth': typeof PublicAuthRoute
+  '/login': typeof PublicLoginRoute
+  '/register': typeof PublicRegisterRoute
   '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/$': typeof SplatRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
+  '/_authenticated/task-audit-logs': typeof AuthenticatedTaskAuditLogsRoute
   '/_authenticated/tasks': typeof AuthenticatedTasksRoute
-  '/_public/auth': typeof PublicAuthRoute
+  '/_public/login': typeof PublicLoginRoute
+  '/_public/register': typeof PublicRegisterRoute
   '/_authenticated/tasks_/$taskId': typeof AuthenticatedTasksTaskIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/tasks' | '/auth' | '/tasks/$taskId'
+  fullPaths:
+    | '/$'
+    | '/task-audit-logs'
+    | '/tasks'
+    | '/login'
+    | '/register'
+    | '/tasks/$taskId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/tasks' | '/auth' | '/tasks/$taskId'
+  to:
+    | '/$'
+    | '/task-audit-logs'
+    | '/tasks'
+    | '/login'
+    | '/register'
+    | '/tasks/$taskId'
   id:
     | '__root__'
+    | '/$'
     | '/_authenticated'
     | '/_public'
+    | '/_authenticated/task-audit-logs'
     | '/_authenticated/tasks'
-    | '/_public/auth'
+    | '/_public/login'
+    | '/_public/register'
     | '/_authenticated/tasks_/$taskId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  SplatRoute: typeof SplatRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   PublicRoute: typeof PublicRouteWithChildren
 }
@@ -93,11 +137,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_public/auth': {
-      id: '/_public/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof PublicAuthRouteImport
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/register': {
+      id: '/_public/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof PublicRegisterRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/login': {
+      id: '/_public/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_authenticated/tasks': {
@@ -105,6 +163,13 @@ declare module '@tanstack/react-router' {
       path: '/tasks'
       fullPath: '/tasks'
       preLoaderRoute: typeof AuthenticatedTasksRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/task-audit-logs': {
+      id: '/_authenticated/task-audit-logs'
+      path: '/task-audit-logs'
+      fullPath: '/task-audit-logs'
+      preLoaderRoute: typeof AuthenticatedTaskAuditLogsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/tasks_/$taskId': {
@@ -118,11 +183,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedTaskAuditLogsRoute: typeof AuthenticatedTaskAuditLogsRoute
   AuthenticatedTasksRoute: typeof AuthenticatedTasksRoute
   AuthenticatedTasksTaskIdRoute: typeof AuthenticatedTasksTaskIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedTaskAuditLogsRoute: AuthenticatedTaskAuditLogsRoute,
   AuthenticatedTasksRoute: AuthenticatedTasksRoute,
   AuthenticatedTasksTaskIdRoute: AuthenticatedTasksTaskIdRoute,
 }
@@ -132,17 +199,20 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface PublicRouteChildren {
-  PublicAuthRoute: typeof PublicAuthRoute
+  PublicLoginRoute: typeof PublicLoginRoute
+  PublicRegisterRoute: typeof PublicRegisterRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
-  PublicAuthRoute: PublicAuthRoute,
+  PublicLoginRoute: PublicLoginRoute,
+  PublicRegisterRoute: PublicRegisterRoute,
 }
 
 const PublicRouteWithChildren =
   PublicRoute._addFileChildren(PublicRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  SplatRoute: SplatRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   PublicRoute: PublicRouteWithChildren,
 }
