@@ -14,6 +14,7 @@ import {
 import { TaskCreateAuditLogTable } from './tables/create';
 import { TaskUpdateAuditLogTable } from './tables/update';
 import { TaskDeleteAuditLogTable } from './tables/delete';
+import { Skeleton } from '@/view/components/ui/skeleton';
 
 type FilterType = 'CREATE' | 'UPDATE' | 'DELETE';
 
@@ -74,7 +75,7 @@ export function TaskAuditLogs() {
         <PopoverTrigger asChild>
           <Button
             aria-label="Abrir filtros"
-            disabled={false}
+            disabled={isTaskAuditLogsLoading}
             variant="outline"
             className="max-w-60"
           >
@@ -96,16 +97,21 @@ export function TaskAuditLogs() {
         </PopoverContent>
       </Popover>
 
-      {filterActionSelected === 'CREATE' && (
+      <div className="flex flex-col gap-2">
+        {isTaskAuditLogsLoading &&
+          Array.from({ length: 12 }).map(() => <Skeleton className="h-10" />)}
+      </div>
+
+      {!isTaskAuditLogsLoading && filterActionSelected === 'CREATE' && (
         <TaskCreateAuditLogTable
           taskAuditLogs={filteredTaskAuditLogs}
           deletedTaskIds={deletedTaskIds}
         />
       )}
-      {filterActionSelected === 'UPDATE' && (
+      {!isTaskAuditLogsLoading && filterActionSelected === 'UPDATE' && (
         <TaskUpdateAuditLogTable taskAuditLogs={filteredTaskAuditLogs} />
       )}
-      {filterActionSelected === 'DELETE' && (
+      {!isTaskAuditLogsLoading && filterActionSelected === 'DELETE' && (
         <TaskDeleteAuditLogTable taskAuditLogs={filteredTaskAuditLogs} />
       )}
     </div>
