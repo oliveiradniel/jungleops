@@ -10,21 +10,7 @@ import { AuthService } from './auth.service';
 import { getConfig } from 'src/shared/config/config.helper';
 
 @Module({
-  imports: [
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
-        const getConfigService = getConfig(configService);
-
-        return {
-          secret: getConfigService.JWT_ACCESS_SECRET,
-          signOptions: { expiresIn: '15m' },
-        };
-      },
-    }),
-    UsersModule,
-  ],
+  imports: [JwtModule.register({}), UsersModule],
   controllers: [AuthController],
   providers: [AuthService],
 })

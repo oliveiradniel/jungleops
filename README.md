@@ -3,6 +3,19 @@
 Projeto desenvolvido como teste técnico para vaga de Full-stack Developer Júnior na Jungle Gaming.
 Monorepo com arquitetura de microserviços NestJS, com autenticação, CRUD de tarefas, comentários e notificações em tempo real utilizando React.js, RabbitMQ, WebSockets, PostgreSQL e Docker Compose.
 
+> 📌 Observação: Este repositório possui uma branch dedicada a melhorias pós-entrega técnica. Para visualizar as funcionalidades mais recentes, recomendo mudar para:
+
+```bash
+improvements/post-delivery
+```
+
+Nesta branch estou implementando:
+
+- Rota de fallback para lidar com paths inexistentes (404 Not Found)
+- Página de auditoria (Audit Log) listando criações, alterações e exclusões de tarefas
+- Página “Minhas tarefas”, exibindo apenas as tarefas que o usuário participa
+- Correção e estabilização do fluxo de refresh token, incluindo ajustes nos cookies
+
 # ⚙️ Arquitetura do Sistema
 
 Este projeto implementa uma arquitetura baseada em microserviços, com comunicação híbrida entre HTTP, RabbitMQ e WebSockets. O objetivo é oferecer autenticação, gerenciamento de tarefas/comentários e notificações em tempo real.

@@ -90,7 +90,7 @@ export class AuthController {
     response.cookie(REFRESH_TOKEN_COOKIE_KEY, data.refreshToken, {
       httpOnly: true,
       secure: false,
-      sameSite: 'none',
+      sameSite: 'lax',
       path: '/',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     });
@@ -124,7 +124,7 @@ export class AuthController {
     response.cookie(REFRESH_TOKEN_COOKIE_KEY, data.refreshToken, {
       httpOnly: true,
       secure: false,
-      sameSite: 'none',
+      sameSite: 'lax',
       path: '/',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     });
@@ -172,7 +172,7 @@ export class AuthController {
     response.cookie(REFRESH_TOKEN_COOKIE_KEY, '', {
       httpOnly: true,
       secure: false,
-      sameSite: 'none',
+      sameSite: 'lax',
       maxAge: 0,
       expires: new Date(0),
     });

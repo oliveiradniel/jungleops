@@ -14,14 +14,20 @@ export class AuthService implements IAuthService {
   }
 
   login(body: LoginData, config?: HttpRequestConfig): Promise<SessionPayload> {
-    return this.httpClient.post<SessionPayload>('/auth/login', body, config);
+    return this.httpClient.post<SessionPayload>('/auth/login', body, {
+      ...config,
+      withCredentials: true,
+    });
   }
 
   register(
     body: RegisterData,
     config?: HttpRequestConfig,
   ): Promise<SessionPayload> {
-    return this.httpClient.post<SessionPayload>('/auth/register', body, config);
+    return this.httpClient.post<SessionPayload>('/auth/register', body, {
+      ...config,
+      withCredentials: true,
+    });
   }
 
   refresh(config?: HttpRequestConfig): Promise<SessionPayload> {
@@ -43,6 +49,9 @@ export class AuthService implements IAuthService {
   }
 
   async logout(config?: HttpRequestConfig): Promise<void> {
-    await this.httpClient.post<void>('/auth/logout', config);
+    await this.httpClient.post<void>('/auth/logout', {
+      ...config,
+      withCredentials: true,
+    });
   }
 }
