@@ -24,7 +24,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(@Body() signInData: SignInData): Promise<AuthPayload> {
+  signIn(@Body() signInData: SignInData): Promise<AuthPayload> {
     const { email, password } = signInData;
 
     return this.authService.signIn({ email, password });
