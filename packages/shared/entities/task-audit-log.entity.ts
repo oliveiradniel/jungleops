@@ -19,7 +19,7 @@ export interface TaskAuditLog {
   userId: string;
   taskTitle: string;
   fieldName: FieldName | null;
-  action: AuditAction;
+  action: 'CREATE' | 'UPDATE' | 'DELETE';
   oldValue: string | null;
   newValue: string | null;
   changedAt: Date;
