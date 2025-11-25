@@ -17,6 +17,9 @@ import { Route as PublicLoginRouteImport } from './routes/_public/login'
 import { Route as AuthenticatedTasksRouteImport } from './routes/_authenticated/tasks'
 import { Route as AuthenticatedTasksAuditLogsRouteImport } from './routes/_authenticated/tasks_/audit-logs'
 import { Route as AuthenticatedTasksTaskIdRouteImport } from './routes/_authenticated/tasks_/$taskId'
+import { Route as AuthenticatedTasksAuditLogsUpdateRouteImport } from './routes/_authenticated/tasks_/audit-logs/update'
+import { Route as AuthenticatedTasksAuditLogsDeletionRouteImport } from './routes/_authenticated/tasks_/audit-logs/deletion'
+import { Route as AuthenticatedTasksAuditLogsCreationRouteImport } from './routes/_authenticated/tasks_/audit-logs/creation'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -58,6 +61,24 @@ const AuthenticatedTasksTaskIdRoute =
     path: '/tasks/$taskId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedTasksAuditLogsUpdateRoute =
+  AuthenticatedTasksAuditLogsUpdateRouteImport.update({
+    id: '/update',
+    path: '/update',
+    getParentRoute: () => AuthenticatedTasksAuditLogsRoute,
+  } as any)
+const AuthenticatedTasksAuditLogsDeletionRoute =
+  AuthenticatedTasksAuditLogsDeletionRouteImport.update({
+    id: '/deletion',
+    path: '/deletion',
+    getParentRoute: () => AuthenticatedTasksAuditLogsRoute,
+  } as any)
+const AuthenticatedTasksAuditLogsCreationRoute =
+  AuthenticatedTasksAuditLogsCreationRouteImport.update({
+    id: '/creation',
+    path: '/creation',
+    getParentRoute: () => AuthenticatedTasksAuditLogsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
@@ -65,7 +86,10 @@ export interface FileRoutesByFullPath {
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
   '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
-  '/tasks/audit-logs': typeof AuthenticatedTasksAuditLogsRoute
+  '/tasks/audit-logs': typeof AuthenticatedTasksAuditLogsRouteWithChildren
+  '/tasks/audit-logs/creation': typeof AuthenticatedTasksAuditLogsCreationRoute
+  '/tasks/audit-logs/deletion': typeof AuthenticatedTasksAuditLogsDeletionRoute
+  '/tasks/audit-logs/update': typeof AuthenticatedTasksAuditLogsUpdateRoute
 }
 export interface FileRoutesByTo {
   '/$': typeof SplatRoute
@@ -73,7 +97,10 @@ export interface FileRoutesByTo {
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
   '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
-  '/tasks/audit-logs': typeof AuthenticatedTasksAuditLogsRoute
+  '/tasks/audit-logs': typeof AuthenticatedTasksAuditLogsRouteWithChildren
+  '/tasks/audit-logs/creation': typeof AuthenticatedTasksAuditLogsCreationRoute
+  '/tasks/audit-logs/deletion': typeof AuthenticatedTasksAuditLogsDeletionRoute
+  '/tasks/audit-logs/update': typeof AuthenticatedTasksAuditLogsUpdateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -84,7 +111,10 @@ export interface FileRoutesById {
   '/_public/login': typeof PublicLoginRoute
   '/_public/register': typeof PublicRegisterRoute
   '/_authenticated/tasks_/$taskId': typeof AuthenticatedTasksTaskIdRoute
-  '/_authenticated/tasks_/audit-logs': typeof AuthenticatedTasksAuditLogsRoute
+  '/_authenticated/tasks_/audit-logs': typeof AuthenticatedTasksAuditLogsRouteWithChildren
+  '/_authenticated/tasks_/audit-logs/creation': typeof AuthenticatedTasksAuditLogsCreationRoute
+  '/_authenticated/tasks_/audit-logs/deletion': typeof AuthenticatedTasksAuditLogsDeletionRoute
+  '/_authenticated/tasks_/audit-logs/update': typeof AuthenticatedTasksAuditLogsUpdateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -95,6 +125,9 @@ export interface FileRouteTypes {
     | '/register'
     | '/tasks/$taskId'
     | '/tasks/audit-logs'
+    | '/tasks/audit-logs/creation'
+    | '/tasks/audit-logs/deletion'
+    | '/tasks/audit-logs/update'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/$'
@@ -103,6 +136,9 @@ export interface FileRouteTypes {
     | '/register'
     | '/tasks/$taskId'
     | '/tasks/audit-logs'
+    | '/tasks/audit-logs/creation'
+    | '/tasks/audit-logs/deletion'
+    | '/tasks/audit-logs/update'
   id:
     | '__root__'
     | '/$'
@@ -113,6 +149,9 @@ export interface FileRouteTypes {
     | '/_public/register'
     | '/_authenticated/tasks_/$taskId'
     | '/_authenticated/tasks_/audit-logs'
+    | '/_authenticated/tasks_/audit-logs/creation'
+    | '/_authenticated/tasks_/audit-logs/deletion'
+    | '/_authenticated/tasks_/audit-logs/update'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -179,19 +218,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTasksTaskIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/tasks_/audit-logs/update': {
+      id: '/_authenticated/tasks_/audit-logs/update'
+      path: '/update'
+      fullPath: '/tasks/audit-logs/update'
+      preLoaderRoute: typeof AuthenticatedTasksAuditLogsUpdateRouteImport
+      parentRoute: typeof AuthenticatedTasksAuditLogsRoute
+    }
+    '/_authenticated/tasks_/audit-logs/deletion': {
+      id: '/_authenticated/tasks_/audit-logs/deletion'
+      path: '/deletion'
+      fullPath: '/tasks/audit-logs/deletion'
+      preLoaderRoute: typeof AuthenticatedTasksAuditLogsDeletionRouteImport
+      parentRoute: typeof AuthenticatedTasksAuditLogsRoute
+    }
+    '/_authenticated/tasks_/audit-logs/creation': {
+      id: '/_authenticated/tasks_/audit-logs/creation'
+      path: '/creation'
+      fullPath: '/tasks/audit-logs/creation'
+      preLoaderRoute: typeof AuthenticatedTasksAuditLogsCreationRouteImport
+      parentRoute: typeof AuthenticatedTasksAuditLogsRoute
+    }
   }
 }
+
+interface AuthenticatedTasksAuditLogsRouteChildren {
+  AuthenticatedTasksAuditLogsCreationRoute: typeof AuthenticatedTasksAuditLogsCreationRoute
+  AuthenticatedTasksAuditLogsDeletionRoute: typeof AuthenticatedTasksAuditLogsDeletionRoute
+  AuthenticatedTasksAuditLogsUpdateRoute: typeof AuthenticatedTasksAuditLogsUpdateRoute
+}
+
+const AuthenticatedTasksAuditLogsRouteChildren: AuthenticatedTasksAuditLogsRouteChildren =
+  {
+    AuthenticatedTasksAuditLogsCreationRoute:
+      AuthenticatedTasksAuditLogsCreationRoute,
+    AuthenticatedTasksAuditLogsDeletionRoute:
+      AuthenticatedTasksAuditLogsDeletionRoute,
+    AuthenticatedTasksAuditLogsUpdateRoute:
+      AuthenticatedTasksAuditLogsUpdateRoute,
+  }
+
+const AuthenticatedTasksAuditLogsRouteWithChildren =
+  AuthenticatedTasksAuditLogsRoute._addFileChildren(
+    AuthenticatedTasksAuditLogsRouteChildren,
+  )
 
 interface AuthenticatedRouteChildren {
   AuthenticatedTasksRoute: typeof AuthenticatedTasksRoute
   AuthenticatedTasksTaskIdRoute: typeof AuthenticatedTasksTaskIdRoute
-  AuthenticatedTasksAuditLogsRoute: typeof AuthenticatedTasksAuditLogsRoute
+  AuthenticatedTasksAuditLogsRoute: typeof AuthenticatedTasksAuditLogsRouteWithChildren
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedTasksRoute: AuthenticatedTasksRoute,
   AuthenticatedTasksTaskIdRoute: AuthenticatedTasksTaskIdRoute,
-  AuthenticatedTasksAuditLogsRoute: AuthenticatedTasksAuditLogsRoute,
+  AuthenticatedTasksAuditLogsRoute:
+    AuthenticatedTasksAuditLogsRouteWithChildren,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
