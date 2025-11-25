@@ -71,6 +71,9 @@ export function useUpdateTaskSheetController(
         queryClient.invalidateQueries({
           queryKey: ['users-tasks', { taskId: taskData?.id }],
         });
+        queryClient.invalidateQueries({
+          queryKey: ['task-update-audit-logs', { taskId: taskData?.id }],
+        });
 
         toast({
           type: 'success',

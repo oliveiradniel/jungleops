@@ -54,6 +54,9 @@ export function useDeleteTaskDialog({
       queryClient.invalidateQueries({
         queryKey: ['tasks', { page }],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['task-deletion-audit-logs'],
+      });
 
       toast({
         type: 'successful-delete',

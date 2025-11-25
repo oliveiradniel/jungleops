@@ -42,8 +42,12 @@ export function useNewTaskSheetController() {
       await createTask(data);
 
       reset();
+
       queryClient.invalidateQueries({
         queryKey: ['tasks', { page }],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['task-creation-audit-logs'],
       });
 
       toast({
