@@ -125,6 +125,9 @@ export class TasksService {
 
     await this.tasksRepository.update(id, { ...parsedTask, userIds });
 
+    const oldDate = new Date(task.term).toISOString().split('T')[0];
+    const newDate = new Date(parsedTask.term).toISOString().split('T')[0];
+
     const changedFields: ChangedField[] = [
       {
         fieldName: FieldName.TITLE,
@@ -140,9 +143,9 @@ export class TasksService {
       },
       {
         fieldName: FieldName.TERM,
-        dirty: term !== task.term,
-        newValue: term,
-        oldValue: task.term,
+        dirty: newDate !== oldDate,
+        newValue: newDate,
+        oldValue: oldDate,
       },
       {
         fieldName: FieldName.PRIORITY,
