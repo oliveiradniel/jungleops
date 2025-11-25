@@ -9,6 +9,7 @@ export interface ListCreationTaskAuditLog {
 
 export interface ListDeletionTaskAuditLog {
   id: string;
+  taskId: string;
   userId: string;
   taskTitle: string;
   oldValue: string;

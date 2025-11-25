@@ -1,4 +1,3 @@
-import { Link } from '@tanstack/react-router';
 import { useListTaskDeletionAuditLogQuery } from '@/app/hooks/queries/use-list-task-deletion-audit-log-query';
 
 import { formatDateToBR } from '@/app/utils/format-date-br';
@@ -117,12 +116,6 @@ export function TaskDeletionAuditLogTable() {
                                 {statusLabels[taskData?.status as TaskStatus]}
                               </span>
                             </div>
-
-                            <Button className="mt-4">
-                              <Link to={`/tasks/${taskData.id}`}>
-                                Ver informações
-                              </Link>
-                            </Button>
                           </div>
                         </PopoverContent>
                       </Popover>

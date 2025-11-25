@@ -1,5 +1,7 @@
 import { Link } from '@tanstack/react-router';
+
 import { useListTaskCreationAuditLogQuery } from '@/app/hooks/queries/use-list-task-creation-audit-log-query';
+import { useListTaskDeletionAuditLogQuery } from '@/app/hooks/queries/use-list-task-deletion-audit-log-query';
 
 import { formatDateToBR } from '@/app/utils/format-date-br';
 import { truncateString } from '@/app/utils/truncate-string';
@@ -30,6 +32,10 @@ import type { Task } from '@challenge/shared';
 export function TaskCreationAuditLogTable() {
   const { taskCreationAuditLogsList, isTaskCreationAuditLogsLoading } =
     useListTaskCreationAuditLogQuery();
+  const { taskDeletionAuditLogsList, isTaskDeletionAuditLogsLoading } =
+    useListTaskDeletionAuditLogQuery();
+
+  const deletedTaskIds = taskDeletionAuditLogsList.map((log) => log.taskId);
 
   return (
     <>
@@ -45,14 +51,11 @@ export function TaskCreationAuditLogTable() {
         </TableHeader>
 
         {!isTaskCreationAuditLogsLoading && (
-          <TableBody className="bg-red-300">
+          <TableBody>
             {taskCreationAuditLogsList.map(
               ({ taskId, taskTitle, newValue, changedAt }) => {
                 const taskData = JSON.parse(newValue!) as Task;
 
-                const deletedTaskIds = taskCreationAuditLogsList.map(
-                  (log) => log.taskId,
-                );
                 const thisTaskDeleted = deletedTaskIds.includes(taskId);
 
                 return (
@@ -61,7 +64,12 @@ export function TaskCreationAuditLogTable() {
                     <TableCell>
                       <Popover>
                         <PopoverTrigger asChild>
-                          <Button variant="outline">Veja os valores</Button>
+                          <Button
+                            variant="outline"
+                            disabled={isTaskDeletionAuditLogsLoading}
+                          >
+                            Veja os valores
+                          </Button>
                         </PopoverTrigger>
 
                         <PopoverContent>

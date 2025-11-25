@@ -41,6 +41,7 @@ export class TaskAuditLogMapper {
   ): ListDeletionTaskAuditLog {
     return {
       id: entity.id,
+      taskId: entity.taskId,
       userId: entity.userId,
       taskTitle: entity.taskTitle,
       oldValue: entity.oldValue!,
