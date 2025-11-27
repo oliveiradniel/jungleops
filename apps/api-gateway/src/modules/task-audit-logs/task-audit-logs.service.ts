@@ -9,9 +9,13 @@ import { getConfig } from 'src/shared/config/config.helper';
 
 import {
   ListCreationTaskAuditLog,
+  ListCreationTaskAuditLogWithAuthorData,
   ListDeletionTaskAuditLog,
+  ListDeletionTaskAuditLogWithAuthorData,
   ListUpdateTaskAuditLog,
+  ListUpdateTaskAuditLogWithAuthorData,
   TaskAuditLog,
+  UserWithoutPassword,
 } from '@challenge/shared';
 
 @Injectable()
@@ -34,17 +38,24 @@ export class TaskAuditLogsService {
     return data;
   }
 
-  async listTaskCreationAuditLog(): Promise<ListCreationTaskAuditLog[]> {
+  async listTaskCreationAuditLog(): Promise<
+    ListCreationTaskAuditLogWithAuthorData[]
+  > {
     const { data } = await firstValueFrom(
       this.httpService.get<ListCreationTaskAuditLog[]>(
         `${this.baseURL}/creation`,
       ),
     );
 
-    return data;
+    const dataWithAuthorData =
+      await this.addAuthorData<ListCreationTaskAuditLogWithAuthorData>(data);
+
+    return dataWithAuthorData;
   }
 
-  async listTaskUpdateAuditLog(): Promise<ListUpdateTaskAuditLog[]> {
+  async listTaskUpdateAuditLog(): Promise<
+    ListUpdateTaskAuditLogWithAuthorData[]
+  > {
     const { data } = await firstValueFrom(
       this.httpService.get<ListUpdateTaskAuditLog[]>(`${this.baseURL}/update`),
     );
@@ -81,7 +92,25 @@ export class TaskAuditLogsService {
       }),
     );
 
-    return enriched;
+    const enrichedWithAuthorData =
+      this.addAuthorData<ListUpdateTaskAuditLogWithAuthorData>(enriched);
+
+    return enrichedWithAuthorData;
+  }
+
+  async listTaskDeletionAuditLog(): Promise<
+    ListDeletionTaskAuditLogWithAuthorData[]
+  > {
+    const { data } = await firstValueFrom(
+      this.httpService.get<ListDeletionTaskAuditLog[]>(
+        `${this.baseURL}/deletion`,
+      ),
+    );
+
+    const datadWithAuthorData =
+      this.addAuthorData<ListDeletionTaskAuditLogWithAuthorData>(data);
+
+    return datadWithAuthorData;
   }
 
   private safeParseIds(value: string | null | undefined): string[] {
@@ -95,13 +124,28 @@ export class TaskAuditLogsService {
     }
   }
 
-  async listTaskDeletionAuditLog(): Promise<ListDeletionTaskAuditLog[]> {
-    const { data } = await firstValueFrom(
-      this.httpService.get<ListDeletionTaskAuditLog[]>(
-        `${this.baseURL}/deletion`,
-      ),
-    );
+  private async addAuthorData<T>(
+    data:
+      | ListCreationTaskAuditLog[]
+      | ListUpdateTaskAuditLog[]
+      | ListDeletionTaskAuditLog[],
+  ): Promise<T[]> {
+    const authorIds = data.map((log) => log.authorId);
+    const authorsData = await this.usersService.findUsers(authorIds);
 
-    return data;
+    const dataWithAuthorData = data.map((log) => {
+      const authorId = log.authorId;
+
+      const authorData = authorsData.find(
+        (author) => author.id === authorId,
+      ) as UserWithoutPassword;
+
+      return {
+        ...log,
+        authorData,
+      };
+    });
+
+    return dataWithAuthorData;
   }
 }

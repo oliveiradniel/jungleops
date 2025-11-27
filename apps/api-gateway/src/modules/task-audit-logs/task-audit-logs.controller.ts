@@ -3,9 +3,9 @@ import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { TaskAuditLogsService } from './task-audit-logs.service';
 
 import {
-  ListCreationTaskAuditLog,
-  ListDeletionTaskAuditLog,
-  ListUpdateTaskAuditLog,
+  ListCreationTaskAuditLogWithAuthorData,
+  ListDeletionTaskAuditLogWithAuthorData,
+  ListUpdateTaskAuditLogWithAuthorData,
   TaskAuditLog,
 } from '@challenge/shared';
 
@@ -21,19 +21,23 @@ export class TaskAuditLogsController {
 
   @HttpCode(HttpStatus.OK)
   @Get('creation')
-  listTaskCreationAuditLog(): Promise<ListCreationTaskAuditLog[]> {
+  listTaskCreationAuditLog(): Promise<
+    ListCreationTaskAuditLogWithAuthorData[]
+  > {
     return this.taskAuditLogsService.listTaskCreationAuditLog();
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('update')
-  listTaskUpdateAuditLog(): Promise<ListUpdateTaskAuditLog[]> {
+  listTaskUpdateAuditLog(): Promise<ListUpdateTaskAuditLogWithAuthorData[]> {
     return this.taskAuditLogsService.listTaskUpdateAuditLog();
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('deletion')
-  listTaskDeletionAuditLog(): Promise<ListDeletionTaskAuditLog[]> {
+  listTaskDeletionAuditLog(): Promise<
+    ListDeletionTaskAuditLogWithAuthorData[]
+  > {
     return this.taskAuditLogsService.listTaskDeletionAuditLog();
   }
 }
