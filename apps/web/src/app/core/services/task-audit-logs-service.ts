@@ -2,9 +2,9 @@ import type { ITaskAuditLogsService } from '../contracts/itasks-audit-logs-servi
 import type { HttpRequestConfig, IHttpClient } from '../contracts/ihttp-client';
 
 import type {
-  ListCreationTaskAuditLog,
-  ListDeletionTaskAuditLog,
-  ListUpdateTaskAuditLog,
+  ListCreationTaskAuditLogWithAuthorData,
+  ListDeletionTaskAuditLogWithAuthorData,
+  ListUpdateTaskAuditLogWithAuthorData,
   TaskAuditLog,
 } from '@challenge/shared';
 
@@ -21,19 +21,19 @@ export class TaskAuditLogsService implements ITaskAuditLogsService {
 
   listTaskCreationAuditLog(
     config?: HttpRequestConfig,
-  ): Promise<ListCreationTaskAuditLog[]> {
+  ): Promise<ListCreationTaskAuditLogWithAuthorData[]> {
     return this.httpClient.get('/task-audit-logs/creation', config);
   }
 
   listTaskUpdateAuditLog(
     config?: HttpRequestConfig,
-  ): Promise<ListUpdateTaskAuditLog[]> {
+  ): Promise<ListUpdateTaskAuditLogWithAuthorData[]> {
     return this.httpClient.get('/task-audit-logs/update', config);
   }
 
   listTaskDeletionAuditLog(
     config?: HttpRequestConfig,
-  ): Promise<ListDeletionTaskAuditLog[]> {
+  ): Promise<ListDeletionTaskAuditLogWithAuthorData[]> {
     return this.httpClient.get('/task-audit-logs/deletion', config);
   }
 }
