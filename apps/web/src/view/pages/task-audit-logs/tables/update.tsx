@@ -26,6 +26,7 @@ import {
   PopoverTrigger,
 } from '@/view/components/ui/popover';
 import { Button } from '@/view/components/ui/button';
+import { truncateString } from '@/app/utils/truncate-string';
 
 export function TaskUpdateAuditLogTable() {
   const { taskUpdateAuditLogsList, isTaskUpdateAuditLogsLoading } =
@@ -81,7 +82,7 @@ export function TaskUpdateAuditLogTable() {
                     </span>
                   </TableCell>
 
-                  <TableCell className="font-semibold">{taskTitle}</TableCell>
+                  <TableCell>{truncateString(taskTitle, 40)}</TableCell>
 
                   <TableCell>{fieldLabels[fieldName as FieldName]}</TableCell>
 

@@ -63,7 +63,7 @@ export function TaskDeletionAuditLogTable() {
                       </span>
                     </TableCell>
 
-                    <TableCell>{taskTitle}</TableCell>
+                    <TableCell>{truncateString(taskTitle, 40)}</TableCell>
 
                     <TableCell>
                       <Popover>
