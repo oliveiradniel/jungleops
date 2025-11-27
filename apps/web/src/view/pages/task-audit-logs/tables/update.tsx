@@ -5,6 +5,7 @@ import {
   formatDateToBRWithHour,
 } from '@/app/utils/format-date-br';
 import { fieldLabels, priorityLabels, statusLabels } from '@/config/labels';
+import { cn } from '@/lib/utils';
 
 import { Skeleton } from '@/view/components/ui/skeleton';
 import {
@@ -43,117 +44,183 @@ export function TaskUpdateAuditLogTable() {
 
             <TableHead>Valor atual</TableHead>
 
-            <TableHead>Data de atualização</TableHead>
+            <TableHead>Data e horário da atualização</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
           {taskUpdateAuditLogsList.map(
-            ({ taskTitle, fieldName, oldValue, newValue, changedAt }) => (
-              <TableRow>
-                <TableCell>{taskTitle}</TableCell>
-                <TableCell>{fieldLabels[fieldName as FieldName]}</TableCell>
-                <TableCell>
-                  {fieldName === 'priority' ? (
-                    priorityLabels[oldValue as TaskPriority]
-                  ) : fieldName === 'status' ? (
-                    statusLabels[oldValue as TaskStatus]
-                  ) : fieldName === 'userIds' && Array.isArray(oldValue) ? (
-                    oldValue.length > 0 ? (
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            disabled={isTaskUpdateAuditLogsLoading}
-                          >
-                            Veja os participantes
-                          </Button>
-                        </PopoverTrigger>
+            ({ taskTitle, fieldName, oldValue, newValue, changedAt }) => {
+              const isFieldNamePriority = fieldName === 'priority';
+              const isFieldNameStatus = fieldName === 'status';
+              const isFieldNameUserIds = fieldName === 'userIds';
 
-                        <PopoverContent>
-                          <div className="flex flex-col gap-4">
-                            {oldValue.map((user) => (
-                              <div key={user.id} className="flex flex-col">
-                                <div className="flex justify-between">
-                                  <span className="text-sm">
-                                    {user.username}
-                                  </span>
-                                  <span className="text-sm">{user.email}</span>
-                                </div>
+              const parsedPriorityOldValue =
+                priorityLabels[oldValue as TaskPriority];
+              const parsedPriorityNewValue =
+                priorityLabels[newValue as TaskPriority];
 
-                                <div className="flex items-center justify-between">
-                                  <span className="text-muted-foreground text-sm">
-                                    Usuário desde
-                                  </span>
-                                  <span className="text-muted-foreground text-sm">
-                                    {formatDateToBR(user.createdAt)}
-                                  </span>
+              const parsedStatusOldValue = statusLabels[oldValue as TaskStatus];
+              const parsedStatusNewValue = statusLabels[newValue as TaskStatus];
+
+              return (
+                <TableRow className="m-6 p-6">
+                  <TableCell className="font-semibold">{taskTitle}</TableCell>
+                  <TableCell>{fieldLabels[fieldName as FieldName]}</TableCell>
+                  <TableCell>
+                    {isFieldNamePriority ? (
+                      <Button
+                        disabled
+                        className={cn(
+                          'rounded-md px-3 py-2 text-sm font-medium text-white opacity-100!',
+                          oldValue === 'LOW' && 'bg-green-400',
+                          oldValue === 'MEDIUM' && 'bg-blue-400',
+                          oldValue === 'HIGH' && 'bg-yellow-400',
+                          oldValue === 'URGENT' && 'bg-red-400',
+                        )}
+                      >
+                        {parsedPriorityOldValue}
+                      </Button>
+                    ) : isFieldNameStatus ? (
+                      <Button
+                        disabled
+                        className={cn(
+                          'rounded-md px-3 py-2 text-sm font-medium text-white opacity-100!',
+                          oldValue === 'TODO' && 'bg-yellow-400',
+                          oldValue === 'IN_PROGRESS' && 'bg-blue-400',
+                          oldValue === 'REVIEW' && 'bg-purple-400',
+                          oldValue === 'DONE' && 'bg-green-400',
+                        )}
+                      >
+                        {parsedStatusOldValue}
+                      </Button>
+                    ) : isFieldNameUserIds && Array.isArray(oldValue) ? (
+                      oldValue.length > 0 ? (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              disabled={isTaskUpdateAuditLogsLoading}
+                            >
+                              Veja os participantes
+                            </Button>
+                          </PopoverTrigger>
+
+                          <PopoverContent>
+                            <div className="flex flex-col gap-4">
+                              {oldValue.map((user) => (
+                                <div key={user.id} className="flex flex-col">
+                                  <div className="flex justify-between">
+                                    <span className="text-sm">
+                                      {user.username}
+                                    </span>
+                                    <span className="text-sm">
+                                      {user.email}
+                                    </span>
+                                  </div>
+
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-muted-foreground text-sm">
+                                      Usuário desde
+                                    </span>
+                                    <span className="text-muted-foreground text-sm">
+                                      {formatDateToBR(user.createdAt)}
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
-                          </div>
-                        </PopoverContent>
-                      </Popover>
+                              ))}
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      ) : (
+                        <span className="text-destructive font-medium">
+                          Sem participantes
+                        </span>
+                      )
                     ) : (
-                      'Vazio'
-                    )
-                  ) : (
-                    oldValue
-                  )}
-                </TableCell>
+                      oldValue
+                    )}
+                  </TableCell>
 
-                <TableCell>
-                  {fieldName === 'priority' ? (
-                    priorityLabels[newValue as TaskPriority]
-                  ) : fieldName === 'status' ? (
-                    statusLabels[newValue as TaskStatus]
-                  ) : fieldName === 'userIds' && Array.isArray(newValue) ? (
-                    newValue.length > 0 ? (
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            disabled={isTaskUpdateAuditLogsLoading}
-                          >
-                            Veja os participantes
-                          </Button>
-                        </PopoverTrigger>
+                  <TableCell>
+                    {isFieldNamePriority ? (
+                      <Button
+                        disabled
+                        className={cn(
+                          'rounded-md px-3 py-2 text-sm font-medium text-white opacity-100!',
+                          newValue === 'LOW' && 'bg-green-400',
+                          newValue === 'MEDIUM' && 'bg-blue-400',
+                          newValue === 'HIGH' && 'bg-yellow-400',
+                          newValue === 'URGENT' && 'bg-red-400',
+                        )}
+                      >
+                        {parsedPriorityNewValue}
+                      </Button>
+                    ) : isFieldNameStatus ? (
+                      <Button
+                        disabled
+                        className={cn(
+                          'rounded-md px-3 py-2 text-sm font-medium text-white opacity-100!',
+                          newValue === 'TODO' && 'bg-yellow-400',
+                          newValue === 'IN_PROGRESS' && 'bg-blue-400',
+                          newValue === 'REVIEW' && 'bg-purple-400',
+                          newValue === 'DONE' && 'bg-green-400',
+                        )}
+                      >
+                        {parsedStatusNewValue}
+                      </Button>
+                    ) : isFieldNameUserIds && Array.isArray(newValue) ? (
+                      newValue.length > 0 ? (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              disabled={isTaskUpdateAuditLogsLoading}
+                            >
+                              Veja os participantes
+                            </Button>
+                          </PopoverTrigger>
 
-                        <PopoverContent>
-                          <div className="flex flex-col gap-4">
-                            {newValue.map((user) => (
-                              <div key={user.id} className="flex flex-col">
-                                <div className="flex justify-between">
-                                  <span className="text-sm">
-                                    {user.username}
-                                  </span>
-                                  <span className="text-sm">{user.email}</span>
+                          <PopoverContent>
+                            <div className="flex flex-col gap-4">
+                              {newValue.map((user) => (
+                                <div key={user.id} className="flex flex-col">
+                                  <div className="flex justify-between">
+                                    <span className="text-sm">
+                                      {user.username}
+                                    </span>
+                                    <span className="text-sm">
+                                      {user.email}
+                                    </span>
+                                  </div>
+
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-muted-foreground text-sm">
+                                      Usuário desde
+                                    </span>
+                                    <span className="text-muted-foreground text-sm">
+                                      {formatDateToBR(user.createdAt)}
+                                    </span>
+                                  </div>
                                 </div>
-
-                                <div className="flex items-center justify-between">
-                                  <span className="text-muted-foreground text-sm">
-                                    Usuário desde
-                                  </span>
-                                  <span className="text-muted-foreground text-sm">
-                                    {formatDateToBR(user.createdAt)}
-                                  </span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </PopoverContent>
-                      </Popover>
+                              ))}
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      ) : (
+                        <span className="text-destructive font-medium">
+                          Sem participantes
+                        </span>
+                      )
                     ) : (
-                      'Vazio'
-                    )
-                  ) : (
-                    newValue
-                  )}
-                </TableCell>
+                      newValue
+                    )}
+                  </TableCell>
 
-                <TableCell>{formatDateToBRWithHour(changedAt)}</TableCell>
-              </TableRow>
-            ),
+                  <TableCell>{formatDateToBRWithHour(changedAt)}</TableCell>
+                </TableRow>
+              );
+            },
           )}
         </TableBody>
       </Table>

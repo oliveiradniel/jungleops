@@ -49,7 +49,7 @@ export function TaskCreationAuditLogTable() {
 
             <TableHead>Valores na criação</TableHead>
 
-            <TableHead>Data de criação</TableHead>
+            <TableHead>Data e horário da criação</TableHead>
           </TableRow>
         </TableHeader>
 

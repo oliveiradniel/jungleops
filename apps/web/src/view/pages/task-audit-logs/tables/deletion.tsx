@@ -40,7 +40,7 @@ export function TaskDeletionAuditLogTable() {
           <TableRow>
             <TableHead>Título</TableHead>
 
-            <TableHead>Valor na exclusão</TableHead>
+            <TableHead>Valores na exclusão</TableHead>
 
             <TableHead>Data e horário da exclusão</TableHead>
           </TableRow>
