@@ -48,57 +48,48 @@ export class TaskAuditLogsRepository implements ITaskAuditLogsRepository {
   }
 
   async listTaskUpdateAuditLog(): Promise<ListUpdateTaskAuditLog[]> {
-    const list = await this.taskAuditLogsRepository.find({
-      where: {
-        action: 'UPDATE' as AuditAction,
-      },
-      select: {
-        id: true,
-        taskId: true,
-        userId: true,
-        fieldName: true,
-        taskTitle: true,
-        oldValue: true,
-        newValue: true,
-        changedAt: true,
-      },
-    });
+    const list = await this.taskAuditLogsRepository
+      .createQueryBuilder('log')
+      .where('log.action = :action', { action: 'UPDATE' })
+      .orderBy('ABS(EXTRACT(EPOCH FROM (NOW() - log.changedAt)))', 'ASC')
+      .getMany();
 
     return TaskAuditLogMapper.toDomainUpdateList(list);
   }
 
   async listTaskDeletionAuditLog(): Promise<ListDeletionTaskAuditLog[]> {
-    const list = await this.taskAuditLogsRepository.find({
-      where: {
-        action: 'DELETE' as AuditAction,
-      },
-      select: {
-        id: true,
-        taskId: true,
-        userId: true,
-        taskTitle: true,
-        oldValue: true,
-        changedAt: true,
-      },
-    });
+    const list = await this.taskAuditLogsRepository
+      .createQueryBuilder('log')
+      .where('log.action = :action', { action: 'DELETE' })
+      .select([
+        'log.id',
+        'log.taskId',
+        'log.userId',
+        'log.taskTitle',
+        'log.oldValue',
+        'log.newValue',
+        'log.changedAt',
+      ])
+      .orderBy('ABS(EXTRACT(EPOCH FROM (NOW() - log.changedAt)))', 'ASC')
+      .getMany();
 
     return TaskAuditLogMapper.toDomainDeletionList(list);
   }
 
   async listTaskCreationAuditLog(): Promise<ListCreationTaskAuditLog[]> {
-    const list = await this.taskAuditLogsRepository.find({
-      where: {
-        action: 'CREATE' as AuditAction,
-      },
-      select: {
-        id: true,
-        taskId: true,
-        userId: true,
-        taskTitle: true,
-        newValue: true,
-        changedAt: true,
-      },
-    });
+    const list = await this.taskAuditLogsRepository
+      .createQueryBuilder('log')
+      .where('log.action = :action', { action: 'CREATE' })
+      .select([
+        'log.id',
+        'log.taskId',
+        'log.userId',
+        'log.taskTitle',
+        'log.newValue',
+        'log.changedAt',
+      ])
+      .orderBy('ABS(EXTRACT(EPOCH FROM (NOW() - log.changedAt)))', 'ASC')
+      .getMany();
 
     return TaskAuditLogMapper.toDomainCreationList(list);
   }
