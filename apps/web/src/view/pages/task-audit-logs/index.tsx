@@ -1,7 +1,8 @@
+import { useEffect } from 'react';
 import { useRouter } from '@tanstack/react-router';
 import { Outlet, useLocation } from '@tanstack/react-router';
 
-import { Filter } from 'lucide-react';
+import { FilePen, Filter, PlusSquare, Trash2 } from 'lucide-react';
 
 import { Button } from '@/view/components/ui/button';
 
@@ -10,7 +11,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/view/components/ui/popover';
-import { useEffect } from 'react';
 
 export function TaskAuditLogs() {
   const { navigate } = useRouter();
@@ -19,18 +19,21 @@ export function TaskAuditLogs() {
   const optionsTaskAuditLogFilterAction = [
     {
       id: crypto.randomUUID(),
-      label: 'Crição',
+      label: 'Criação',
       pathname: '/tasks/audit-logs/creation',
+      icon: PlusSquare,
     },
     {
       id: crypto.randomUUID(),
       label: 'Atualização',
       pathname: '/tasks/audit-logs/update',
+      icon: FilePen,
     },
     {
       id: crypto.randomUUID(),
       label: 'Exclusão',
       pathname: '/tasks/audit-logs/deletion',
+      icon: Trash2,
     },
   ];
 
@@ -67,17 +70,21 @@ export function TaskAuditLogs() {
 
         <PopoverContent className="w-60">
           <div className="flex flex-col gap-1">
-            {optionsTaskAuditLogFilterAction.map((option) => (
-              <Button
-                key={option.id}
-                variant={
-                  location.pathname === option.pathname ? 'default' : 'ghost'
-                }
-                onClick={() => navigate({ to: option.pathname })}
-              >
-                {option.label}
-              </Button>
-            ))}
+            {optionsTaskAuditLogFilterAction.map((option) => {
+              const isActive = location.pathname === option.pathname;
+
+              return (
+                <Button
+                  key={option.id}
+                  variant={isActive ? 'default' : 'ghost'}
+                  onClick={() => navigate({ to: option.pathname })}
+                  className="text-muted-foreground justify-start"
+                >
+                  {option.icon && <option.icon />}
+                  {option.label}
+                </Button>
+              );
+            })}
           </div>
         </PopoverContent>
       </Popover>
