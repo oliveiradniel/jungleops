@@ -36,6 +36,8 @@ export function TaskUpdateAuditLogTable() {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead>Autor</TableHead>
+
             <TableHead>Título</TableHead>
 
             <TableHead>Campo</TableHead>
@@ -50,7 +52,14 @@ export function TaskUpdateAuditLogTable() {
 
         <TableBody>
           {taskUpdateAuditLogsList.map(
-            ({ taskTitle, fieldName, oldValue, newValue, changedAt }) => {
+            ({
+              taskTitle,
+              authorData,
+              fieldName,
+              oldValue,
+              newValue,
+              changedAt,
+            }) => {
               const isFieldNamePriority = fieldName === 'priority';
               const isFieldNameStatus = fieldName === 'status';
               const isFieldNameUserIds = fieldName === 'userIds';
@@ -65,8 +74,17 @@ export function TaskUpdateAuditLogTable() {
 
               return (
                 <TableRow className="m-6 p-6">
+                  <TableCell className="flex flex-col">
+                    <span>{authorData.username}</span>
+                    <span className="text-muted-foreground text-xs">
+                      {authorData.email}
+                    </span>
+                  </TableCell>
+
                   <TableCell className="font-semibold">{taskTitle}</TableCell>
+
                   <TableCell>{fieldLabels[fieldName as FieldName]}</TableCell>
+
                   <TableCell>
                     {isFieldNamePriority ? (
                       <Button

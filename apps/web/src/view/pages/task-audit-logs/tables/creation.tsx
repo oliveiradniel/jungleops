@@ -45,6 +45,8 @@ export function TaskCreationAuditLogTable() {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead>Autor</TableHead>
+
             <TableHead>Título</TableHead>
 
             <TableHead>Valores na criação</TableHead>
@@ -56,13 +58,20 @@ export function TaskCreationAuditLogTable() {
         {!isTaskCreationAuditLogsLoading && (
           <TableBody>
             {taskCreationAuditLogsList.map(
-              ({ taskId, taskTitle, newValue, changedAt }) => {
+              ({ taskId, taskTitle, authorData, newValue, changedAt }) => {
                 const taskData = JSON.parse(newValue!) as Task;
 
                 const thisTaskDeleted = deletedTaskIds.includes(taskId);
 
                 return (
                   <TableRow key={taskId}>
+                    <TableCell className="flex flex-col">
+                      <span>{authorData.username}</span>
+                      <span className="text-muted-foreground text-xs">
+                        {authorData.email}
+                      </span>
+                    </TableCell>
+
                     <TableCell>{taskTitle}</TableCell>
                     <TableCell>
                       <Popover>
@@ -76,77 +85,72 @@ export function TaskCreationAuditLogTable() {
                         </PopoverTrigger>
 
                         <PopoverContent>
-                          <div className="flex flex-col">
-                            <div className="flex items-center justify-between text-sm">
-                              <span>Título: </span>
-                              <span>{truncateString(taskData.title, 20)}</span>
-                            </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span>Título: </span>
+                            <span>{truncateString(taskData.title, 20)}</span>
+                          </div>
 
-                            <div className="flex items-center justify-between text-sm">
-                              <span>Descrição:</span>
-                              <span className="text-sm">
-                                {truncateString(taskData.description, 20)}
-                              </span>
-                            </div>
-
-                            <Separator className="my-2" />
-
+                          <div className="flex items-center justify-between text-sm">
+                            <span>Descrição:</span>
                             <span className="text-sm">
-                              Prazo para término:{' '}
-                              {formatDateToBR(taskData?.term!)}
+                              {truncateString(taskData.description, 20)}
+                            </span>
+                          </div>
+
+                          <Separator className="my-2" />
+
+                          <span className="text-sm">
+                            Prazo para término:{' '}
+                            {formatDateToBR(taskData?.term!)}
+                          </span>
+
+                          <div className="mt-2 flex items-center gap-2">
+                            <span
+                              className={cn(
+                                'rounded-md px-3 py-2 text-sm font-medium text-white',
+                                taskData?.priority === 'LOW' && 'bg-green-400',
+                                taskData?.priority === 'MEDIUM' &&
+                                  'bg-blue-400',
+                                taskData?.priority === 'HIGH' &&
+                                  'bg-yellow-400',
+                                taskData?.priority === 'URGENT' && 'bg-red-400',
+                              )}
+                            >
+                              {
+                                priorityLabels[
+                                  taskData.priority as TaskPriority
+                                ]
+                              }
                             </span>
 
-                            <div className="mt-2 flex items-center gap-2">
-                              <span
-                                className={cn(
-                                  'rounded-md px-3 py-2 text-sm font-medium text-white',
-                                  taskData?.priority === 'LOW' &&
-                                    'bg-green-400',
-                                  taskData?.priority === 'MEDIUM' &&
-                                    'bg-blue-400',
-                                  taskData?.priority === 'HIGH' &&
-                                    'bg-yellow-400',
-                                  taskData?.priority === 'URGENT' &&
-                                    'bg-red-400',
-                                )}
-                              >
-                                {
-                                  priorityLabels[
-                                    taskData.priority as TaskPriority
-                                  ]
-                                }
-                              </span>
-
-                              <span
-                                className={cn(
-                                  'rounded-md px-3 py-2 text-sm font-medium text-white',
-                                  taskData?.status === 'TODO' &&
-                                    'bg-yellow-400',
-                                  taskData?.status === 'IN_PROGRESS' &&
-                                    'bg-blue-400',
-                                  taskData?.status === 'REVIEW' &&
-                                    'bg-purple-400',
-                                  taskData?.status === 'DONE' && 'bg-green-400',
-                                )}
-                              >
-                                {statusLabels[taskData?.status as TaskStatus]}
-                              </span>
-                            </div>
-
-                            <Button
-                              variant={
-                                thisTaskDeleted ? 'destructive' : 'default'
-                              }
-                              disabled={thisTaskDeleted}
-                              className="mt-4"
+                            <span
+                              className={cn(
+                                'rounded-md px-3 py-2 text-sm font-medium text-white',
+                                taskData?.status === 'TODO' && 'bg-yellow-400',
+                                taskData?.status === 'IN_PROGRESS' &&
+                                  'bg-blue-400',
+                                taskData?.status === 'REVIEW' &&
+                                  'bg-purple-400',
+                                taskData?.status === 'DONE' && 'bg-green-400',
+                              )}
                             >
-                              <Link to={`/tasks/${taskId}`}>
-                                {thisTaskDeleted
-                                  ? 'Indisponível'
-                                  : 'Ver informações'}
-                              </Link>
-                            </Button>
+                              {statusLabels[taskData?.status as TaskStatus]}
+                            </span>
                           </div>
+
+                          <Button
+                            variant={
+                              thisTaskDeleted ? 'destructive' : 'default'
+                            }
+                            disabled={thisTaskDeleted}
+                            className="mt-4"
+                          >
+                            <Link to={`/tasks/${taskId}`}>
+                              {thisTaskDeleted
+                                ? 'Indisponível'
+                                : 'Ver informações'}
+                            </Link>
+                          </Button>
                         </PopoverContent>
                       </Popover>
                     </TableCell>
