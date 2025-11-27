@@ -44,7 +44,7 @@ export function TaskAuditLogs() {
   }, []);
 
   return (
-    <div className="flex h-full w-full flex-col gap-6 p-6">
+    <div className="flex h-[calc(100%-90px)] w-full flex-col gap-6 p-6">
       <h1 className="text-2xl">
         {location.pathname === '/tasks/audit-logs/creation' &&
           'Criações de tarefas'}
