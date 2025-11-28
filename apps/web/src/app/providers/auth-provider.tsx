@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 
 import { AxiosError } from 'axios';
 
@@ -18,6 +18,8 @@ import {
 } from '../utils/access-token';
 
 import { toast } from '../utils/toast';
+import { httpClient } from '../core/infra/http-client';
+import { makeAuthService } from '../factories/make-auth-service';
 
 import type { LoginData, RegisterData } from '@/types/auth-data';
 import type { UserWithoutPassword } from '@challenge/shared';
@@ -52,6 +54,81 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsAuthenticated(false);
     }
   }, [user]);
+
+  useLayoutEffect(() => {
+    const request = httpClient.interceptors.request.use((config) => {
+      const accessToken = getAccessToken();
+
+      if (accessToken) {
+        config.headers = config.headers ?? {};
+        config.headers.Authorization = `Bearer ${accessToken}`;
+      }
+
+      return config;
+    });
+
+    return () => {
+      httpClient.interceptors.request.eject(request);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const response = httpClient.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const originalRequest = error.config;
+
+        if (originalRequest?.url === '/auth/refresh') {
+          setActiveUser(null);
+          setIsAuthenticated(false);
+          removeAccessToken();
+
+          return Promise.reject(error);
+        }
+
+        if (error.response && error.response.status !== 401) {
+          return Promise.reject(error);
+        }
+
+        const accessTokenExists = getAccessToken();
+        if (!accessTokenExists) {
+          return Promise.reject(error);
+        }
+
+        if (originalRequest._retry) {
+          return Promise.reject(error);
+        }
+        originalRequest._retry = true;
+
+        const authService = makeAuthService();
+
+        try {
+          const { accessToken } = await authService.refresh();
+
+          setAccessToken(accessToken);
+
+          return httpClient(originalRequest);
+        } catch (refreshError) {
+          if (error.response && error.response.status === 401) {
+            toast({
+              type: 'error',
+              description: 'Sua sessão expirou, faça login novamente.',
+            });
+          }
+
+          setActiveUser(null);
+          setIsAuthenticated(false);
+          removeAccessToken();
+
+          return Promise.reject(refreshError);
+        }
+      },
+    );
+
+    return () => {
+      httpClient.interceptors.response.eject(response);
+    };
+  }, []);
 
   const handleLogin = useCallback(async (data: LoginData) => {
     try {
@@ -132,7 +209,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
     }
   }, []);
-
   if (isSessionLoading && !user) {
     return <AuthLoadingScreen />;
   }
