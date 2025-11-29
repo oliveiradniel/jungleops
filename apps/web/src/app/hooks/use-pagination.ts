@@ -1,12 +1,19 @@
 import { useRouter, useSearch } from '@tanstack/react-router';
 
+import type { FileRouteTypes } from '@/routeTree.gen';
+
+interface PaginationSearch {
+  page?: number;
+  size?: number;
+}
+
 interface UsePaginationProps {
-  from: string;
-  to: string;
+  from: FileRouteTypes['id'];
+  to: FileRouteTypes['to'];
 }
 
 export function usePagination({ from, to }: UsePaginationProps) {
-  const search = useSearch({ from });
+  const search = useSearch({ from }) as PaginationSearch;
   const router = useRouter();
 
   const page = Number(search.page) || 1;
