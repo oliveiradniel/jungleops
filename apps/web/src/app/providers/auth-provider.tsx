@@ -1,9 +1,9 @@
-import { useCallback, useLayoutEffect } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { AxiosError } from 'axios';
 
-import { AuthContext } from '@/app/contexts/auth-context';
+import { AuthContext, type LoadingType } from '@/app/contexts/auth-context';
 
 import { useLoginMutation } from '../hooks/mutations/use-login-mutation';
 import { useRegisterMutation } from '../hooks/mutations/use-register-mutation';
@@ -28,11 +28,20 @@ import type { LoginData, RegisterData } from '@/types/auth-data';
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
 
+  const { data: user, isPending: isSessionLoading } = useQuery(sessionQuery);
+
+  const [isNavigating, setIsNavigating] = useState(false);
+
   const { login: loginMutate, isLoginLoading } = useLoginMutation();
   const { register: registerMutate, isRegisterLoading } = useRegisterMutation();
   const { logout: logoutMutate, isLogoutLoading } = useLogoutMutation();
 
-  const { data: user, isPending } = useQuery(sessionQuery);
+  const isLoadingGlobal = isSessionLoading || isLogoutLoading || isNavigating;
+  const loadingType: LoadingType = isSessionLoading
+    ? 'is-session'
+    : isLogoutLoading
+      ? 'is-logout'
+      : 'is-login/is-register';
 
   useLayoutEffect(() => {
     const request = httpClient.interceptors.request.use((config) => {
@@ -116,6 +125,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         setAccessToken(accessToken);
 
+        setIsNavigating(true);
+
         await queryClient.invalidateQueries({ queryKey: ['session'] });
 
         router.invalidate();
@@ -136,6 +147,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           description:
             'Não foi possível fazer login! Tente novamente mais tarde.',
         });
+      } finally {
+        setIsNavigating(false);
       }
     },
     [loginMutate, queryClient],
@@ -147,6 +160,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { accessToken } = await registerMutate(data);
 
         setAccessToken(accessToken);
+
+        setIsNavigating(true);
 
         await queryClient.invalidateQueries({ queryKey: ['session'] });
 
@@ -180,6 +195,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           description:
             'Não foi possível se cadastrar! Tente novamente mais tarde.',
         });
+      } finally {
+        setIsNavigating(false);
       }
     },
     [registerMutate, queryClient],
@@ -191,6 +208,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       removeAccessToken();
 
+      setIsNavigating(true);
+
       await queryClient.invalidateQueries({ queryKey: ['session'] });
 
       router.invalidate();
@@ -200,6 +219,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         description:
           'Não foi possível fazer logout! Tente novamente mais tarde.',
       });
+    } finally {
+      setIsNavigating(false);
     }
   }, [logoutMutate, queryClient]);
 
@@ -215,7 +236,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLogoutLoading,
       }}
     >
-      {isPending ? <AuthLoadingScreen /> : children}
+      {isLoadingGlobal ? (
+        <AuthLoadingScreen loadingType={loadingType} />
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
   );
 }

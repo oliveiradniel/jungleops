@@ -14,4 +14,6 @@ export interface AuthContextValue {
   isLogoutLoading: boolean;
 }
 
+export type LoadingType = 'is-session' | 'is-login/is-register' | 'is-logout';
+
 export const AuthContext = createContext({} as AuthContextValue);
