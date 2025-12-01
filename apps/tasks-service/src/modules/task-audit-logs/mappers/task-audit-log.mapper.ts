@@ -31,7 +31,7 @@ export class TaskAuditLogMapper {
       taskId: entity.taskId,
       authorId: entity.userId,
       taskTitle: entity.taskTitle,
-      newValue: entity.newValue!,
+      values: entity.newValue!,
       changedAt: entity.changedAt,
     };
   }
@@ -44,7 +44,7 @@ export class TaskAuditLogMapper {
       taskId: entity.taskId,
       authorId: entity.userId,
       taskTitle: entity.taskTitle,
-      oldValue: entity.oldValue!,
+      values: entity.oldValue!,
       changedAt: entity.changedAt,
     };
   }
