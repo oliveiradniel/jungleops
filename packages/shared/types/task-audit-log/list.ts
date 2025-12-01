@@ -5,7 +5,7 @@ export interface ListCreationTaskAuditLog {
   taskId: string;
   authorId: string;
   taskTitle: string;
-  newValue: string;
+  values: string;
   changedAt: Date;
 }
 
@@ -16,7 +16,7 @@ export interface ListDeletionTaskAuditLog {
   taskId: string;
   authorId: string;
   taskTitle: string;
-  oldValue: string;
+  values: string;
   changedAt: Date;
 }
 

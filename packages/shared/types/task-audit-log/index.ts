@@ -1,5 +1,5 @@
-import { ListCreationTaskAuditLog, ListDeletionTaskAuditLog, ListUpdateTaskAuditLog } from './list'
+import { ListCreationTaskAuditLog, ListDeletionTaskAuditLog, ListUpdateTaskAuditLog, ListCreationTaskAuditLogWithAuthorData, ListDeletionTaskAuditLogWithAuthorData, ListUpdateTaskAuditLogWithAuthorData } from './list'
 
 export {
-   ListCreationTaskAuditLog, ListDeletionTaskAuditLog, ListUpdateTaskAuditLog
+   ListCreationTaskAuditLog, ListDeletionTaskAuditLog, ListUpdateTaskAuditLog, ListCreationTaskAuditLogWithAuthorData, ListDeletionTaskAuditLogWithAuthorData, ListUpdateTaskAuditLogWithAuthorData
 }
