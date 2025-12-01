@@ -95,6 +95,13 @@ export class TasksController {
     return this.tasksService.list({ page, size });
   }
 
+  @Get('list/user')
+  async listTasksByUserId(@Req() request: Request) {
+    const userId = request.user?.userId as string;
+
+    return this.tasksService.listTasksByUserId(userId);
+  }
+
   @ApiCreatedResponse({
     description: 'Task successfully created.',
     example: {
