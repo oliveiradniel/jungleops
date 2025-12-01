@@ -14,12 +14,13 @@ import {
 
 import { TasksService } from './tasks.service';
 
-import {
+import type {
   CreateTaskData,
   Pagination,
   UpdateTaskData,
   Task,
   ListTasksPagination,
+  TaskWithCommentCount,
 } from '@challenge/shared';
 
 @Controller('tasks')
@@ -38,6 +39,13 @@ export class TasksController {
     const { page, size } = queryParams;
 
     return this.tasksService.list({ page, size });
+  }
+
+  @Get('user/:userId')
+  listTasksByUserId(
+    @Param('userId') userId: string,
+  ): Promise<TaskWithCommentCount[]> {
+    return this.tasksService.listTasksByUserId(userId);
   }
 
   @HttpCode(HttpStatus.CREATED)
