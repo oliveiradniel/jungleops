@@ -12,7 +12,6 @@ import { TaskAuditLogsService } from '../task-audit-logs/task-audit-logs.service
 import { CreateTaskAuditLogData } from '../task-audit-logs/types/create-task-audit-log-data.type';
 
 import type { ITasksRepository } from 'src/database/contracts/tasks-repository.contract';
-import type { ITaskAuditLogsRepository } from 'src/database/contracts/task-audit-logs.contract';
 
 import {
   type CreateTaskData,
@@ -24,6 +23,7 @@ import {
   type ListTasksPagination,
   type ChangedField,
   type TaskAuditLog,
+  type TaskWithCommentCount,
   AuditAction,
   FieldName,
 } from '@challenge/shared';
@@ -52,6 +52,18 @@ export class TasksService {
     const { page, size } = pagination;
 
     return this.tasksRepository.list({ page, size });
+  }
+
+  async listTasksByUserId(userId: string): Promise<TaskWithCommentCount[]> {
+    const taskIds = await this.usersTasksService.listTaskIdsByUserId(userId);
+
+    const tasks = await Promise.all(
+      taskIds.map((taskId) =>
+        this.tasksRepository.getByIdWithCommentsCount(taskId),
+      ),
+    );
+
+    return tasks.flatMap((task) => (task ? [task] : []));
   }
 
   async create(data: CreateTaskData): Promise<Task> {
