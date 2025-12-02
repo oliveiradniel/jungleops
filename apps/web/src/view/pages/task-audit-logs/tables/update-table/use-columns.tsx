@@ -32,7 +32,7 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
 
   const deletedTaskIds = taskDeletionAuditLogsList.map((log) => log.taskId);
 
-  return useMemo(
+  return useMemo<ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[]>(
     () => [
       {
         accessorKey: 'authorData',
@@ -45,16 +45,25 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
             </span>
           </div>
         ),
+        meta: {
+          nameInFilters: 'Autor',
+        },
       },
       {
         accessorKey: 'taskTitle',
         header: 'Título',
         cell: ({ row }) => truncateString(row.original.taskTitle, 40),
+        meta: {
+          nameInFilters: 'Título',
+        },
       },
       {
         accessorKey: 'fieldName',
         header: 'Campo',
         cell: ({ row }) => fieldLabels[row.original.fieldName as FieldName],
+        meta: {
+          nameInFilters: 'Título',
+        },
       },
       {
         accessorKey: 'oldValue',
@@ -134,6 +143,9 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
           ) : (
             oldValue
           );
+        },
+        meta: {
+          nameInFilters: 'Valor antigo',
         },
       },
       {
@@ -215,11 +227,17 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
             newValue
           );
         },
+        meta: {
+          nameInFilters: 'Valor atual',
+        },
       },
       {
         accessorKey: 'changedAt',
         header: 'Data/horário da atualização',
         cell: ({ row }) => formatDateToBRWithHour(row.original.changedAt),
+        meta: {
+          nameInFilters: 'Data/horário',
+        },
       },
       {
         accessorKey: 'link',
@@ -249,6 +267,7 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
             </div>
           );
         },
+        enableHiding: false,
       },
     ],
     [],

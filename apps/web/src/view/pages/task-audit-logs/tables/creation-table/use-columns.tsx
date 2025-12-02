@@ -32,7 +32,7 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
 
   const deletedTaskIds = taskDeletionAuditLogsList.map((log) => log.taskId);
 
-  return useMemo(
+  return useMemo<ColumnDef<ListCreationTaskAuditLogWithAuthorData>[]>(
     () => [
       {
         accessorKey: 'authorData',
@@ -45,11 +45,17 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
             </span>
           </div>
         ),
+        meta: {
+          nameInFilters: 'Autor',
+        },
       },
       {
         accessorKey: 'taskTitle',
         header: 'Título',
         cell: ({ row }) => truncateString(row.original.taskTitle, 40),
+        meta: {
+          nameInFilters: 'Título',
+        },
       },
       {
         accessorKey: 'values',
@@ -124,14 +130,21 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
             </Popover>
           );
         },
+        meta: {
+          nameInFilters: 'Valores',
+        },
       },
       {
         accessorKey: 'changedAt',
         header: 'Data/horário da criação',
         cell: ({ row }) => formatDateToBRWithHour(row.original.changedAt),
+        meta: {
+          nameInFilters: 'Data/horário',
+        },
       },
       {
         accessorKey: 'link',
+        enableHiding: false,
         header: () => (
           <div className="flex justify-center">
             <LinkIcon aria-hidden="true" className="text-primary" />

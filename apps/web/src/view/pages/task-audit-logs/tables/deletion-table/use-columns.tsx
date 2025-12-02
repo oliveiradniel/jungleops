@@ -22,7 +22,7 @@ import type { TaskStatus } from '@/app/enums/TaskStatus';
 import type { ListDeletionTaskAuditLogWithAuthorData } from '@challenge/shared';
 
 export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[] {
-  return useMemo(
+  return useMemo<ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[]>(
     () => [
       {
         accessorKey: 'authorData',
@@ -35,11 +35,17 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
             </span>
           </div>
         ),
+        meta: {
+          nameInFilters: 'Autor',
+        },
       },
       {
         accessorKey: 'taskTitle',
         header: 'Título',
         cell: ({ row }) => truncateString(row.original.taskTitle, 40),
+        meta: {
+          nameInFilters: 'Título',
+        },
       },
       {
         accessorKey: 'values',
@@ -99,11 +105,17 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
             </Popover>
           );
         },
+        meta: {
+          nameInFilters: 'Valores',
+        },
       },
       {
         accessorKey: 'changedAt',
-        header: 'Data/horário da criação',
+        header: 'Data/horário da exclusão',
         cell: ({ row }) => formatDateToBRWithHour(row.original.changedAt),
+        meta: {
+          nameInFilters: 'Data/horário',
+        },
       },
     ],
     [],

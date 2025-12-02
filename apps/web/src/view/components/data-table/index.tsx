@@ -12,8 +12,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from './ui/table';
-import { Skeleton } from './ui/skeleton';
+} from '../ui/table';
+import { Skeleton } from '../ui/skeleton';
+
+import { DataTableColumnsVisibilityDropdown } from './data-table-columns-visibility-dropdown';
 
 interface DataTableProps<TData> {
   data: TData[];
@@ -35,7 +37,13 @@ export function DataTable<TData>({
   });
 
   return (
-    <>
+    <div>
+      {data.length > 0 && (
+        <div className="mb-8 flex justify-end">
+          <DataTableColumnsVisibilityDropdown table={table} />
+        </div>
+      )}
+
       {isLoading && (
         <Table>
           <TableHeader>
@@ -82,7 +90,7 @@ export function DataTable<TData>({
             {!isLoading &&
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
-                  {row.getAllCells().map((cell) => (
+                  {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -95,6 +103,6 @@ export function DataTable<TData>({
           </TableBody>
         </Table>
       )}
-    </>
+    </div>
   );
 }
