@@ -74,7 +74,9 @@ export function AuthPageTemplate({
                       disabled={isSubmitLoading}
                       className="p-0"
                     >
-                      <Link to={href}>{authLinkLabel}</Link>
+                      <Link to={href} search={{ redirect: '/tasks' }}>
+                        {authLinkLabel}
+                      </Link>
                     </Button>
                   </div>
                 </CardFooter>
