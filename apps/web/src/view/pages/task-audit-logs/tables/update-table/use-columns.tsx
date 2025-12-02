@@ -10,7 +10,7 @@ import {
   formatDateToBRWithHour,
 } from '@/app/utils/format-date-br';
 import { fieldLabels, priorityLabels, statusLabels } from '@/config/labels';
-import { LinkIcon } from 'lucide-react';
+import { EllipsisIcon, InfoIcon, XIcon } from 'lucide-react';
 
 import { Button } from '@/view/components/ui/button';
 import {
@@ -26,6 +26,11 @@ import type {
   FieldName,
   ListUpdateTaskAuditLogWithAuthorData,
 } from '@challenge/shared';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/view/components/ui/dropdown-menu';
 
 export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] {
   const { taskDeletionAuditLogsList } = useListTaskDeletionAuditLogQuery();
@@ -240,34 +245,55 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
         },
       },
       {
-        accessorKey: 'link',
-        header: () => (
-          <div className="flex justify-center">
-            <LinkIcon aria-hidden="true" className="text-primary" />
-          </div>
-        ),
+        id: 'Actions',
+        enableHiding: false,
         cell: ({ row }) => {
           const thisTaskDeleted = deletedTaskIds.includes(row.original.taskId);
 
           return (
-            <div className="flex justify-center">
-              <Button
-                asChild
-                variant="link"
-                disabled={thisTaskDeleted}
-                className={cn(thisTaskDeleted && 'text-destructive')}
-              >
-                <Link
-                  to="/tasks/$taskId"
-                  params={{ taskId: row.original.taskId }}
-                >
-                  {thisTaskDeleted ? 'Indisponível' : 'Ver tarefa'}
-                </Link>
-              </Button>
+            <div className="flex justify-end">
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button aria-label="Ver opções" variant="ghost" size="sm">
+                    <EllipsisIcon className="size-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent align="end">
+                  <div>
+                    <Button
+                      asChild
+                      variant="ghost"
+                      disabled={thisTaskDeleted}
+                      className={cn(
+                        'w-full font-normal',
+                        thisTaskDeleted && 'text-destructive! bg-transparent!',
+                      )}
+                    >
+                      <Link
+                        to="/tasks/$taskId"
+                        params={{ taskId: row.original.taskId }}
+                        className={cn(thisTaskDeleted && 'cursor-default')}
+                      >
+                        {thisTaskDeleted ? (
+                          <div className="flex items-center gap-2">
+                            <XIcon />
+                            Indisponível
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <InfoIcon className="size-4 text-blue-400" />
+                            Ver tarefa
+                          </div>
+                        )}
+                      </Link>
+                    </Button>
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           );
         },
-        enableHiding: false,
       },
     ],
     [],
