@@ -41,7 +41,7 @@ export function TaskAuditLogProvider({
       <>
         {children}
 
-        {/* <DeleteLogDialog selectedLogId={selectedLogId!} type={logType!} /> */}
+        <DeleteLogDialog selectedLogId={selectedLogId!} type={logType!} />
       </>
     </TaskAuditLogContext.Provider>
   );
