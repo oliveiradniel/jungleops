@@ -22,23 +22,12 @@ export class TaskAuditLogsRepository implements ITaskAuditLogsRepository {
     private readonly taskAuditLogsRepository: Repository<TaskAuditLogEntity>,
   ) {}
 
-  async create(data: CreateTaskAuditLogData): Promise<TaskAuditLog> {
-    const { action, taskId, userId, taskTitle, oldValue, newValue, fieldName } =
-      data;
+  async getById(id: string): Promise<TaskAuditLog | null> {
+    const taskAuditLog = await this.taskAuditLogsRepository.findOne({
+      where: { id },
+    });
 
-    const audit = this.taskAuditLogsRepository.create({
-      action,
-      taskId,
-      userId,
-      taskTitle,
-      oldValue: oldValue ?? null,
-      newValue: newValue ?? null,
-      fieldName: fieldName ?? null,
-    } as DeepPartial<TaskAuditLogEntity>);
-
-    return TaskAuditLogMapper.toDomain(
-      await this.taskAuditLogsRepository.save(audit),
-    );
+    return taskAuditLog ? TaskAuditLogMapper.toDomain(taskAuditLog) : null;
   }
 
   async list(): Promise<TaskAuditLog[]> {
@@ -94,19 +83,26 @@ export class TaskAuditLogsRepository implements ITaskAuditLogsRepository {
     return TaskAuditLogMapper.toDomainCreationList(list);
   }
 
-  // async list(filters: TaskAuditLogsFilters): Promise<TaskAuditLogEntity[]> {
-  //   const { task, userId, fieldName } = filters;
+  async create(data: CreateTaskAuditLogData): Promise<TaskAuditLog> {
+    const { action, taskId, userId, taskTitle, oldValue, newValue, fieldName } =
+      data;
 
-  //   const where: Partial<TaskAuditLogsFilters> = {};
+    const audit = this.taskAuditLogsRepository.create({
+      action,
+      taskId,
+      userId,
+      taskTitle,
+      oldValue: oldValue ?? null,
+      newValue: newValue ?? null,
+      fieldName: fieldName ?? null,
+    } as DeepPartial<TaskAuditLogEntity>);
 
-  //   if (task) where.task = { id: task.id };
-  //   if (userId) where.userId = userId;
-  //   if (fieldName) where.fieldName = fieldName;
+    return TaskAuditLogMapper.toDomain(
+      await this.taskAuditLogsRepository.save(audit),
+    );
+  }
 
-  //   const listTaskAuditLogs = await this.taskAuditLogsRepository.find({
-  //     where,
-  //   });
-
-  //   return listTaskAuditLogs;
-  // }
+  async delete(id: string): Promise<void> {
+    await this.taskAuditLogsRepository.delete(id);
+  }
 }
