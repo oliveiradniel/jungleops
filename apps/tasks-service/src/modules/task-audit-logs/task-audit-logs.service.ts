@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import type { ITaskAuditLogsRepository } from 'src/database/contracts/task-audit-logs.contract';
 
@@ -49,5 +49,18 @@ export class TaskAuditLogsService {
       newValue,
       fieldName,
     });
+  }
+
+  async delete(id: string) {
+    await this.verifyTaskAuditLogExists(id);
+
+    await this.taskAuditLogsRepository.delete(id);
+  }
+
+  private async verifyTaskAuditLogExists(id: string) {
+    const taskAuditLog = await this.taskAuditLogsRepository.getById(id);
+    if (!taskAuditLog) {
+      throw new NotFoundException('Task audit log not found.');
+    }
   }
 }
