@@ -1,5 +1,6 @@
 import {
   getCoreRowModel,
+  getFilteredRowModel,
   useReactTable,
   type ColumnDef,
 } from '@tanstack/react-table';
@@ -21,6 +22,7 @@ export function DataTable<TData>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
   return (
