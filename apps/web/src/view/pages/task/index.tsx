@@ -1,5 +1,6 @@
 import { useTaskController } from './use-task-controller';
 import { useTasks } from '@/app/hooks/use-tasks';
+import { router } from '@/router';
 
 import {
   ArrowLeft,
@@ -64,7 +65,6 @@ export function Task() {
     isCreateCommentLoading,
     handleOpenDeleteTaskDialog,
     register,
-    navigate,
     goToPage,
     handlePreviousTasksPage,
     handleNextTasksPage,
@@ -79,7 +79,7 @@ export function Task() {
         <header className="mt-20 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Button
-              onClick={() => navigate({ to: '/tasks' })}
+              onClick={() => router.history.back()}
               className="text-primary-foreground"
             >
               <ArrowLeft className="size-6" />

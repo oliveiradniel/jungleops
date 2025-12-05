@@ -132,7 +132,6 @@ export function useTaskController() {
     isDeleteTaskDialogOpen,
     handleOpenDeleteTaskDialog,
     register,
-    navigate,
     goToPage,
     handlePreviousTasksPage,
     handleNextTasksPage,
