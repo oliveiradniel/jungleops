@@ -6,6 +6,8 @@ import {
 
 import { Socket } from 'socket.io';
 
+import { TAuditAction } from '@challenge/shared';
+
 @WebSocketGateway({ cors: { origin: '*' } })
 export class TaskAuditLogGateway
   implements OnGatewayConnection, OnGatewayDisconnect
@@ -29,5 +31,11 @@ export class TaskAuditLogGateway
     if (userId) {
       this.clients.delete(userId);
     }
+  }
+
+  notifyDeletedTaskAuditLog({ action }: { action: TAuditAction }) {
+    this.clients.forEach((client) => {
+      client.emit('task-audit-log:deleted', { action });
+    });
   }
 }
