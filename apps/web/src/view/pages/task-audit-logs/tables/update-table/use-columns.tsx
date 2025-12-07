@@ -6,36 +6,25 @@ import { useTaskAuditLog } from '../../context/use-task-audit-log';
 
 import { cn } from '@/lib/utils';
 import { truncateString } from '@/app/utils/truncate-string';
-import {
-  formatDateToBR,
-  formatDateToBRWithHour,
-} from '@/app/utils/format-date-br';
+import { formatDateToBRWithHour } from '@/app/utils/format-date-br';
 import { fieldLabels } from '@/config/labels';
 
 import { EllipsisIcon, InfoIcon, Trash2Icon } from 'lucide-react';
 
 import { Button } from '@/view/components/ui/button';
 import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from '@/view/components/ui/popover';
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/view/components/ui/dropdown-menu';
 import { AuthorCell } from '../../author-cell';
+import { TaskUpdateValueCell } from '../../task-update-value-cell';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import type { TaskPriority } from '@/app/enums/TaskPriority';
-import type { TaskStatus } from '@/app/enums/TaskStatus';
 import type {
   FieldName,
   ListUpdateTaskAuditLogWithAuthorData,
 } from '@challenge/shared';
-import { PriorityBadge } from '@/view/components/ui/priority-badge';
-import { StatusBadge } from '@/view/components/ui/status-badge';
 
 export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] {
   const { taskDeletionAuditLogsList } = useListTaskDeletionAuditLogQuery();
@@ -75,55 +64,12 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
       {
         accessorKey: 'oldValue',
         header: 'Valor antigo',
-        cell: ({ row }) => {
-          const oldValue = row.original.oldValue;
-
-          const isFieldNamePriority = row.original.fieldName === 'priority';
-          const isFieldNameStatus = row.original.fieldName === 'status';
-          const isFieldNameUserIds = row.original.fieldName === 'userIds';
-
-          return isFieldNamePriority ? (
-            <PriorityBadge priority={oldValue as TaskPriority} />
-          ) : isFieldNameStatus ? (
-            <StatusBadge status={oldValue as TaskStatus} />
-          ) : isFieldNameUserIds && Array.isArray(oldValue) ? (
-            oldValue.length > 0 ? (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline">Veja os participantes</Button>
-                </PopoverTrigger>
-
-                <PopoverContent>
-                  <div className="flex flex-col gap-4">
-                    {oldValue.map((user) => (
-                      <div key={user.id} className="flex flex-col">
-                        <div className="flex justify-between">
-                          <span className="text-sm">{user.username}</span>
-                          <span className="text-sm">{user.email}</span>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground text-sm">
-                            Usuário desde
-                          </span>
-                          <span className="text-muted-foreground text-sm">
-                            {formatDateToBR(user.createdAt)}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </PopoverContent>
-              </Popover>
-            ) : (
-              <span className="text-destructive font-medium">
-                Sem participantes
-              </span>
-            )
-          ) : (
-            oldValue
-          );
-        },
+        cell: ({ row }) => (
+          <TaskUpdateValueCell
+            value={row.original.oldValue}
+            fieldName={row.original.fieldName}
+          />
+        ),
         meta: {
           nameInFilters: 'Valor antigo',
         },
@@ -131,55 +77,12 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
       {
         accessorKey: 'newValue',
         header: 'Valor atual',
-        cell: ({ row }) => {
-          const newValue = row.original.newValue;
-
-          const isFieldNamePriority = row.original.fieldName === 'priority';
-          const isFieldNameStatus = row.original.fieldName === 'status';
-          const isFieldNameUserIds = row.original.fieldName === 'userIds';
-
-          return isFieldNamePriority ? (
-            <PriorityBadge priority={newValue as TaskPriority} />
-          ) : isFieldNameStatus ? (
-            <StatusBadge status={newValue as TaskStatus} />
-          ) : isFieldNameUserIds && Array.isArray(newValue) ? (
-            newValue.length > 0 ? (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline">Veja os participantes</Button>
-                </PopoverTrigger>
-
-                <PopoverContent>
-                  <div className="flex flex-col gap-4">
-                    {newValue.map((user) => (
-                      <div key={user.id} className="flex flex-col">
-                        <div className="flex justify-between">
-                          <span className="text-sm">{user.username}</span>
-                          <span className="text-sm">{user.email}</span>
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground text-sm">
-                            Usuário desde
-                          </span>
-                          <span className="text-muted-foreground text-sm">
-                            {formatDateToBR(user.createdAt)}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </PopoverContent>
-              </Popover>
-            ) : (
-              <span className="text-destructive font-medium">
-                Sem participantes
-              </span>
-            )
-          ) : (
-            newValue
-          );
-        },
+        cell: ({ row }) => (
+          <TaskUpdateValueCell
+            value={row.original.newValue}
+            fieldName={row.original.fieldName}
+          />
+        ),
         meta: {
           nameInFilters: 'Valor atual',
         },
