@@ -153,7 +153,7 @@ export function useNotificationsSocket({
       });
     });
 
-    socket.on('task-audit-log:deleted', ({ action }: ActionPayload) => {
+    socket.on('task-audit-log:changed', ({ action }: ActionPayload) => {
       const actionLabels = {
         CREATE: 'creation',
         UPDATE: 'update',

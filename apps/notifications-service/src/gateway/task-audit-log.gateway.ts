@@ -33,9 +33,9 @@ export class TaskAuditLogGateway
     }
   }
 
-  notifyDeletedTaskAuditLog({ action }: ActionPayload) {
+  notifyChangedTaskAuditLog({ action }: ActionPayload) {
     this.clients.forEach((client) => {
-      client.emit('task-audit-log:deleted', { action });
+      client.emit('task-audit-log:changed', { action });
     });
   }
 }

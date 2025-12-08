@@ -9,9 +9,9 @@ import { ActionPayload } from '@challenge/shared';
 export class TaskAuditLogListenerController {
   constructor(private readonly taskAuditLogGateway: TaskAuditLogGateway) {}
 
-  @EventPattern('task-audit-log.deleted')
-  onTaskAuditLogDeleted({ action }: ActionPayload) {
-    this.taskAuditLogGateway.notifyDeletedTaskAuditLog({
+  @EventPattern('task-audit-log.changed')
+  onTaskAuditLogCreated({ action }: ActionPayload) {
+    this.taskAuditLogGateway.notifyChangedTaskAuditLog({
       action,
     });
   }

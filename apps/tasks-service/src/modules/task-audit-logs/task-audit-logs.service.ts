@@ -46,6 +46,10 @@ export class TaskAuditLogsService {
     const { action, taskId, userId, taskTitle, oldValue, newValue, fieldName } =
       data;
 
+    this.notificationsClient.emit('task-audit-log.changed', {
+      action,
+    });
+
     return this.taskAuditLogsRepository.create({
       action,
       taskId,
@@ -58,12 +62,12 @@ export class TaskAuditLogsService {
   }
 
   async delete(id: string) {
-    const auditLog = await this.verifyTaskAuditLogExists(id);
+    const { action } = await this.verifyTaskAuditLogExists(id);
 
     await this.taskAuditLogsRepository.delete(id);
 
-    this.notificationsClient.emit('task-audit-log.deleted', {
-      action: auditLog.action,
+    this.notificationsClient.emit('task-audit-log.changed', {
+      action,
     });
   }
 
