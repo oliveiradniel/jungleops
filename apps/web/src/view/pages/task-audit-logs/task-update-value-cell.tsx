@@ -8,6 +8,7 @@ import {
 } from '@/view/components/ui/popover';
 import { PriorityBadge } from '@/view/components/ui/priority-badge';
 import { StatusBadge } from '@/view/components/ui/status-badge';
+import { TextCellTooltip } from './text-cell-tooltip';
 
 import type { TaskPriority } from '@/app/enums/TaskPriority';
 import type { TaskStatus } from '@/app/enums/TaskStatus';
@@ -70,7 +71,7 @@ export function TaskUpdateValueCell({
   }
 
   if (typeof value === 'string' || typeof value === 'number') {
-    return value;
+    return <TextCellTooltip text={value} />;
   }
 
   return JSON.stringify(value);
