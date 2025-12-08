@@ -11,6 +11,7 @@ import type {
   DeletedTaskNotificationPayload,
   NewCommentNotificationPayload,
   Task,
+  TAuditAction,
   UpdatedTaskNotificationPayload,
   UpdatedTaskPriorityNotificationPayload,
   UpdatedTaskStatusNotificationPayload,
@@ -151,6 +152,23 @@ export function useNotificationsSocket({
         queryKey: ['task'],
       });
     });
+
+    socket.on(
+      'task-audit-log:deleted',
+      ({ action }: { action: TAuditAction }) => {
+        const actionLabels = {
+          CREATE: 'creation',
+          UPDATE: 'update',
+          DELETE: 'deletion',
+        };
+
+        const actionLabel = actionLabels[action];
+
+        queryClient.invalidateQueries({
+          queryKey: [`task-${actionLabel}-audit-logs`],
+        });
+      },
+    );
 
     return () => {
       socket.disconnect();
