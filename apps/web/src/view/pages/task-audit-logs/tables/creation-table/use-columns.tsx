@@ -19,6 +19,7 @@ import { AuthorCell } from '../../author-cell';
 import { TaskDetailsPopover } from '../../task-details-popover';
 import { TitleCell } from '../../title-cell';
 import { AuthorHeader } from '../../author-header';
+import { TitleHeader } from '../../title-header';
 
 import type { ColumnDef } from '@tanstack/react-table';
 import type { ListCreationTaskAuditLogWithAuthorData } from '@challenge/shared';
@@ -45,7 +46,7 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
       },
       {
         accessorKey: 'taskTitle',
-        header: 'Título',
+        header: ({ column }) => <TitleHeader column={column} />,
         cell: ({ row }) => <TitleCell row={row} />,
         meta: {
           nameInFilters: 'Título',

@@ -20,6 +20,7 @@ import { AuthorCell } from '../../author-cell';
 import { TaskUpdateValueCell } from '../../task-update-value-cell';
 import { TitleCell } from '../../title-cell';
 import { AuthorHeader } from '../../author-header';
+import { TitleHeader } from '../../title-header';
 
 import type { ColumnDef } from '@tanstack/react-table';
 import type {
@@ -48,7 +49,7 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
       },
       {
         accessorKey: 'taskTitle',
-        header: 'Título',
+        header: ({ column }) => <TitleHeader column={column} />,
         cell: ({ row }) => <TitleCell row={row} />,
         meta: {
           nameInFilters: 'Título',
