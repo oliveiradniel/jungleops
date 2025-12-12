@@ -31,6 +31,7 @@ import type {
   ListCreationTaskAuditLogWithAuthorData,
   Task,
 } from '@challenge/shared';
+import { DescriptionHeader } from '../../description-header';
 
 export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[] {
   const { taskDeletionAuditLogsList, isTaskDeletionAuditLogsLoading } =
@@ -62,7 +63,12 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
       },
       {
         id: 'description',
-        header: 'Descrição',
+        accessorFn: (row) => {
+          const values = JSON.parse(row.values) as Task;
+
+          return values.description;
+        },
+        header: ({ column }) => <DescriptionHeader column={column} />,
         cell: ({ row }) => {
           const values = JSON.parse(row.original.values) as Task;
 

@@ -21,6 +21,7 @@ import { TitleHeader } from '../../title-header';
 import { PriorityBadge } from '@/view/components/ui/priority-badge';
 import { StatusBadge } from '@/view/components/ui/status-badge';
 import { TextCellTooltip } from '../../text-cell-tooltip';
+import { DescriptionHeader } from '../../description-header';
 
 import type { ColumnDef } from '@tanstack/react-table';
 import type {
@@ -53,7 +54,12 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
       },
       {
         id: 'description',
-        header: 'Descrição',
+        accessorFn: (row) => {
+          const values = JSON.parse(row.values) as Task;
+
+          return values.description;
+        },
+        header: ({ column }) => <DescriptionHeader column={column} />,
         cell: ({ row }) => {
           const values = JSON.parse(row.original.values) as Task;
 
