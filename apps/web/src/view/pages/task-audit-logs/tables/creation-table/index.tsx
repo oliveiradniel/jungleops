@@ -32,7 +32,7 @@ export function TaskCreationAuditLogTable() {
 
       <DataTable data={taskCreationAuditLogsList} columns={columns}>
         {taskCreationAuditLogsList.length > 0 && (
-          <div className="mb-8 flex justify-end">
+          <div className="mb-8 flex items-center gap-4">
             <DataTableTextFilter placeholder="Procurar por autor ou título" />
 
             <DataTableColumnsVisibilityDropdown />
