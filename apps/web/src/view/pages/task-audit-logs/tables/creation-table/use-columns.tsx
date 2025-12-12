@@ -5,7 +5,10 @@ import { useListTaskDeletionAuditLogQuery } from '@/app/hooks/queries/use-list-t
 import { useTaskAuditLog } from '../../context/use-task-audit-log';
 
 import { cn } from '@/lib/utils';
-import { formatDateToBRWithHour } from '@/app/utils/format-date-br';
+import {
+  formatDateToBR,
+  formatDateToBRWithHour,
+} from '@/app/utils/format-date-br';
 
 import { EllipsisIcon, InfoIcon, Trash2Icon } from 'lucide-react';
 
@@ -16,13 +19,18 @@ import {
   DropdownMenuTrigger,
 } from '@/view/components/ui/dropdown-menu';
 import { AuthorCell } from '../../author-cell';
-import { TaskDetailsPopover } from '../../task-details-popover';
 import { TitleCell } from '../../title-cell';
 import { AuthorHeader } from '../../author-header';
 import { TitleHeader } from '../../title-header';
+import { TextCellTooltip } from '../../text-cell-tooltip';
+import { StatusBadge } from '@/view/components/ui/status-badge';
+import { PriorityBadge } from '@/view/components/ui/priority-badge';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import type { ListCreationTaskAuditLogWithAuthorData } from '@challenge/shared';
+import type {
+  ListCreationTaskAuditLogWithAuthorData,
+  Task,
+} from '@challenge/shared';
 
 export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[] {
   const { taskDeletionAuditLogsList, isTaskDeletionAuditLogsLoading } =
@@ -53,32 +61,51 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
         },
       },
       {
-        accessorKey: 'values',
-        header: 'Valores na criação',
-        enableGlobalFilter: false,
+        id: 'description',
+        header: 'Descrição',
         cell: ({ row }) => {
-          const values = JSON.parse(row.original.values);
-          const thisTaskDeleted = deletedTaskIds.includes(row.original.taskId);
+          const values = JSON.parse(row.original.values) as Task;
 
-          return (
-            <TaskDetailsPopover
-              values={values}
-              isTaskDeletionAuditLogsLoading={isTaskDeletionAuditLogsLoading}
-            >
-              <Button
-                disabled={isTaskDeletionAuditLogsLoading || thisTaskDeleted}
-                variant={thisTaskDeleted ? 'destructive' : 'default'}
-                className="mt-4 w-full"
-              >
-                <Link to="/tasks/$taskId" params={{ taskId: values.id }}>
-                  {thisTaskDeleted ? 'Indisponível' : 'Ver informações'}
-                </Link>
-              </Button>
-            </TaskDetailsPopover>
-          );
+          return <TextCellTooltip text={values.description} />;
         },
         meta: {
-          nameInFilters: 'Valores',
+          nameInFilters: 'Descrição',
+        },
+      },
+      {
+        id: 'status',
+        header: 'Status',
+        cell: ({ row }) => {
+          const values = JSON.parse(row.original.values) as Task;
+
+          return <StatusBadge status={values.status} />;
+        },
+        meta: {
+          nameInFilters: 'Status',
+        },
+      },
+      {
+        id: 'prioridade',
+        header: 'Prioridade',
+        cell: ({ row }) => {
+          const values = JSON.parse(row.original.values) as Task;
+
+          return <PriorityBadge priority={values.priority} />;
+        },
+        meta: {
+          nameInFilters: 'Prioridade',
+        },
+      },
+      {
+        id: 'term',
+        header: 'Prazo',
+        cell: ({ row }) => {
+          const values = JSON.parse(row.original.values) as Task;
+
+          return formatDateToBR(values.term);
+        },
+        meta: {
+          nameInFilters: 'Prazo',
         },
       },
       {
