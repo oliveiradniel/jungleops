@@ -54,11 +54,7 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
       },
       {
         id: 'description',
-        accessorFn: (row) => {
-          const values = JSON.parse(row.values) as Task;
-
-          return values.description;
-        },
+        accessorFn: (row) => (JSON.parse(row.values) as Task).description,
         header: ({ column }) => <DescriptionHeader column={column} />,
         cell: ({ row }) => {
           const values = JSON.parse(row.original.values) as Task;
@@ -71,6 +67,7 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
       },
       {
         id: 'status',
+        accessorFn: (row) => (JSON.parse(row.values) as Task).status,
         header: 'Status',
         cell: ({ row }) => {
           const values = JSON.parse(row.original.values) as Task;
@@ -82,7 +79,8 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
         },
       },
       {
-        id: 'prioridade',
+        id: 'priority',
+        accessorFn: (row) => (JSON.parse(row.values) as Task).priority,
         header: 'Prioridade',
         cell: ({ row }) => {
           const values = JSON.parse(row.original.values) as Task;

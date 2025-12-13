@@ -1,12 +1,18 @@
 import { useListTaskDeletionAuditLogQuery } from '@/app/hooks/queries/use-list-task-deletion-audit-log-query';
 import { useColumns } from './use-columns';
 
+import { priorityLabels, statusLabels } from '@/config/labels';
+
 import { DataTable } from '@/view/components/data-table';
 import { DataTableColumnsVisibilityDropdown } from '@/view/components/data-table/data-table-columns-visibility-dropdown';
 import { DataTableContent } from '@/view/components/data-table/data-table-content';
 import { DataTableFallback } from '@/view/components/data-table/data-table-fallback';
 import { EmptyLog } from './empty-log';
 import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
+import { DataTableFacetedFilter } from '@/view/components/data-table/data-table-faceted-filter';
+
+import type { TaskStatus } from '@/app/enums/TaskStatus';
+import type { TaskPriority } from '@/app/enums/TaskPriority';
 
 export function TaskDeletionAuditLogTable() {
   const { taskDeletionAuditLogsList, isTaskDeletionAuditLogsLoading } =
@@ -35,7 +41,21 @@ export function TaskDeletionAuditLogTable() {
           <div className="flex items-center gap-4">
             <DataTableTextFilter placeholder="Procurar por autor ou título" />
 
-            <DataTableColumnsVisibilityDropdown />
+            <div className="flex items-center gap-1">
+              <DataTableFacetedFilter<TaskStatus>
+                placeholder="Status"
+                column="status"
+                labels={statusLabels}
+              />
+
+              <DataTableFacetedFilter<TaskPriority>
+                placeholder="Prioridade"
+                column="priority"
+                labels={priorityLabels}
+              />
+
+              <DataTableColumnsVisibilityDropdown />
+            </div>
           </div>
         )}
 
