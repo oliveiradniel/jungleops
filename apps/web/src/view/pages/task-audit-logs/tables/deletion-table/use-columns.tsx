@@ -22,6 +22,8 @@ import { PriorityBadge } from '@/view/components/ui/priority-badge';
 import { StatusBadge } from '@/view/components/ui/status-badge';
 import { TextCellTooltip } from '../../text-cell-tooltip';
 import { DescriptionHeader } from '../../description-header';
+import { DateHeader } from '../../date-header';
+import { TermHeader } from '../../term-header';
 
 import type { ColumnDef } from '@tanstack/react-table';
 import type {
@@ -93,7 +95,8 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
       },
       {
         id: 'term',
-        header: 'Prazo',
+        accessorFn: (row) => (JSON.parse(row.values) as Task).term,
+        header: ({ column }) => <TermHeader column={column} />,
         cell: ({ row }) => {
           const values = JSON.parse(row.original.values) as Task;
 
@@ -102,15 +105,19 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
         meta: {
           nameInFilters: 'Prazo',
         },
+        sortingFn: 'datetime',
       },
       {
         accessorKey: 'changedAt',
         enableColumnFilter: false,
-        header: 'Data/horário da exclusão',
+        header: ({ column }) => (
+          <DateHeader title="Data/horário da exclusão" column={column} />
+        ),
         cell: ({ row }) => formatDateToBRWithHour(row.original.changedAt),
         meta: {
           nameInFilters: 'Data/horário',
         },
+        sortingFn: 'datetime',
       },
       {
         id: 'Actions',
