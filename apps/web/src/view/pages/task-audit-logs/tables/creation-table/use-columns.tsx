@@ -25,13 +25,15 @@ import { TitleHeader } from '../../title-header';
 import { TextCellTooltip } from '../../text-cell-tooltip';
 import { StatusBadge } from '@/view/components/ui/status-badge';
 import { PriorityBadge } from '@/view/components/ui/priority-badge';
+import { DescriptionHeader } from '../../description-header';
+import { TermHeader } from '../../term-header';
+import { DateHeader } from '../../date-header';
 
 import type { ColumnDef } from '@tanstack/react-table';
 import type {
   ListCreationTaskAuditLogWithAuthorData,
   Task,
 } from '@challenge/shared';
-import { DescriptionHeader } from '../../description-header';
 
 export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[] {
   const { taskDeletionAuditLogsList, isTaskDeletionAuditLogsLoading } =
@@ -102,7 +104,8 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
       },
       {
         id: 'term',
-        header: 'Prazo',
+        accessorFn: (row) => (JSON.parse(row.values) as Task).term,
+        header: ({ column }) => <TermHeader column={column} />,
         cell: ({ row }) => {
           const values = JSON.parse(row.original.values) as Task;
 
@@ -111,15 +114,17 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
         meta: {
           nameInFilters: 'Prazo',
         },
+        sortingFn: 'datetime',
       },
       {
         accessorKey: 'changedAt',
-        header: 'Data/horário da criação',
+        header: ({ column }) => <DateHeader column={column} />,
         enableGlobalFilter: false,
         cell: ({ row }) => formatDateToBRWithHour(row.original.changedAt),
         meta: {
           nameInFilters: 'Data/horário',
         },
+        sortingFn: 'datetime',
       },
       {
         id: 'Actions',
