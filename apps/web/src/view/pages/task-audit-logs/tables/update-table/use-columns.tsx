@@ -21,6 +21,7 @@ import { TaskUpdateValueCell } from '../../task-update-value-cell';
 import { TitleCell } from '../../title-cell';
 import { AuthorHeader } from '../../author-header';
 import { TitleHeader } from '../../title-header';
+import { DateHeader } from '../../date-header';
 
 import type { ColumnDef } from '@tanstack/react-table';
 import type {
@@ -92,11 +93,14 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
       {
         accessorKey: 'changedAt',
         enableGlobalFilter: false,
-        header: 'Data/horário da atualização',
+        header: ({ column }) => (
+          <DateHeader title="Data/horário da atualização" column={column} />
+        ),
         cell: ({ row }) => formatDateToBRWithHour(row.original.changedAt),
         meta: {
           nameInFilters: 'Data/horário',
         },
+        sortingFn: 'datetime',
       },
       {
         id: 'Actions',
