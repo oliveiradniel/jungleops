@@ -3,11 +3,10 @@ import { DataTableColumnHeader } from '@/view/components/data-table/data-table-c
 import type { Column } from '@tanstack/react-table';
 
 interface DateHeaderProps {
+  title: string;
   column: Column<any>;
 }
 
-export function DateHeader({ column }: DateHeaderProps) {
-  return (
-    <DataTableColumnHeader title="Data/horário da criação" column={column} />
-  );
+export function DateHeader({ title, column }: DateHeaderProps) {
+  return <DataTableColumnHeader title={title} column={column} />;
 }

@@ -118,7 +118,9 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
       },
       {
         accessorKey: 'changedAt',
-        header: ({ column }) => <DateHeader column={column} />,
+        header: ({ column }) => (
+          <DateHeader title="Data/horário da criação" column={column} />
+        ),
         enableGlobalFilter: false,
         cell: ({ row }) => formatDateToBRWithHour(row.original.changedAt),
         meta: {
