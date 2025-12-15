@@ -18,16 +18,16 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/view/components/ui/dropdown-menu';
-import { AuthorCell } from '../../author-cell';
-import { TitleCell } from '../../title-cell';
-import { AuthorHeader } from '../../author-header';
-import { TitleHeader } from '../../title-header';
-import { TextCellTooltip } from '../../text-cell-tooltip';
+import { AuthorCell } from '../../components/author-cell';
+import { TitleCell } from '../../components/title-cell';
+import { AuthorHeader } from '../../components/author-header';
+import { TitleHeader } from '../../components/title-header';
+import { TextCellTooltip } from '../../components/text-cell-tooltip';
 import { StatusBadge } from '@/view/components/ui/status-badge';
 import { PriorityBadge } from '@/view/components/ui/priority-badge';
-import { DescriptionHeader } from '../../description-header';
-import { TermHeader } from '../../term-header';
-import { DateHeader } from '../../date-header';
+import { DescriptionHeader } from '../../components/description-header';
+import { TermHeader } from '../../components/term-header';
+import { DateHeader } from '../../components/date-header';
 
 import type { ColumnDef } from '@tanstack/react-table';
 import type {

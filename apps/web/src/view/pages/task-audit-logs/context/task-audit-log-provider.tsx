@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { TaskAuditLogContext } from './task-audit-log-context';
-import { DeleteLogDialog } from '../delete-log-dialog';
+import { DeleteLogDialog } from '../components/delete-log-dialog';
 
 export function TaskAuditLogProvider({
   children,

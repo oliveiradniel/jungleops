@@ -16,12 +16,12 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/view/components/ui/dropdown-menu';
-import { AuthorCell } from '../../author-cell';
-import { TaskUpdateValueCell } from '../../task-update-value-cell';
-import { TitleCell } from '../../title-cell';
-import { AuthorHeader } from '../../author-header';
-import { TitleHeader } from '../../title-header';
-import { DateHeader } from '../../date-header';
+import { AuthorCell } from '../../components/author-cell';
+import { TaskUpdateValueCell } from '../../components/task-update-value-cell';
+import { TitleCell } from '../../components/title-cell';
+import { AuthorHeader } from '../../components/author-header';
+import { TitleHeader } from '../../components/title-header';
+import { DateHeader } from '../../components/date-header';
 
 import type { ColumnDef } from '@tanstack/react-table';
 import type {
