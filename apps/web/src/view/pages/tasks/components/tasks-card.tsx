@@ -1,4 +1,3 @@
-import { formatDateToBR } from '@/app/utils/format-date-br';
 import { truncateString } from '@/app/utils/truncate-string';
 
 import { Card, CardDescription, CardTitle } from '@/view/components/ui/card';
@@ -9,10 +8,10 @@ import { TaskActionsPopover } from './task-actions-popover';
 import { PriorityBadge } from '@/view/components/ui/priority-badge';
 import { StatusBadge } from '@/view/components/ui/status-badge';
 
-import type { TaskWithCommentCount } from '@challenge/shared';
+import type { Task } from '@/app/entities/task';
 
 interface TasksCardProps {
-  filteredTasksList: TaskWithCommentCount[];
+  filteredTasksList: Task[];
 }
 
 export function TasksCard({ filteredTasksList }: TasksCardProps) {
@@ -42,7 +41,7 @@ export function TasksCard({ filteredTasksList }: TasksCardProps) {
                 <TaskActionsPopover
                   taskId={id}
                   title={title}
-                  status={status}
+                  status={status.value}
                   createdAt={createdAt}
                 />
               </div>
@@ -53,9 +52,12 @@ export function TasksCard({ filteredTasksList }: TasksCardProps) {
 
               <div>
                 <div className="flex justify-between gap-4">
-                  <StatusBadge status={status} />
+                  <StatusBadge value={status.value} label={status.label} />
 
-                  <PriorityBadge priority={priority} />
+                  <PriorityBadge
+                    value={priority.value}
+                    label={priority.label}
+                  />
                 </div>
 
                 <Separator className="my-3" />
@@ -63,12 +65,12 @@ export function TasksCard({ filteredTasksList }: TasksCardProps) {
                 <div className="flex items-center justify-between">
                   <div className="text-muted-foreground flex items-center gap-2">
                     <CalendarPlus className="size-4" />
-                    <span className="text-xs">{formatDateToBR(createdAt)}</span>
+                    <span className="text-xs">{createdAt}</span>
                   </div>
 
                   <div className="text-muted-foreground flex items-center gap-2">
                     <CalendarClock className="size-4" />
-                    <span className="text-xs">{formatDateToBR(term)}</span>
+                    <span className="text-xs">{term}</span>
                   </div>
 
                   <div className="text-muted-foreground flex items-center gap-2">
