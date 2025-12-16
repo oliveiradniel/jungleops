@@ -127,7 +127,7 @@ export function Task() {
                   <span>
                     Criado em:{' '}
                     <span className="text-primary font-medium">
-                      {formatDateToBR(task?.createdAt!)}
+                      {task?.createdAt}
                     </span>
                   </span>
                 </div>
@@ -139,7 +139,7 @@ export function Task() {
                   <span>
                     Prazo para término:{' '}
                     <span className="text-primary font-medium">
-                      {formatDateToBR(task?.term!)}
+                      {task?.term}
                     </span>
                   </span>
                 </div>
@@ -158,7 +158,10 @@ export function Task() {
                 <div className="flex flex-col gap-2">
                   <span className="text-muted-foreground text-xs">Status</span>
 
-                  <StatusBadge status={task?.status} />
+                  <StatusBadge
+                    value={task?.status.value}
+                    label={task?.status.label}
+                  />
                 </div>
               )}
 
@@ -168,7 +171,10 @@ export function Task() {
                     Prioridade
                   </span>
 
-                  <PriorityBadge priority={task?.priority} />
+                  <PriorityBadge
+                    value={task?.priority.value}
+                    label={task?.priority.label}
+                  />
                 </div>
               )}
             </div>
