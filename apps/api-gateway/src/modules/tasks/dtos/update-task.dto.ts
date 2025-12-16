@@ -1,28 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import {
-  IsArray,
-  IsDate,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsArray, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
 
-import { TaskPriority, TaskStatus, UpdateTaskData } from '@challenge/shared';
+import { TaskPriority, TaskStatus } from '@challenge/shared';
 
-export class UpdateTaskDTO implements UpdateTaskData {
-  @ApiProperty({
-    example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
-    description: 'Last user to update the task.',
-  })
-  @IsUUID('4')
-  @IsString()
-  @IsNotEmpty()
-  lastEditedBy: string;
-
+export class UpdateTaskDTO {
   @ApiProperty({
     example: 'f95bbf1c-2829-4540-902f-ee718dded518',
     description: 'Optional. List of user IDs to assign to the task.',
@@ -59,10 +41,9 @@ export class UpdateTaskDTO implements UpdateTaskData {
     description: 'Optional. Deadline for task completion (ISO 8601 format).',
     required: false,
   })
-  @Type(() => Date)
-  @IsDate()
+  @IsString()
   @IsOptional()
-  term?: Date;
+  term?: string;
 
   @ApiProperty({
     example: 'LOW',

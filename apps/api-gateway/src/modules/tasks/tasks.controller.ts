@@ -126,12 +126,16 @@ export class TasksController {
   })
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  async create(@Body() createTaskDTO: CreateTaskDTO): Promise<Task> {
-    const { authorId, title, description, term, priority, status } =
-      createTaskDTO;
+  async create(
+    @Body() createTaskDTO: CreateTaskDTO,
+    @Req() request: Request,
+  ): Promise<Task> {
+    const userId = request.user?.userId!;
+
+    const { title, description, term, priority, status } = createTaskDTO;
 
     return this.tasksService.create({
-      authorId,
+      authorId: userId,
       title,
       description,
       term,
@@ -156,20 +160,15 @@ export class TasksController {
   async update(
     @Param() params: TaskIdParam,
     @Body() updateTaskDTO: UpdateTaskDTO,
+    @Req() request: Request,
   ): Promise<void> {
+    const userId = request.user?.userId!;
     const { taskId } = params;
-    const {
-      lastEditedBy,
-      userIds,
-      title,
-      description,
-      term,
-      priority,
-      status,
-    } = updateTaskDTO;
+    const { userIds, title, description, term, priority, status } =
+      updateTaskDTO;
 
     await this.tasksService.update(taskId, {
-      lastEditedBy,
+      lastEditedBy: userId,
       userIds,
       title,
       description,
