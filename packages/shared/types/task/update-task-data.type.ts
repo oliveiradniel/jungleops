@@ -4,7 +4,7 @@ export type UpdateTaskData = {
   title?: string;
   lastEditedBy: string;
   description?: string;
-  term?: Date;
+  term?: string;
   priority?: TaskPriority;
   status?: TaskStatus;
   userIds?: string[];

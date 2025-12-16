@@ -8,7 +8,7 @@ export interface Task {
   lastEditedBy: string;
   title: string;
   description: string;
-  term: Date;
+  term: string;
   priority: TaskPriority;
   status: TaskStatus;
   comments: TaskComment[];
@@ -21,10 +21,21 @@ export interface TaskWithParticipants {
   lastEditedBy: string;
   title: string;
   description: string;
-  term: Date;
+  term: string;
   priority: TaskPriority;
   status: TaskStatus;
   comments: TaskComment[];
   createdAt: Date;
   participants: UserWithoutPassword[];
+}
+
+export interface TaskWithCommentCount {
+  id: string;
+  title: string;
+  description: string;
+  term: string;
+  priority: TaskPriority;
+  status: TaskStatus;
+  createdAt: Date;
+  commentsCount: number;
 }

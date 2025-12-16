@@ -4,7 +4,7 @@ export interface CreateTaskData {
   title: string;
   authorId: string;
   description: string;
-  term: Date;
+  term: string;
   priority?: TaskPriority;
   status?: TaskStatus;
 }

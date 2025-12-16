@@ -22,7 +22,7 @@ export interface UpdatedTaskNotificationPayload {
     lastEditedBy: string;
     title: string;
     description: string;
-    term: Date;
+    term: string;
     priority: TaskPriority;
     status: TaskStatus;
   };
@@ -55,7 +55,7 @@ export interface AssignedToTaskNotificationPayload {
     lastEditedBy: string;
     title: string;
     description: string;
-    term: Date;
+    term: string;
     priority: TaskPriority;
     status: TaskStatus;
   };

@@ -1,6 +1,4 @@
-import { TaskComment, User } from 'entities';
-
-import { TaskWithCommentCount } from './task/task-with-comment-count.entity';
+import { TaskComment, TaskWithCommentCount, User } from 'entities';
 
 export interface Pagination {
   page: number;
