@@ -1,3 +1,9 @@
+export function formatTermDateToBR(term: string): string {
+  const [year, month, day] = term.split('-');
+
+  return `${day}/${month}/${year}`;
+}
+
 export function formatDateToBR(date: Date): string {
   return new Date(date).toLocaleDateString('pt-BR');
 }
