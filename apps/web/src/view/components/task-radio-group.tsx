@@ -6,23 +6,23 @@ import {
   RadioGroupItem,
 } from './ui/radio-group';
 
-interface Options {
+interface Options<TValue> {
   id: string;
-  value: string;
+  value: TValue;
   label: string;
 }
 
-interface TaskTadioGroupProps {
-  options: Options[];
-  value: string;
+interface TaskTadioGroupProps<TValue> {
+  options: Options<TValue>[];
+  value?: TValue;
   onValueChange: (value: string) => void;
 }
 
-export function TaskRadioGroup({
+export function TaskRadioGroup<TValue extends string>({
   options,
   value,
   onValueChange,
-}: TaskTadioGroupProps) {
+}: TaskTadioGroupProps<TValue>) {
   return (
     <RadioGroup
       defaultValue={options[0].value}
