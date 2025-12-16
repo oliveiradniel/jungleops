@@ -9,6 +9,8 @@ import { useTasks } from '@/app/hooks/use-tasks';
 import { useListUsersByTaskIdQuery } from '@/app/hooks/queries/use-list-users-by-task-id-query';
 import { useNotificationsSocket } from '@/app/hooks/use-notifications-socket';
 
+import { AxiosError } from 'axios';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UpdateTaskSchema } from '@/app/schemas/update-task-schema';
 
@@ -16,13 +18,24 @@ import { toast } from '@/app/utils/toast';
 
 import { optionsTaskPriority, optionsTaskStatus } from '@/config/options';
 
-import type { TaskWithCommentCount, UpdateTaskData } from '@challenge/shared';
-import { AxiosError } from 'axios';
+import type { UpdateTaskData } from '@/types/task-data';
+import type { Task } from '@/app/entities/task';
 
-export function useUpdateTaskSheetController(
-  taskData: TaskWithCommentCount | undefined,
-) {
+export function useUpdateTaskSheetController(taskData: Task | undefined) {
   const { isUpdateTaskSheetOpen, handleCloseUpdateTaskSheet } = useTasks();
+
+  function parseDate(term?: string): Date | undefined {
+    if (!term) return;
+    const [d, m, y] = term.split('/').map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  const id = taskData?.id!;
+  const title = taskData?.title;
+  const description = taskData?.description;
+  const term = parseDate(taskData?.term);
+  const priority = taskData?.priority.value;
+  const status = taskData?.status.value;
 
   const {
     control,
@@ -30,14 +43,14 @@ export function useUpdateTaskSheetController(
     register,
     handleSubmit: reactHookHandleSubmit,
     formState: { errors },
-  } = useForm<Omit<UpdateTaskData, 'lastEditedBy'>>({
+  } = useForm<UpdateTaskData>({
     resolver: zodResolver(UpdateTaskSchema),
     defaultValues: {
-      title: taskData?.title,
-      description: taskData?.description,
-      term: new Date(taskData?.term!),
-      priority: taskData?.priority,
-      status: taskData?.status,
+      title,
+      description,
+      term,
+      priority,
+      status,
     },
   });
 
@@ -50,26 +63,26 @@ export function useUpdateTaskSheetController(
   const { updateTask, isUpdateTaskLoading } = useUpdateTaskMutation();
   const { users, isUsersLoading } = useListUsersQuery();
 
-  const { participants } = useListUsersByTaskIdQuery({ taskId: taskData?.id! });
+  const { participants } = useListUsersByTaskIdQuery({ taskId: id });
 
   const participantIds = participants?.map((participant) => participant.id);
 
-  useNotificationsSocket({ userId: user?.id, taskId: taskData?.id });
+  useNotificationsSocket({ userId: user?.id, taskId: id });
 
   const handleSubmit = reactHookHandleSubmit(
     async (data: Omit<UpdateTaskData, 'lastEditedBy'>) => {
       try {
-        await updateTask({ taskId: taskData?.id!, data });
+        await updateTask({ taskId: id, data });
 
         reset();
         queryClient.invalidateQueries({
           queryKey: ['tasks', { page: currentPage }],
         });
         queryClient.invalidateQueries({
-          queryKey: ['task', { taskId: taskData?.id }],
+          queryKey: ['task', { taskId: id }],
         });
         queryClient.invalidateQueries({
-          queryKey: ['users-tasks', { taskId: taskData?.id }],
+          queryKey: ['users-tasks', { taskId: id }],
         });
         queryClient.invalidateQueries({
           queryKey: ['task-update-audit-logs'],
@@ -117,11 +130,11 @@ export function useUpdateTaskSheetController(
   useEffect(() => {
     if (taskData && isUpdateTaskSheetOpen) {
       reset({
-        title: taskData.title,
-        description: taskData.description,
-        term: new Date(taskData.term),
-        priority: taskData.priority,
-        status: taskData.status,
+        title,
+        description,
+        term,
+        priority,
+        status,
         userIds: participantIds,
       });
     }

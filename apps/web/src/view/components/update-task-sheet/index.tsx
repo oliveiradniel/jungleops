@@ -11,13 +11,11 @@ import { DatePicker } from '../ui/date-picker';
 import { TaskRadioGroup } from '../task-radio-group';
 import { CheckboxIndicator, CheckboxItem } from '../ui/checkbox';
 
-import type { TaskWithCommentCount } from '@challenge/shared';
+import type { Task } from '@/app/entities/task';
+import type { TaskPriority } from '@/app/enums/TaskPriority';
+import type { TaskStatus } from '@/app/enums/TaskStatus';
 
-export function UpdateTaskSheet({
-  taskData,
-}: {
-  taskData: TaskWithCommentCount | undefined;
-}) {
+export function UpdateTaskSheet({ taskData }: { taskData: Task | undefined }) {
   const {
     control,
     register,
@@ -96,7 +94,7 @@ export function UpdateTaskSheet({
             name="priority"
             control={control}
             render={({ field: { value, onChange } }) => (
-              <TaskRadioGroup
+              <TaskRadioGroup<TaskPriority>
                 options={optionsTaskPriority}
                 value={value}
                 onValueChange={onChange}
@@ -111,7 +109,7 @@ export function UpdateTaskSheet({
             name="status"
             control={control}
             render={({ field: { value, onChange } }) => (
-              <TaskRadioGroup
+              <TaskRadioGroup<TaskStatus>
                 options={optionsTaskStatus}
                 value={value}
                 onValueChange={onChange}

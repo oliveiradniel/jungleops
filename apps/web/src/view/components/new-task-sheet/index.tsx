@@ -10,6 +10,9 @@ import { Textarea } from '../ui/textarea';
 import { DatePicker } from '../ui/date-picker';
 import { TaskRadioGroup } from '../task-radio-group';
 
+import type { TaskPriority } from '@/app/enums/TaskPriority';
+import type { TaskStatus } from '@/app/enums/TaskStatus';
+
 export function NewTaskSheet() {
   const {
     control,
@@ -88,7 +91,7 @@ export function NewTaskSheet() {
             name="priority"
             control={control}
             render={({ field: { value, onChange } }) => (
-              <TaskRadioGroup
+              <TaskRadioGroup<TaskPriority>
                 options={optionsTaskPriority}
                 value={value}
                 onValueChange={onChange}
@@ -103,7 +106,7 @@ export function NewTaskSheet() {
             name="status"
             control={control}
             render={({ field: { value, onChange } }) => (
-              <TaskRadioGroup
+              <TaskRadioGroup<TaskStatus>
                 options={optionsTaskStatus}
                 value={value}
                 onValueChange={onChange}
