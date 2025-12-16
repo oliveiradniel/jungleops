@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 import { TasksContext } from '../contexts/tasks-context';
 
+import type { Task } from '../entities/task';
 import type { TaskStatus } from '../enums/TaskStatus';
 import type { CheckedState } from '@radix-ui/react-checkbox';
 import type { TaskPriority } from '../enums/TaskPriority';
-import type { TaskWithCommentCount } from '@challenge/shared';
 
 export function TasksProvider({ children }: { children: React.ReactNode }) {
   const [isNewTaskSheetOpen, setIsNewTaskSheetOpen] = useState(false);
@@ -16,7 +16,7 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
   const [selectedStatus, setSelectedStatus] = useState<TaskStatus[]>([]);
 
   const [taskToDelete, setTaskToDelete] = useState<Pick<
-    TaskWithCommentCount,
+    Task,
     'id' | 'title' | 'createdAt' | 'status'
   > | null>(null);
   const [pageForDelete, setPageForDelete] = useState<number | null>(null);
@@ -34,7 +34,7 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
   }
 
   function handleOpenDeleteTaskDialog(
-    task: Pick<TaskWithCommentCount, 'id' | 'title' | 'createdAt' | 'status'>,
+    task: Pick<Task, 'id' | 'title' | 'createdAt' | 'status'>,
     page: number,
   ) {
     setIsDeleteTaskDialogOpen(true);

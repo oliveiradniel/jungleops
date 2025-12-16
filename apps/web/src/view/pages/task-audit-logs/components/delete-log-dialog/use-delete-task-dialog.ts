@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useTaskAuditLog } from '../context/use-task-audit-log';
+import { useTaskAuditLog } from '../../context/use-task-audit-log';
 import { useDeleteTaskAuditLogMutation } from '@/app/hooks/mutations/use-delete-task-audit-log-mutation';
 
 import { toast } from '@/app/utils/toast';

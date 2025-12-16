@@ -3,7 +3,7 @@ import { createContext } from 'react';
 import type { CheckedState } from '@radix-ui/react-checkbox';
 import type { TaskPriority } from '../enums/TaskPriority';
 import type { TaskStatus } from '../enums/TaskStatus';
-import type { TaskWithCommentCount } from '@challenge/shared';
+import type { Task } from '../entities/task';
 
 export interface TasksContextValue {
   isNewTaskSheetOpen: boolean;
@@ -14,7 +14,7 @@ export interface TasksContextValue {
   handleOpenUpdateTaskSheet: () => void;
   handleCloseUpdateTaskSheet: () => void;
   handleOpenDeleteTaskDialog: (
-    task: Pick<TaskWithCommentCount, 'id' | 'title' | 'createdAt' | 'status'>,
+    task: Pick<Task, 'id' | 'title' | 'createdAt' | 'status'>,
     page: number,
   ) => void;
   handleCloseDeleteTaskDialog: () => void;
@@ -22,10 +22,7 @@ export interface TasksContextValue {
   selectedStatus: TaskStatus[];
   togglePriorityFilter: (isChecked: CheckedState, value: TaskPriority) => void;
   toggleStatusFilter: (isChecked: CheckedState, value: TaskStatus) => void;
-  taskToDelete: Pick<
-    TaskWithCommentCount,
-    'id' | 'title' | 'createdAt' | 'status'
-  > | null;
+  taskToDelete: Pick<Task, 'id' | 'title' | 'createdAt' | 'status'> | null;
   pageForDelete: number | null;
 }
 
