@@ -8,13 +8,14 @@ export function TaskAuditLogProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [isDeleteTaskDialogOpen, setIsDeleteTaskDialogOpen] = useState(false);
+  const [isDeleteTaskAuditLogDialogOpen, setIsDeleteTaskAuditLogDialogOpen] =
+    useState(false);
   const [selectedLogId, setSelectedLogId] = useState<string | null>(null);
   const [logType, setLogType] = useState<
     'creation' | 'update' | 'deletion' | null
   >(null);
 
-  function handleOpenDeleteTaskDialog({
+  function handleOpenDeleteTaskAuditLogDialog({
     selectedLogId,
     type,
   }: {
@@ -22,20 +23,20 @@ export function TaskAuditLogProvider({
     type: 'creation' | 'update' | 'deletion';
   }) {
     setSelectedLogId(selectedLogId);
-    setIsDeleteTaskDialogOpen(true);
+    setIsDeleteTaskAuditLogDialogOpen(true);
     setLogType(type);
   }
 
-  function handleCloseDeleteTaskDialog() {
-    setIsDeleteTaskDialogOpen(false);
+  function handleCloseDeleteTaskAuditLogDialog() {
+    setIsDeleteTaskAuditLogDialogOpen(false);
   }
 
   return (
     <TaskAuditLogContext.Provider
       value={{
-        isDeleteTaskDialogOpen,
-        handleOpenDeleteTaskDialog,
-        handleCloseDeleteTaskDialog,
+        isDeleteTaskAuditLogDialogOpen,
+        handleOpenDeleteTaskAuditLogDialog,
+        handleCloseDeleteTaskAuditLogDialog,
       }}
     >
       <>

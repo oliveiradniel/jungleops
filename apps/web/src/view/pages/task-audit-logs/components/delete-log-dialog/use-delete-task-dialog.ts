@@ -16,9 +16,9 @@ export function useDeleteTaskDialog({
   const queryClient = useQueryClient();
 
   const {
-    isDeleteTaskDialogOpen,
-    handleOpenDeleteTaskDialog,
-    handleCloseDeleteTaskDialog,
+    isDeleteTaskAuditLogDialogOpen,
+    handleOpenDeleteTaskAuditLogDialog,
+    handleCloseDeleteTaskAuditLogDialog,
   } = useTaskAuditLog();
 
   const { deleteTaskAuditLog, isDeleteTaskAuditLogLoading } =
@@ -37,7 +37,7 @@ export function useDeleteTaskDialog({
         description: `O audit log foi excluído com sucesso.`,
       });
 
-      handleCloseDeleteTaskDialog();
+      handleCloseDeleteTaskAuditLogDialog();
     } catch (error) {
       toast({
         type: 'error',
@@ -48,9 +48,9 @@ export function useDeleteTaskDialog({
 
   return {
     handleDeleteLog,
-    handleOpenDeleteTaskDialog,
-    handleCloseDeleteTaskDialog,
+    handleOpenDeleteTaskAuditLogDialog,
+    handleCloseDeleteTaskAuditLogDialog,
     isDeleteTaskAuditLogLoading,
-    isDeleteTaskDialogOpen,
+    isDeleteTaskAuditLogDialogOpen,
   };
 }

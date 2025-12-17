@@ -32,7 +32,7 @@ import type {
 } from '@challenge/shared';
 
 export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[] {
-  const { handleOpenDeleteTaskDialog } = useTaskAuditLog();
+  const { handleOpenDeleteTaskAuditLogDialog } = useTaskAuditLog();
 
   return useMemo<ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[]>(
     () => [
@@ -147,7 +147,7 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
                   <Button
                     variant="ghost"
                     onClick={() =>
-                      handleOpenDeleteTaskDialog({
+                      handleOpenDeleteTaskAuditLogDialog({
                         selectedLogId: row.original.id,
                         type: 'deletion',
                       })

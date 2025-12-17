@@ -1,12 +1,12 @@
 import { createContext } from 'react';
 
 interface TaskAuditLogContextValues {
-  isDeleteTaskDialogOpen: boolean;
-  handleOpenDeleteTaskDialog: (params: {
+  isDeleteTaskAuditLogDialogOpen: boolean;
+  handleOpenDeleteTaskAuditLogDialog: (params: {
     selectedLogId: string;
     type: 'creation' | 'update' | 'deletion';
   }) => void;
-  handleCloseDeleteTaskDialog: () => void;
+  handleCloseDeleteTaskAuditLogDialog: () => void;
 }
 
 export const TaskAuditLogContext = createContext(

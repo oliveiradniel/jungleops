@@ -39,7 +39,7 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
   const { taskDeletionAuditLogsList, isTaskDeletionAuditLogsLoading } =
     useListTaskDeletionAuditLogQuery();
 
-  const { handleOpenDeleteTaskDialog } = useTaskAuditLog();
+  const { handleOpenDeleteTaskAuditLogDialog } = useTaskAuditLog();
 
   const deletedTaskIds = taskDeletionAuditLogsList.map((log) => log.taskId);
 
@@ -177,7 +177,7 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
                     <Button
                       variant="ghost"
                       onClick={() =>
-                        handleOpenDeleteTaskDialog({
+                        handleOpenDeleteTaskAuditLogDialog({
                           selectedLogId: row.original.id,
                           type: 'creation',
                         })

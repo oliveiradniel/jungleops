@@ -32,7 +32,7 @@ import type {
 export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] {
   const { taskDeletionAuditLogsList } = useListTaskDeletionAuditLogQuery();
 
-  const { handleOpenDeleteTaskDialog } = useTaskAuditLog();
+  const { handleOpenDeleteTaskAuditLogDialog } = useTaskAuditLog();
 
   const deletedTaskIds = taskDeletionAuditLogsList.map((log) => log.taskId);
 
@@ -141,7 +141,7 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
                     <Button
                       variant="ghost"
                       onClick={() =>
-                        handleOpenDeleteTaskDialog({
+                        handleOpenDeleteTaskAuditLogDialog({
                           selectedLogId: row.original.id,
                           type: 'update',
                         })
