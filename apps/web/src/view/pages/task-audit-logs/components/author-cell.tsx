@@ -5,7 +5,7 @@ interface AuthorCellProps {
 }
 
 export function AuthorCell({ row }: AuthorCellProps) {
-  const { username, email } = row.original.authorData;
+  const { username, email } = row.original.author;
 
   return (
     <div className="flex flex-col">

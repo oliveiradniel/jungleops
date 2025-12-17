@@ -1,23 +1,6 @@
-import { Link } from '@tanstack/react-router';
-
 import { useMemo } from 'react';
 import { useListTaskDeletionAuditLogQuery } from '@/app/hooks/queries/use-list-task-deletion-audit-log-query';
-import { useTaskAuditLog } from '../../context/use-task-audit-log';
 
-import { cn } from '@/lib/utils';
-import {
-  formatDateToBR,
-  formatDateToBRWithHour,
-} from '@/app/utils/format-date-br';
-
-import { EllipsisIcon, InfoIcon, Trash2Icon } from 'lucide-react';
-
-import { Button } from '@/view/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/view/components/ui/dropdown-menu';
 import { AuthorCell } from '../../components/author-cell';
 import { TitleCell } from '../../components/title-cell';
 import { AuthorHeader } from '../../components/author-header';
@@ -30,25 +13,31 @@ import { TermHeader } from '../../components/term-header';
 import { DateHeader } from '../../components/date-header';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import type {
-  ListCreationTaskAuditLogWithAuthorData,
-  Task,
-} from '@challenge/shared';
+import type { AuditLogOfTaskCreation } from '@/app/entities/task-audit-log';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/view/components/ui/dropdown-menu';
+import { Button } from '@/view/components/ui/button';
+import { EllipsisIcon, InfoIcon, Trash2Icon } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Link } from '@tanstack/react-router';
+import { useTaskAuditLog } from '../../context/use-task-audit-log';
 
-export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[] {
+export function useColumns(): ColumnDef<AuditLogOfTaskCreation>[] {
+  const { handleOpenDeleteTaskAuditLogDialog } = useTaskAuditLog();
+
   const { taskDeletionAuditLogsList, isTaskDeletionAuditLogsLoading } =
     useListTaskDeletionAuditLogQuery();
 
-  const { handleOpenDeleteTaskAuditLogDialog } = useTaskAuditLog();
+  const deletedTaskIds = taskDeletionAuditLogsList.map((log) => log.task.id);
 
-  const deletedTaskIds = taskDeletionAuditLogsList.map((log) => log.taskId);
-
-  return useMemo<ColumnDef<ListCreationTaskAuditLogWithAuthorData>[]>(
+  return useMemo<ColumnDef<AuditLogOfTaskCreation>[]>(
     () => [
       {
         id: 'author',
-        accessorFn: (row) =>
-          `${row.authorData.username} ${row.authorData.email}`,
+        accessorFn: (row) => row.author.username,
         header: ({ column }) => <AuthorHeader column={column} />,
         cell: ({ row }) => <AuthorCell row={row} />,
         meta: {
@@ -56,7 +45,8 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
         },
       },
       {
-        accessorKey: 'taskTitle',
+        id: 'title',
+        accessorFn: (row) => row.task.title,
         header: ({ column }) => <TitleHeader column={column} />,
         cell: ({ row }) => <TitleCell row={row} />,
         meta: {
@@ -65,30 +55,23 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
       },
       {
         id: 'description',
-        accessorFn: (row) => (JSON.parse(row.values) as Task).description,
+        accessorFn: (row) => row.task.description,
         header: ({ column }) => <DescriptionHeader column={column} />,
-        cell: ({ row }) => {
-          const values = JSON.parse(row.original.values) as Task;
-
-          return <TextCellTooltip text={values.description} />;
-        },
+        cell: ({ row }) => (
+          <TextCellTooltip text={row.original.task.description} />
+        ),
         meta: {
           nameInFilters: 'Descrição',
         },
       },
       {
         id: 'status',
-        accessorFn: (row) => (JSON.parse(row.values) as Task).status,
+        accessorFn: (row) => row.task.status,
         header: 'Status',
         cell: ({ row }) => {
-          const values = JSON.parse(row.original.values) as Task;
+          const { value, label } = row.original.task.status;
 
-          return (
-            <StatusBadge
-              value={values.status.value}
-              label={values.status.label}
-            />
-          );
+          return <StatusBadge value={value} label={label} />;
         },
         meta: {
           nameInFilters: 'Status',
@@ -96,17 +79,12 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
       },
       {
         id: 'priority',
-        accessorFn: (row) => (JSON.parse(row.values) as Task).priority,
+        accessorFn: (row) => row.task.priority,
         header: 'Prioridade',
         cell: ({ row }) => {
-          const values = JSON.parse(row.original.values) as Task;
+          const { value, label } = row.original.task.priority;
 
-          return (
-            <PriorityBadge
-              value={values.priority.value}
-              label={values.priority.label}
-            />
-          );
+          return <PriorityBadge value={value} label={label} />;
         },
         meta: {
           nameInFilters: 'Prioridade',
@@ -114,13 +92,9 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
       },
       {
         id: 'term',
-        accessorFn: (row) => (JSON.parse(row.values) as Task).term,
+        accessorFn: (row) => row.task.term,
         header: ({ column }) => <TermHeader column={column} />,
-        cell: ({ row }) => {
-          const values = JSON.parse(row.original.values) as Task;
-
-          return formatDateToBR(values.term);
-        },
+        cell: ({ row }) => row.original.task.term,
         meta: {
           nameInFilters: 'Prazo',
         },
@@ -132,7 +106,7 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
           <DateHeader title="Data/horário da criação" column={column} />
         ),
         enableGlobalFilter: false,
-        cell: ({ row }) => formatDateToBRWithHour(row.original.changedAt),
+        cell: ({ row }) => row.original.createdAt,
         meta: {
           nameInFilters: 'Data/horário',
         },
@@ -143,7 +117,7 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
         enableHiding: false,
         enableGlobalFilter: false,
         cell: ({ row }) => {
-          const thisTaskDeleted = deletedTaskIds.includes(row.original.taskId);
+          const thisTaskDeleted = deletedTaskIds.includes(row.original.task.id);
 
           return (
             <div className="flex justify-end">
@@ -164,7 +138,7 @@ export function useColumns(): ColumnDef<ListCreationTaskAuditLogWithAuthorData>[
                       >
                         <Link
                           to="/tasks/$taskId"
-                          params={{ taskId: row.original.taskId }}
+                          params={{ taskId: row.original.task.id }}
                         >
                           <div className="flex items-center gap-2">
                             <InfoIcon className="size-4 text-blue-400" />

@@ -1,5 +1,7 @@
 import { TaskMapper } from './task-mapper';
 
+import { formatDateToBRWithHour } from '../utils/format-date-br';
+
 import type {
   AuditLogOfTaskCreation,
   AuditLogOfTaskDeletion,
@@ -15,14 +17,12 @@ export class TaskAuditLogMapper {
   static toDomainCreation(
     taskAuditLogs: ListCreationTaskAuditLogWithAuthor[],
   ): AuditLogOfTaskCreation[] {
-    return taskAuditLogs.map((taskAuditLog) => {
-      const { id, author, task, createdAt } = taskAuditLog;
-
+    return taskAuditLogs.map(({ id, author, task, createdAt }) => {
       return {
         id,
-        task: TaskMapper.toDomain(JSON.parse(task)),
+        task: TaskMapper.toDomain(task),
         author,
-        createdAt,
+        createdAt: formatDateToBRWithHour(createdAt),
       };
     });
   }
@@ -52,7 +52,7 @@ export class TaskAuditLogMapper {
         fieldName,
         newValue,
         oldValue,
-        changedAt,
+        changedAt: formatDateToBRWithHour(changedAt),
       };
     });
   }
@@ -65,9 +65,9 @@ export class TaskAuditLogMapper {
 
       return {
         id,
-        task: TaskMapper.toDomain(JSON.parse(task)),
+        task: TaskMapper.toDomain(task),
         author,
-        deletedAt,
+        deletedAt: formatDateToBRWithHour(deletedAt),
       };
     });
   }

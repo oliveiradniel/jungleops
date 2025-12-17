@@ -53,7 +53,7 @@ export class TaskAuditLogMapper {
     return {
       id: entity.id,
       authorId: entity.userId,
-      task: entity.oldValue!,
+      task: JSON.parse(entity.oldValue!),
       deletedAt: entity.changedAt,
     };
   }

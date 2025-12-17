@@ -5,7 +5,7 @@ export interface AuditLogOfTaskCreation {
   id: string;
   task: Task;
   author: UserWithoutPassword;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface AuditLogOfTaskUpdate {
@@ -18,12 +18,12 @@ export interface AuditLogOfTaskUpdate {
   fieldName: string;
   oldValue: string | UserWithoutPassword[];
   newValue: string | UserWithoutPassword[];
-  changedAt: Date;
+  changedAt: string;
 }
 
 export interface AuditLogOfTaskDeletion {
   id: string;
   task: Task;
   author: UserWithoutPassword;
-  deletedAt: Date;
+  deletedAt: string;
 }
