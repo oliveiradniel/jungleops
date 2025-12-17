@@ -18,9 +18,9 @@ import { Button } from '@/view/components/ui/button';
 export function DeleteLogDialog({ selectedLogId, type }: DeleteLogDialogProps) {
   const {
     handleDeleteLog,
-    handleCloseDeleteTaskDialog,
+    handleCloseDeleteTaskAuditLogDialog,
     isDeleteTaskAuditLogLoading,
-    isDeleteTaskDialogOpen,
+    isDeleteTaskAuditLogDialogOpen,
   } = useDeleteTaskDialog({
     selectedLogId,
     type,
@@ -28,8 +28,8 @@ export function DeleteLogDialog({ selectedLogId, type }: DeleteLogDialogProps) {
 
   return (
     <Dialog
-      open={isDeleteTaskDialogOpen}
-      onOpenChange={handleCloseDeleteTaskDialog}
+      open={isDeleteTaskAuditLogDialogOpen}
+      onOpenChange={handleCloseDeleteTaskAuditLogDialog}
     >
       <DialogContent>
         <DialogHeader>

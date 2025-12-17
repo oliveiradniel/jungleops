@@ -66,7 +66,7 @@ export function useColumns(): ColumnDef<AuditLogOfTaskCreation>[] {
       },
       {
         id: 'status',
-        accessorFn: (row) => row.task.status,
+        accessorFn: (row) => row.task.status.value,
         header: 'Status',
         cell: ({ row }) => {
           const { value, label } = row.original.task.status;
@@ -79,7 +79,7 @@ export function useColumns(): ColumnDef<AuditLogOfTaskCreation>[] {
       },
       {
         id: 'priority',
-        accessorFn: (row) => row.task.priority,
+        accessorFn: (row) => row.task.priority.value,
         header: 'Prioridade',
         cell: ({ row }) => {
           const { value, label } = row.original.task.priority;
@@ -150,12 +150,12 @@ export function useColumns(): ColumnDef<AuditLogOfTaskCreation>[] {
 
                     <Button
                       variant="ghost"
-                      onClick={() =>
+                      onClick={() => {
                         handleOpenDeleteTaskAuditLogDialog({
                           selectedLogId: row.original.id,
                           type: 'creation',
-                        })
-                      }
+                        });
+                      }}
                       className="flex w-full items-center gap-2 font-normal"
                     >
                       <Trash2Icon className="size-4 text-red-400" />

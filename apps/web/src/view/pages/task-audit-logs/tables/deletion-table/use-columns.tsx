@@ -1,11 +1,6 @@
 import { useMemo } from 'react';
 import { useTaskAuditLog } from '../../context/use-task-audit-log';
 
-import {
-  formatDateToBR,
-  formatDateToBRWithHour,
-} from '@/app/utils/format-date-br';
-
 import { EllipsisIcon, Trash2Icon } from 'lucide-react';
 
 import { Button } from '@/view/components/ui/button';
@@ -26,20 +21,16 @@ import { DateHeader } from '../../components/date-header';
 import { TermHeader } from '../../components/term-header';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import type {
-  ListDeletionTaskAuditLogWithAuthorData,
-  Task,
-} from '@challenge/shared';
+import type { AuditLogOfTaskDeletion } from '@/app/entities/task-audit-log';
 
-export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[] {
+export function useColumns(): ColumnDef<AuditLogOfTaskDeletion>[] {
   const { handleOpenDeleteTaskAuditLogDialog } = useTaskAuditLog();
 
-  return useMemo<ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[]>(
+  return useMemo<ColumnDef<AuditLogOfTaskDeletion>[]>(
     () => [
       {
         id: 'author',
-        accessorFn: (row) =>
-          `${row.authorData.username} ${row.authorData.email}`,
+        accessorFn: (row) => row.author.username,
         header: ({ column }) => <AuthorHeader column={column} />,
         cell: ({ row }) => <AuthorCell row={row} />,
         meta: {
@@ -47,7 +38,8 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
         },
       },
       {
-        accessorKey: 'taskTitle',
+        id: 'title',
+        accessorFn: (row) => row.task.title,
         header: ({ column }) => <TitleHeader column={column} />,
         cell: ({ row }) => <TitleCell row={row} />,
         meta: {
@@ -56,30 +48,23 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
       },
       {
         id: 'description',
-        accessorFn: (row) => (JSON.parse(row.values) as Task).description,
+        accessorFn: (row) => row.task.description,
         header: ({ column }) => <DescriptionHeader column={column} />,
-        cell: ({ row }) => {
-          const values = JSON.parse(row.original.values) as Task;
-
-          return <TextCellTooltip text={values.description} />;
-        },
+        cell: ({ row }) => (
+          <TextCellTooltip text={row.original.task.description} />
+        ),
         meta: {
           nameInFilters: 'Descrição',
         },
       },
       {
         id: 'status',
-        accessorFn: (row) => (JSON.parse(row.values) as Task).status,
+        accessorFn: (row) => row.task.status.value,
         header: 'Status',
         cell: ({ row }) => {
-          const values = JSON.parse(row.original.values) as Task;
+          const { value, label } = row.original.task.status;
 
-          return (
-            <StatusBadge
-              value={values.status.value}
-              label={values.status.label}
-            />
-          );
+          return <StatusBadge value={value} label={label} />;
         },
         meta: {
           nameInFilters: 'Status',
@@ -87,17 +72,12 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
       },
       {
         id: 'priority',
-        accessorFn: (row) => (JSON.parse(row.values) as Task).priority,
+        accessorFn: (row) => row.task.priority.value,
         header: 'Prioridade',
         cell: ({ row }) => {
-          const values = JSON.parse(row.original.values) as Task;
+          const { value, label } = row.original.task.priority;
 
-          return (
-            <PriorityBadge
-              value={values.priority.value}
-              label={values.priority.label}
-            />
-          );
+          return <PriorityBadge value={value} label={label} />;
         },
         meta: {
           nameInFilters: 'Prioridade',
@@ -105,13 +85,9 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
       },
       {
         id: 'term',
-        accessorFn: (row) => (JSON.parse(row.values) as Task).term,
+        accessorFn: (row) => row.task.term,
         header: ({ column }) => <TermHeader column={column} />,
-        cell: ({ row }) => {
-          const values = JSON.parse(row.original.values) as Task;
-
-          return formatDateToBR(values.term);
-        },
+        cell: ({ row }) => row.original.task.term,
         meta: {
           nameInFilters: 'Prazo',
         },
@@ -123,7 +99,7 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
         header: ({ column }) => (
           <DateHeader title="Data/horário da exclusão" column={column} />
         ),
-        cell: ({ row }) => formatDateToBRWithHour(row.original.changedAt),
+        cell: ({ row }) => row.original.deletedAt,
         meta: {
           nameInFilters: 'Data/horário',
         },
