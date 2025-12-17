@@ -1,22 +1,22 @@
 import type { HttpRequestConfig } from './ihttp-client';
 
 import type {
-  ListCreationTaskAuditLogWithAuthorData,
-  ListDeletionTaskAuditLogWithAuthorData,
-  ListUpdateTaskAuditLogWithAuthorData,
-  TaskAuditLog,
-} from '@challenge/shared';
+  AuditLogOfTaskCreation,
+  AuditLogOfTaskDeletion,
+  AuditLogOfTaskUpdate,
+} from '@/app/entities/task-audit-log';
+import type { TaskAuditLog } from '@challenge/shared';
 
 export abstract class ITaskAuditLogsService {
   abstract list(config?: HttpRequestConfig): Promise<TaskAuditLog[]>;
   abstract listTaskCreationAuditLog(
     config?: HttpRequestConfig,
-  ): Promise<ListCreationTaskAuditLogWithAuthorData[]>;
+  ): Promise<AuditLogOfTaskCreation[]>;
   abstract listTaskUpdateAuditLog(
     config?: HttpRequestConfig,
-  ): Promise<ListUpdateTaskAuditLogWithAuthorData[]>;
+  ): Promise<AuditLogOfTaskUpdate[]>;
   abstract listTaskDeletionAuditLog(
     config?: HttpRequestConfig,
-  ): Promise<ListDeletionTaskAuditLogWithAuthorData[]>;
+  ): Promise<AuditLogOfTaskDeletion[]>;
   abstract delete(id: string, config?: HttpRequestConfig): Promise<void>;
 }
