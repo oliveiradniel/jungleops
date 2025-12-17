@@ -28,24 +28,9 @@ export class TaskAuditLogMapper {
   ): ListCreationTaskAuditLog {
     return {
       id: entity.id,
-      taskId: entity.taskId,
       authorId: entity.userId,
-      taskTitle: entity.taskTitle,
-      values: entity.newValue!,
-      changedAt: entity.changedAt,
-    };
-  }
-
-  static toDomainDeletion(
-    entity: TaskAuditLogEntity,
-  ): ListDeletionTaskAuditLog {
-    return {
-      id: entity.id,
-      taskId: entity.taskId,
-      authorId: entity.userId,
-      taskTitle: entity.taskTitle,
-      values: entity.oldValue!,
-      changedAt: entity.changedAt,
+      task: JSON.parse(entity.newValue!),
+      createdAt: entity.changedAt,
     };
   }
 
@@ -62,6 +47,17 @@ export class TaskAuditLogMapper {
     };
   }
 
+  static toDomainDeletion(
+    entity: TaskAuditLogEntity,
+  ): ListDeletionTaskAuditLog {
+    return {
+      id: entity.id,
+      authorId: entity.userId,
+      task: entity.oldValue!,
+      deletedAt: entity.changedAt,
+    };
+  }
+
   static toDomainList(entities: TaskAuditLogEntity[]): TaskAuditLog[] {
     return entities.map(this.toDomain);
   }
@@ -72,16 +68,16 @@ export class TaskAuditLogMapper {
     return entities.map(this.toDomainCreation);
   }
 
-  static toDomainDeletionList(
-    entities: TaskAuditLogEntity[],
-  ): ListDeletionTaskAuditLog[] {
-    return entities.map(this.toDomainDeletion);
-  }
-
   static toDomainUpdateList(
     entities: TaskAuditLogEntity[],
   ): ListUpdateTaskAuditLog[] {
     return entities.map(this.toDomainUpdate);
+  }
+
+  static toDomainDeletionList(
+    entities: TaskAuditLogEntity[],
+  ): ListDeletionTaskAuditLog[] {
+    return entities.map(this.toDomainDeletion);
   }
 
   static toEntity(domain: TaskAuditLog): TaskAuditLogEntity {

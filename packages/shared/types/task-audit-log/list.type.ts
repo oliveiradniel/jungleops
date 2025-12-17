@@ -7,7 +7,7 @@ export interface ListCreationTaskAuditLog {
   createdAt: Date;
 }
 
-export type ListCreationTaskAuditLogWithAuthorData = ListCreationTaskAuditLog & { authorData: UserWithoutPassword }
+export type ListCreationTaskAuditLogWithAuthor = ListCreationTaskAuditLog & { author: UserWithoutPassword }
 
 export interface ListUpdateTaskAuditLog {
   id: string;
@@ -20,7 +20,7 @@ export interface ListUpdateTaskAuditLog {
   changedAt: Date;
 }
 
-export type ListUpdateTaskAuditLogWithAuthorData = ListUpdateTaskAuditLog & { authorData: UserWithoutPassword }
+export type ListUpdateTaskAuditLogWithAuthor = ListUpdateTaskAuditLog & { author: UserWithoutPassword }
 
 export interface ListDeletionTaskAuditLog {
   id: string;
@@ -29,4 +29,4 @@ export interface ListDeletionTaskAuditLog {
   deletedAt: Date;
 }
 
-export type ListDeletionTaskAuditLogWithAuthorData = ListDeletionTaskAuditLog & { authorData: UserWithoutPassword }
+export type ListDeletionTaskAuditLogWithAuthor = ListDeletionTaskAuditLog & { author: UserWithoutPassword }

@@ -10,9 +10,9 @@ import {
 import { TaskAuditLogsService } from './task-audit-logs.service';
 
 import {
-  ListCreationTaskAuditLogWithAuthorData,
-  ListDeletionTaskAuditLogWithAuthorData,
-  ListUpdateTaskAuditLogWithAuthorData,
+  ListCreationTaskAuditLogWithAuthor,
+  ListDeletionTaskAuditLogWithAuthor,
+  ListUpdateTaskAuditLogWithAuthor,
   TaskAuditLog,
 } from '@challenge/shared';
 
@@ -28,23 +28,19 @@ export class TaskAuditLogsController {
 
   @HttpCode(HttpStatus.OK)
   @Get('creation')
-  listTaskCreationAuditLog(): Promise<
-    ListCreationTaskAuditLogWithAuthorData[]
-  > {
+  listTaskCreationAuditLog(): Promise<ListCreationTaskAuditLogWithAuthor[]> {
     return this.taskAuditLogsService.listTaskCreationAuditLog();
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('update')
-  listTaskUpdateAuditLog(): Promise<ListUpdateTaskAuditLogWithAuthorData[]> {
+  listTaskUpdateAuditLog(): Promise<ListUpdateTaskAuditLogWithAuthor[]> {
     return this.taskAuditLogsService.listTaskUpdateAuditLog();
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('deletion')
-  listTaskDeletionAuditLog(): Promise<
-    ListDeletionTaskAuditLogWithAuthorData[]
-  > {
+  listTaskDeletionAuditLog(): Promise<ListDeletionTaskAuditLogWithAuthor[]> {
     return this.taskAuditLogsService.listTaskDeletionAuditLog();
   }
 

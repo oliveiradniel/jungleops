@@ -36,6 +36,24 @@ export class TaskAuditLogsRepository implements ITaskAuditLogsRepository {
     return TaskAuditLogMapper.toDomainList(listTaskAuditLogs);
   }
 
+  async listTaskCreationAuditLog(): Promise<ListCreationTaskAuditLog[]> {
+    const list = await this.taskAuditLogsRepository
+      .createQueryBuilder('log')
+      .where('log.action = :action', { action: 'CREATE' })
+      .select([
+        'log.id',
+        'log.taskId',
+        'log.userId',
+        'log.taskTitle',
+        'log.newValue',
+        'log.changedAt',
+      ])
+      .orderBy('ABS(EXTRACT(EPOCH FROM (NOW() - log.changedAt)))', 'ASC')
+      .getMany();
+
+    return TaskAuditLogMapper.toDomainCreationList(list);
+  }
+
   async listTaskUpdateAuditLog(): Promise<ListUpdateTaskAuditLog[]> {
     const list = await this.taskAuditLogsRepository
       .createQueryBuilder('log')
@@ -56,31 +74,12 @@ export class TaskAuditLogsRepository implements ITaskAuditLogsRepository {
         'log.userId',
         'log.taskTitle',
         'log.oldValue',
-        'log.newValue',
         'log.changedAt',
       ])
       .orderBy('ABS(EXTRACT(EPOCH FROM (NOW() - log.changedAt)))', 'ASC')
       .getMany();
 
     return TaskAuditLogMapper.toDomainDeletionList(list);
-  }
-
-  async listTaskCreationAuditLog(): Promise<ListCreationTaskAuditLog[]> {
-    const list = await this.taskAuditLogsRepository
-      .createQueryBuilder('log')
-      .where('log.action = :action', { action: 'CREATE' })
-      .select([
-        'log.id',
-        'log.taskId',
-        'log.userId',
-        'log.taskTitle',
-        'log.newValue',
-        'log.changedAt',
-      ])
-      .orderBy('ABS(EXTRACT(EPOCH FROM (NOW() - log.changedAt)))', 'ASC')
-      .getMany();
-
-    return TaskAuditLogMapper.toDomainCreationList(list);
   }
 
   async create(data: CreateTaskAuditLogData): Promise<TaskAuditLog> {
