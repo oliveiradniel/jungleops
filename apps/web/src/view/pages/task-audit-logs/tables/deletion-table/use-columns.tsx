@@ -74,7 +74,12 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
         cell: ({ row }) => {
           const values = JSON.parse(row.original.values) as Task;
 
-          return <StatusBadge status={values.status} />;
+          return (
+            <StatusBadge
+              value={values.status.value}
+              label={values.status.label}
+            />
+          );
         },
         meta: {
           nameInFilters: 'Status',
@@ -87,7 +92,12 @@ export function useColumns(): ColumnDef<ListDeletionTaskAuditLogWithAuthorData>[
         cell: ({ row }) => {
           const values = JSON.parse(row.original.values) as Task;
 
-          return <PriorityBadge priority={values.priority} />;
+          return (
+            <PriorityBadge
+              value={values.priority.value}
+              label={values.priority.label}
+            />
+          );
         },
         meta: {
           nameInFilters: 'Prioridade',
