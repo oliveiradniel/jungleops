@@ -14,9 +14,9 @@ import {
 
 interface DropdownMenuActionsProps {
   logId: string;
-  taskId: string;
+  taskId?: string;
   taskAuditLogType: 'creation' | 'deletion' | 'update';
-  thisTaskDeleted: boolean;
+  thisTaskDeleted?: boolean;
 }
 
 export function DropdownMenuActions({
@@ -38,13 +38,13 @@ export function DropdownMenuActions({
 
         <DropdownMenuContent align="end">
           <div>
-            {!thisTaskDeleted && (
+            {(!thisTaskDeleted || taskAuditLogType === 'deletion') && (
               <Button
                 asChild
                 variant="ghost"
                 className={cn('w-full font-normal')}
               >
-                <Link to="/tasks/$taskId" params={{ taskId }}>
+                <Link to="/tasks/$taskId" params={{ taskId: taskId! }}>
                   <div className="flex items-center gap-2">
                     <InfoIcon className="size-4 text-blue-400" />
                     Ver tarefa

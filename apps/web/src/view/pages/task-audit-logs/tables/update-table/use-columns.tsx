@@ -1,47 +1,27 @@
-import { Link } from '@tanstack/react-router';
-
 import { useMemo } from 'react';
 import { useListTaskDeletionAuditLogQuery } from '@/app/hooks/queries/use-list-task-deletion-audit-log-query';
-import { useTaskAuditLog } from '../../context/use-task-audit-log';
 
-import { cn } from '@/lib/utils';
-import { formatDateToBRWithHour } from '@/app/utils/format-date-br';
-import { fieldLabels } from '@/config/labels';
-
-import { EllipsisIcon, InfoIcon, Trash2Icon } from 'lucide-react';
-
-import { Button } from '@/view/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/view/components/ui/dropdown-menu';
 import { AuthorCell } from '../../components/author-cell';
 import { TaskUpdateValueCell } from '../../components/task-update-value-cell';
 import { TitleCell } from '../../components/title-cell';
 import { AuthorHeader } from '../../components/author-header';
 import { TitleHeader } from '../../components/title-header';
 import { DateHeader } from '../../components/date-header';
+import { DropdownMenuActions } from '../../components/dropdown-menu-actions';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import type {
-  FieldName,
-  ListUpdateTaskAuditLogWithAuthorData,
-} from '@challenge/shared';
+import type { AuditLogOfTaskUpdate } from '@/app/entities/task-audit-log';
 
-export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] {
+export function useColumns(): ColumnDef<AuditLogOfTaskUpdate>[] {
   const { taskDeletionAuditLogsList } = useListTaskDeletionAuditLogQuery();
 
-  const { handleOpenDeleteTaskAuditLogDialog } = useTaskAuditLog();
+  const deletedTaskIds = taskDeletionAuditLogsList.map((log) => log.task.id);
 
-  const deletedTaskIds = taskDeletionAuditLogsList.map((log) => log.taskId);
-
-  return useMemo<ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[]>(
+  return useMemo<ColumnDef<AuditLogOfTaskUpdate>[]>(
     () => [
       {
         id: 'author',
-        accessorFn: (row) =>
-          `${row.authorData.username} ${row.authorData.email}`,
+        accessorFn: (row) => `${row.author.username} ${row.author.email}`,
         header: ({ column }) => <AuthorHeader column={column} />,
         cell: ({ row }) => <AuthorCell row={row} />,
         meta: {
@@ -49,7 +29,8 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
         },
       },
       {
-        accessorKey: 'taskTitle',
+        id: 'title',
+        accessorFn: (row) => row.task.title,
         header: ({ column }) => <TitleHeader column={column} />,
         cell: ({ row }) => <TitleCell row={row} />,
         meta: {
@@ -59,7 +40,7 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
       {
         accessorKey: 'fieldName',
         header: 'Campo',
-        cell: ({ row }) => fieldLabels[row.original.fieldName as FieldName],
+        cell: ({ row }) => row.original.fieldName.label,
         meta: {
           nameInFilters: 'Campo',
         },
@@ -96,7 +77,7 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
         header: ({ column }) => (
           <DateHeader title="Data/horário da atualização" column={column} />
         ),
-        cell: ({ row }) => formatDateToBRWithHour(row.original.changedAt),
+        cell: ({ row }) => row.original.changedAt,
         meta: {
           nameInFilters: 'Data/horário',
         },
@@ -107,54 +88,17 @@ export function useColumns(): ColumnDef<ListUpdateTaskAuditLogWithAuthorData>[] 
         enableHiding: false,
         enableGlobalFilter: false,
         cell: ({ row }) => {
-          const thisTaskDeleted = deletedTaskIds.includes(row.original.taskId);
+          const thisTaskDeleted = deletedTaskIds.includes(row.original.task.id);
+
+          const { id, task } = row.original;
 
           return (
-            <div className="flex justify-end">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button aria-label="Ver opções" variant="ghost" size="sm">
-                    <EllipsisIcon className="size-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent align="end">
-                  <div>
-                    {!thisTaskDeleted && (
-                      <Button
-                        asChild
-                        variant="ghost"
-                        className={cn('w-full font-normal')}
-                      >
-                        <Link
-                          to="/tasks/$taskId"
-                          params={{ taskId: row.original.taskId }}
-                        >
-                          <div className="flex items-center gap-2">
-                            <InfoIcon className="size-4 text-blue-400" />
-                            Ver tarefa
-                          </div>
-                        </Link>
-                      </Button>
-                    )}
-
-                    <Button
-                      variant="ghost"
-                      onClick={() =>
-                        handleOpenDeleteTaskAuditLogDialog({
-                          selectedLogId: row.original.id,
-                          type: 'update',
-                        })
-                      }
-                      className="flex w-full items-center gap-2 font-normal"
-                    >
-                      <Trash2Icon className="size-4 text-red-400" />
-                      Excluir log
-                    </Button>
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+            <DropdownMenuActions
+              logId={id}
+              taskId={task.id}
+              thisTaskDeleted={thisTaskDeleted}
+              taskAuditLogType="update"
+            />
           );
         },
       },

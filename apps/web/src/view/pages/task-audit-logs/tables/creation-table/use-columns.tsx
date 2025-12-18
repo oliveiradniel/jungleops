@@ -11,23 +11,12 @@ import { PriorityBadge } from '@/view/components/ui/priority-badge';
 import { DescriptionHeader } from '../../components/description-header';
 import { TermHeader } from '../../components/term-header';
 import { DateHeader } from '../../components/date-header';
+import { DropdownMenuActions } from '../../components/dropdown-menu-actions';
 
 import type { ColumnDef } from '@tanstack/react-table';
 import type { AuditLogOfTaskCreation } from '@/app/entities/task-audit-log';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/view/components/ui/dropdown-menu';
-import { Button } from '@/view/components/ui/button';
-import { EllipsisIcon, InfoIcon, Trash2Icon } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Link } from '@tanstack/react-router';
-import { useTaskAuditLog } from '../../context/use-task-audit-log';
 
 export function useColumns(): ColumnDef<AuditLogOfTaskCreation>[] {
-  const { handleOpenDeleteTaskAuditLogDialog } = useTaskAuditLog();
-
   const { taskDeletionAuditLogsList, isTaskDeletionAuditLogsLoading } =
     useListTaskDeletionAuditLogQuery();
 
@@ -119,52 +108,15 @@ export function useColumns(): ColumnDef<AuditLogOfTaskCreation>[] {
         cell: ({ row }) => {
           const thisTaskDeleted = deletedTaskIds.includes(row.original.task.id);
 
+          const { id, task } = row.original;
+
           return (
-            <div className="flex justify-end">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button variant="ghost" size="sm">
-                    <EllipsisIcon className="size-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent align="end">
-                  <div>
-                    {!thisTaskDeleted && (
-                      <Button
-                        asChild
-                        variant="ghost"
-                        className={cn('w-full font-normal')}
-                      >
-                        <Link
-                          to="/tasks/$taskId"
-                          params={{ taskId: row.original.task.id }}
-                        >
-                          <div className="flex items-center gap-2">
-                            <InfoIcon className="size-4 text-blue-400" />
-                            Ver tarefa
-                          </div>
-                        </Link>
-                      </Button>
-                    )}
-
-                    <Button
-                      variant="ghost"
-                      onClick={() => {
-                        handleOpenDeleteTaskAuditLogDialog({
-                          selectedLogId: row.original.id,
-                          type: 'creation',
-                        });
-                      }}
-                      className="flex w-full items-center gap-2 font-normal"
-                    >
-                      <Trash2Icon className="size-4 text-red-400" />
-                      Excluir log
-                    </Button>
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+            <DropdownMenuActions
+              logId={id}
+              taskId={task.id}
+              thisTaskDeleted={thisTaskDeleted}
+              taskAuditLogType="creation"
+            />
           );
         },
       },
