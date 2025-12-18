@@ -41,7 +41,7 @@ export function useTaskController() {
       to: '/tasks/$taskId',
     });
 
-  useNotificationsSocket({ userId: user?.id, taskId, page });
+  useNotificationsSocket({ userId: user?.id, taskId });
 
   const {
     commentsList,

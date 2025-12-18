@@ -22,11 +22,9 @@ import type { TaskStatus } from '../enums/TaskStatus';
 export function useNotificationsSocket({
   userId,
   taskId,
-  page,
 }: {
   userId?: string;
   taskId?: string;
-  page?: number;
 }) {
   const socketRef = useRef<Socket | null>(null);
 
@@ -68,7 +66,8 @@ export function useNotificationsSocket({
         queryKey: ['task', { taskId }],
       });
       queryClient.invalidateQueries({
-        queryKey: ['tasks', { page }],
+        queryKey: ['tasks'],
+        exact: false,
       });
     });
 
@@ -84,7 +83,8 @@ export function useNotificationsSocket({
         queryKey: ['task', { taskId }],
       });
       queryClient.invalidateQueries({
-        queryKey: ['tasks', { page }],
+        queryKey: ['tasks'],
+        exact: false,
       });
     });
 
@@ -102,7 +102,8 @@ export function useNotificationsSocket({
           queryKey: ['task', { taskId }],
         });
         queryClient.invalidateQueries({
-          queryKey: ['tasks', { page }],
+          queryKey: ['tasks'],
+          exact: false,
         });
       },
     );
@@ -130,7 +131,8 @@ export function useNotificationsSocket({
         queryKey: ['task', { taskId }],
       });
       queryClient.invalidateQueries({
-        queryKey: ['tasks', { page }],
+        queryKey: ['tasks'],
+        exact: false,
       });
     });
 
@@ -146,7 +148,8 @@ export function useNotificationsSocket({
         queryKey: ['comments'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['tasks', { page }],
+        queryKey: ['tasks'],
+        exact: false,
       });
       queryClient.invalidateQueries({
         queryKey: ['task'],

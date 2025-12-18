@@ -4,6 +4,8 @@ import { useTasks } from '@/app/hooks/use-tasks';
 import { useListTasksQuery } from '@/app/hooks/queries/use-list-tasks-query';
 import { usePagination } from '@/app/hooks/use-pagination';
 import { useNotificationsSocket } from '@/app/hooks/use-notifications-socket';
+// import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+// import { useData } from './use-data';
 
 export interface FilterParams {
   type: 'priority' | 'status';
@@ -19,7 +21,7 @@ export function useTasksController() {
 
   const { user } = useAuth();
 
-  useNotificationsSocket({ userId: user?.id, page });
+  useNotificationsSocket({ userId: user?.id });
 
   const {
     tasksList,
@@ -30,6 +32,16 @@ export function useTasksController() {
     isTasksLoading,
     isTasksPending,
   } = useListTasksQuery({ page, size });
+
+  // const data = useData();
+
+  // const table = useReactTable({
+  //   data: tasksList,
+  //   columns: data,
+  //   getCoreRowModel: getCoreRowModel(),
+  // });
+
+  // console.log(table.getRowModel().rows);
 
   const maxVisiblePages = 3;
 

@@ -30,7 +30,7 @@ export function useDeleteTaskDialog({
 
   const { user } = useAuth();
 
-  useNotificationsSocket({ userId: user?.id, page });
+  useNotificationsSocket({ userId: user?.id });
 
   const { deleteTask, isDeleteTaskLoading } = useDeleteTaskMutation();
 
