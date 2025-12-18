@@ -13,26 +13,24 @@ import { TextCellTooltip } from './text-cell-tooltip';
 import type { TaskPriority } from '@/app/enums/TaskPriority';
 import type { TaskStatus } from '@/app/enums/TaskStatus';
 import type { UserWithoutPassword } from '@challenge/shared';
+import type { FieldName } from '@/app/enums/field-name';
 
 interface TaskUpdateValueCellProps {
   value: string | UserWithoutPassword[];
-  fieldName: string;
+  fieldName: { value: FieldName; label: string };
 }
 
 export function TaskUpdateValueCell({
   value,
   fieldName,
 }: TaskUpdateValueCellProps) {
-  const isFieldNamePriority = fieldName === 'priority';
-  const isFieldNameStatus = fieldName === 'status';
-  const isFieldNameUserIds = fieldName === 'userIds';
+  if (fieldName.value === 'priority')
+    return <PriorityBadge value={value as TaskPriority} />;
 
-  if (isFieldNamePriority)
-    return <PriorityBadge priority={value as TaskPriority} />;
+  if (fieldName.value === 'status')
+    return <StatusBadge value={value as TaskStatus} />;
 
-  if (isFieldNameStatus) return <StatusBadge status={value as TaskStatus} />;
-
-  if (Array.isArray(value) && isFieldNameUserIds) {
+  if (Array.isArray(value) && fieldName.value === 'userIds') {
     if (value.length === 0) {
       return (
         <span className="text-destructive font-medium">Sem participantes</span>
@@ -70,9 +68,11 @@ export function TaskUpdateValueCell({
     );
   }
 
-  if (typeof value === 'string' || typeof value === 'number') {
+  if (typeof value === 'string') {
+    if (fieldName.value === 'term') {
+      return value;
+    }
+
     return <TextCellTooltip text={value} />;
   }
-
-  return JSON.stringify(value);
 }

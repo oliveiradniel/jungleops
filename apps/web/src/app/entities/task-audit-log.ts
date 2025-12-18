@@ -1,5 +1,5 @@
 import type { Task } from './task';
-import type { UserWithoutPassword } from '@challenge/shared';
+import type { FieldName, UserWithoutPassword } from '@challenge/shared';
 
 export interface AuditLogOfTaskCreation {
   id: string;
@@ -15,7 +15,10 @@ export interface AuditLogOfTaskUpdate {
     title: string;
   };
   author: UserWithoutPassword;
-  fieldName: string;
+  fieldName: {
+    value: FieldName;
+    label: string;
+  };
   oldValue: string | UserWithoutPassword[];
   newValue: string | UserWithoutPassword[];
   changedAt: string;

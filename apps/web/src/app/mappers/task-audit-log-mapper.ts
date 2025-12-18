@@ -1,6 +1,7 @@
 import { TaskMapper } from './task-mapper';
 
 import { formatDateToBRWithHour } from '../utils/format-date-br';
+import { fieldLabels } from '@/config/labels';
 
 import type {
   AuditLogOfTaskCreation,
@@ -8,6 +9,7 @@ import type {
   AuditLogOfTaskUpdate,
 } from '../entities/task-audit-log';
 import type {
+  FieldName,
   ListCreationTaskAuditLogWithAuthor,
   ListDeletionTaskAuditLogWithAuthor,
   ListUpdateTaskAuditLogWithAuthor,
@@ -49,7 +51,10 @@ export class TaskAuditLogMapper {
           title: taskTitle,
         },
         author,
-        fieldName,
+        fieldName: {
+          value: fieldName,
+          label: fieldLabels[fieldName as FieldName],
+        },
         newValue,
         oldValue,
         changedAt: formatDateToBRWithHour(changedAt),

@@ -41,7 +41,7 @@ export function TasksCard({ filteredTasksList }: TasksCardProps) {
                 <TaskActionsPopover
                   taskId={id}
                   title={title}
-                  status={status.value}
+                  status={status}
                   createdAt={createdAt}
                 />
               </div>

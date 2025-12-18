@@ -7,13 +7,15 @@ export enum FieldName {
   USER_IDS = 'userIds',
 }
 
+export type TFieldName = 'title' | 'description' | 'term' | 'priority' | 'status' | 'userIds';
+
 export enum AuditAction {
   CREATE = 'CREATE',
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
 }
-
 export type TAuditAction = 'CREATE' | 'UPDATE' | 'DELETE';
+
 
 export interface TaskAuditLog {
   id: string;

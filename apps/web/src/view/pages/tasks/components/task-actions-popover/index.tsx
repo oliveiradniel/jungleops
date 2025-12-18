@@ -26,8 +26,11 @@ import type { TaskStatus } from '@/app/enums/TaskStatus';
 interface TaskActionsPopover {
   taskId: string;
   title: string;
-  status: TaskStatus;
-  createdAt: Date;
+  status: {
+    value: TaskStatus;
+    label: string;
+  };
+  createdAt: string;
 }
 
 export function TaskActionsPopover({

@@ -1,7 +1,20 @@
-import { ListCreationTaskAuditLog, ListDeletionTaskAuditLog, ListUpdateTaskAuditLog, ListCreationTaskAuditLogWithAuthorData, ListDeletionTaskAuditLogWithAuthorData, ListUpdateTaskAuditLogWithAuthorData } from './list.type'
+import {
+  ListCreationTaskAuditLog,
+  ListDeletionTaskAuditLog,
+  ListUpdateTaskAuditLog,
+  ListCreationTaskAuditLogWithAuthor,
+  ListDeletionTaskAuditLogWithAuthor,
+  ListUpdateTaskAuditLogWithAuthor
+} from './list.type'
 
 import { ActionPayload } from './websocket-payload'
 
 export {
-   ListCreationTaskAuditLog, ListDeletionTaskAuditLog, ListUpdateTaskAuditLog, ListCreationTaskAuditLogWithAuthorData, ListDeletionTaskAuditLogWithAuthorData, ListUpdateTaskAuditLogWithAuthorData, ActionPayload
+   ListCreationTaskAuditLog,
+   ListDeletionTaskAuditLog,
+   ListUpdateTaskAuditLog,
+   ListCreationTaskAuditLogWithAuthor,
+   ListDeletionTaskAuditLogWithAuthor,
+   ListUpdateTaskAuditLogWithAuthor,
+   ActionPayload
 }

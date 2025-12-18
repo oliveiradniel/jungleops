@@ -1,9 +1,9 @@
-import { Task, UserWithoutPassword } from "entities";
+import { TaskWithCommentCount, UserWithoutPassword, TFieldName } from "entities";
 
 export interface ListCreationTaskAuditLog {
   id: string;
   authorId: string;
-  task: Task;
+  task: TaskWithCommentCount;
   createdAt: Date;
 }
 
@@ -14,7 +14,7 @@ export interface ListUpdateTaskAuditLog {
   taskId: string;
   authorId: string;
   taskTitle: string;
-  fieldName: string;
+  fieldName: TFieldName;
   oldValue: string | UserWithoutPassword[];
   newValue: string | UserWithoutPassword[];
   changedAt: Date;
@@ -25,7 +25,7 @@ export type ListUpdateTaskAuditLogWithAuthor = ListUpdateTaskAuditLog & { author
 export interface ListDeletionTaskAuditLog {
   id: string;
   authorId: string;
-  task: string;
+  task: TaskWithCommentCount;
   deletedAt: Date;
 }
 

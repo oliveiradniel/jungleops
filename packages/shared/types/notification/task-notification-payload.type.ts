@@ -1,9 +1,8 @@
-import { FieldName } from 'entities';
-
 import { TaskPriority, TaskStatus } from 'enums';
+import { TFieldName } from 'entities';
 
 export interface ChangedField {
-  fieldName: FieldName;
+  fieldName: TFieldName;
   dirty: boolean;
   newValue: string;
   oldValue: string;
