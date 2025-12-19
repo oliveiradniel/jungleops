@@ -1,5 +1,9 @@
 import { useMemo, useState } from 'react';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import { useAuth } from '@/app/hooks/use-auth';
 import { useTasks } from '@/app/hooks/use-tasks';
 import { useListTasksQuery } from '@/app/hooks/queries/use-list-tasks-query';
@@ -38,6 +42,7 @@ export function useTasksController() {
     data: tasksList,
     columns: taskColumns,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
   const maxVisiblePages = 3;

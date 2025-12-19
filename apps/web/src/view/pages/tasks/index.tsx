@@ -9,6 +9,7 @@ import { Spinner } from '@/view/components/ui/spinner';
 import { Header } from '@/view/components/header';
 import { PaginationControls } from './components/pagination-controls';
 import { Filters } from './components/filters';
+import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
 
 export function Tasks() {
   const {
@@ -60,6 +61,14 @@ export function Tasks() {
               <Filters disabled={isTasksLoading || totalTasksCount === 0} />
             </PaginationControls>
           </Header>
+
+          <header>
+            <DataTableTextFilter
+              table={table}
+              placeholder="Digite o título de uma tarefa"
+              column="title"
+            />
+          </header>
 
           <Separator />
 
