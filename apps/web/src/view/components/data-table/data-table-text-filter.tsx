@@ -8,19 +8,29 @@ import {
   InputGroupInput,
 } from '../ui/input-group';
 
+import type { Table } from '@tanstack/react-table';
+
 interface DataTableTextFilterProps {
+  table?: Table<any>;
   placeholder?: string;
   column?: string;
 }
 
 export function DataTableTextFilter({
+  table,
   placeholder,
   column,
 }: DataTableTextFilterProps) {
-  const { table } = useDataTable();
+  const context = useDataTable();
+
+  const t = table ?? context?.table;
+
+  if (!t) {
+    throw new Error('DataTableTextFilter requires a table instance');
+  }
 
   if (column) {
-    const tableColumn = table.getColumn(column);
+    const tableColumn = t.getColumn(column);
     const value = tableColumn?.getFilterValue() as string;
 
     return (
@@ -30,9 +40,16 @@ export function DataTableTextFilter({
           value={value}
           onChange={(event) => tableColumn?.setFilterValue(event.target.value)}
         />
+
         <InputGroupAddon>
           <SearchIcon />
         </InputGroupAddon>
+
+        {value?.length > 0 && (
+          <InputGroupAddon align="inline-end" className="animate-fade-in">
+            ({t.getRowCount()})
+          </InputGroupAddon>
+        )}
       </InputGroup>
     );
   }
@@ -41,7 +58,7 @@ export function DataTableTextFilter({
     <InputGroup>
       <InputGroupInput
         placeholder={placeholder}
-        onChange={(event) => table.setGlobalFilter(event.target.value)}
+        onChange={(event) => t.setGlobalFilter(event.target.value)}
       />
       <InputGroupAddon>
         <SearchIcon />
