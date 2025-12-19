@@ -12,6 +12,7 @@ import { Filters } from './components/filters';
 
 export function Tasks() {
   const {
+    table,
     startPage,
     pagesToShow,
     page,
@@ -92,8 +93,8 @@ export function Tasks() {
             </div>
           )}
 
-          {!isTasksLoading && totalTasksCount > 0 && (
-            <TasksCard filteredTasksList={filteredTasksList} />
+          {!isTasksLoading && table.getRowCount() > 0 && (
+            <TasksCard table={table} />
           )}
 
           {!isTasksLoading && totalTasksCount === 0 && <EmptyTasks />}
