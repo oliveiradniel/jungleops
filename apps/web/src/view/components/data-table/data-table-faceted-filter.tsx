@@ -12,20 +12,30 @@ import {
 } from '../ui/select';
 import { Button } from '../ui/button';
 
+import type { Table } from '@tanstack/react-table';
+
 interface DataTableFacetedFilterProps<T extends string> {
+  table?: Table<any>;
   placeholder: string;
   column: string;
   labels: Record<T, string>;
 }
 
 export function DataTableFacetedFilter<T extends string>({
+  table,
   placeholder,
   column,
   labels,
 }: DataTableFacetedFilterProps<T>) {
-  const { table } = useDataTable();
+  const context = useDataTable();
 
-  const tableColumn = table.getColumn(column);
+  const t = table ?? context?.table;
+
+  if (!t) {
+    throw new Error('DataTableTextFilter requires a table instance');
+  }
+
+  const tableColumn = t.getColumn(column);
   const facet = tableColumn?.getFacetedUniqueValues();
   const options = facet ? (Array.from(facet.keys()) as T[]) : [];
 
