@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import {
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -43,6 +45,8 @@ export function useTasksController() {
     columns: taskColumns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFacetedRowModel: getFacetedRowModel(),
   });
 
   const maxVisiblePages = 3;

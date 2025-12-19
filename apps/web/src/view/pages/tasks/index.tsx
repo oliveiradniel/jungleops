@@ -1,5 +1,7 @@
 import { useTasksController } from './use-tasks-controller';
 
+import { priorityLabels, statusLabels } from '@/config/labels';
+
 import { Skeleton } from '../../components/ui/skeleton';
 import { TasksCard } from './components/tasks-card';
 import { Separator } from '@/view/components/ui/separator';
@@ -10,6 +12,7 @@ import { Header } from '@/view/components/header';
 import { PaginationControls } from './components/pagination-controls';
 import { Filters } from './components/filters';
 import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
+import { DataTableFacetedFilter } from '@/view/components/data-table/data-table-faceted-filter';
 
 export function Tasks() {
   const {
@@ -62,11 +65,25 @@ export function Tasks() {
             </PaginationControls>
           </Header>
 
-          <header>
+          <header className="flex flex-col items-start justify-between gap-2 xl:flex-row">
             <DataTableTextFilter
               table={table}
               placeholder="Digite o título de uma tarefa"
               column="title"
+            />
+
+            <DataTableFacetedFilter
+              table={table}
+              column="status"
+              labels={statusLabels}
+              placeholder="Status"
+            />
+
+            <DataTableFacetedFilter
+              table={table}
+              column="priority"
+              labels={priorityLabels}
+              placeholder="Prioridade"
             />
           </header>
 

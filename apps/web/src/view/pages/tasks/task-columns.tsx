@@ -9,10 +9,12 @@ export const taskColumns: ColumnDef<Task>[] = [
     accessorKey: 'description',
   },
   {
-    accessorKey: 'status',
+    id: 'status',
+    accessorFn: (row) => row.status.value,
   },
   {
-    accessorKey: 'priority',
+    id: 'priority',
+    accessorFn: (row) => row.priority.value,
   },
   {
     accessorKey: 'term',
