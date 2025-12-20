@@ -8,82 +8,53 @@ import { Separator } from '@/view/components/ui/separator';
 import { EmptyFilteredTasks } from './components/empty-filtered-tasks';
 import { EmptyTasks } from './components/empty-tasks';
 import { Spinner } from '@/view/components/ui/spinner';
-import { Header } from '@/view/components/header';
-import { PaginationControls } from './components/pagination-controls';
-import { Filters } from './components/filters';
 import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
 import { DataTableFacetedFilter } from '@/view/components/data-table/data-table-faceted-filter';
+import { PaginationControls } from '@/view/components/pagination-controls';
 
 export function Tasks() {
   const {
     table,
-    startPage,
-    pagesToShow,
-    page,
-    endPage,
+    totalTasksCount,
+    isTasksLoading,
+    isTasksPending,
     hasPrevious,
     hasNext,
     totalPages,
-    isTasksLoading,
-    isTasksPending,
-    totalTasksCount,
-    filteredTasksList,
-    searchInput,
-    goToPage,
-    handlePreviousTasksPage,
-    handleNextTasksPage,
-    handleChangeSearchInput,
   } = useTasksController();
 
   return (
     <>
       <div className="flex h-[calc(100%-90px)]">
         <div className="flex h-full w-full flex-col gap-6 p-6">
-          <Header
-            searchInput={searchInput}
-            placeholderInput="Digite o título de uma tarefa"
-            itemsList={filteredTasksList}
-            isLoading={isTasksLoading}
-            itemsCount={totalTasksCount}
-            handleChangeSearchInput={handleChangeSearchInput}
-          >
+          <header className="flex flex-col items-start justify-between gap-2">
+            <div className="flex w-full items-start gap-2">
+              <DataTableTextFilter
+                table={table}
+                placeholder="Digite o título de uma tarefa"
+                column="title"
+              />
+
+              <DataTableFacetedFilter
+                table={table}
+                column="status"
+                labels={statusLabels}
+                placeholder="Status"
+              />
+
+              <DataTableFacetedFilter
+                table={table}
+                column="priority"
+                labels={priorityLabels}
+                placeholder="Prioridade"
+              />
+            </div>
+
             <PaginationControls
               hasPrevious={hasPrevious}
               hasNext={hasNext}
-              startPage={startPage}
-              pagesToShow={pagesToShow}
-              endPage={endPage}
               totalPages={totalPages}
-              currentPage={page}
-              itemsCount={totalTasksCount}
-              goToPage={goToPage}
-              isDisabled={isTasksLoading}
-              handlePreviousTasksPage={handlePreviousTasksPage}
-              handleNextTasksPage={handleNextTasksPage}
-            >
-              <Filters disabled={isTasksLoading || totalTasksCount === 0} />
-            </PaginationControls>
-          </Header>
-
-          <header className="flex flex-col items-start justify-between gap-2 xl:flex-row">
-            <DataTableTextFilter
-              table={table}
-              placeholder="Digite o título de uma tarefa"
-              column="title"
-            />
-
-            <DataTableFacetedFilter
-              table={table}
-              column="status"
-              labels={statusLabels}
-              placeholder="Status"
-            />
-
-            <DataTableFacetedFilter
-              table={table}
-              column="priority"
-              labels={priorityLabels}
-              placeholder="Prioridade"
+              isLoading={isTasksPending}
             />
           </header>
 
@@ -126,9 +97,13 @@ export function Tasks() {
           {!isTasksLoading && totalTasksCount === 0 && <EmptyTasks />}
 
           {!isTasksLoading &&
-            filteredTasksList.length === 0 &&
+            table.getRowCount() === 0 &&
             totalTasksCount > 0 && (
-              <EmptyFilteredTasks searchInput={searchInput} />
+              <EmptyFilteredTasks
+                searchInput={
+                  table.getColumn('title')?.getFilterValue() as string
+                }
+              />
             )}
         </div>
       </div>

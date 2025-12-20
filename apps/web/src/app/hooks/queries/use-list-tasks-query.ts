@@ -11,7 +11,7 @@ export function useListTasksQuery({ page, size }: UseListsTasksQueryParams) {
   const tasksService = makeTasksService();
 
   const { data, isLoading, isPending } = useQuery({
-    queryKey: ['tasks', { page }],
+    queryKey: ['tasks', { page, size }],
     queryFn: () => tasksService.list({ page, size }),
   });
 
