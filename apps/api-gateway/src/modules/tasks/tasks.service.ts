@@ -7,9 +7,9 @@ import { firstValueFrom } from 'rxjs';
 
 import {
   CreateTaskData,
-  ListTasksPagination,
-  Pagination,
   Task,
+  TasksFilters,
+  TasksList,
   UpdateTaskData,
 } from '@challenge/shared';
 
@@ -32,16 +32,18 @@ export class TasksService {
     return data;
   }
 
-  async list(dataToPagination: Pagination): Promise<ListTasksPagination> {
-    const { page, size } = dataToPagination;
+  async list(filters: TasksFilters): Promise<TasksList> {
+    const { page, size, status, priority } = filters;
 
     const { data } = await firstValueFrom(
-      this.httpService.get<ListTasksPagination, { params: Pagination }>(
+      this.httpService.get<TasksList, { params: TasksFilters }>(
         `${this.baseURL}`,
         {
           params: {
             page,
             size,
+            status,
+            priority,
           },
         },
       ),

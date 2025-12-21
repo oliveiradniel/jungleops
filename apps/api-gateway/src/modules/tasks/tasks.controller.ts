@@ -43,7 +43,8 @@ import { ConflictTaskResponse } from './responses/conflict-task-response copy';
 import { ThrottlerResponse } from 'src/shared/responses/throttler.response';
 import { BadRequestCreateTaskResponse } from './responses/bad-request-create-task.response';
 
-import { ListTasksPagination, Task } from '@challenge/shared';
+import { TasksList, Task } from '@challenge/shared';
+import { TaskFiltersQueryParam } from 'src/shared/queryParams/task-filters.query-param';
 
 @ApiBearerAuth()
 @ApiBadGatewayResponse({
@@ -87,12 +88,10 @@ export class TasksController {
   })
   @HttpCode(HttpStatus.OK)
   @Get()
-  async list(
-    @Query() queryParams: PaginationQueryParam,
-  ): Promise<ListTasksPagination> {
-    const { page, size } = queryParams;
+  async list(@Query() queryParams: TaskFiltersQueryParam): Promise<TasksList> {
+    const { page, size, status, priority } = queryParams;
 
-    return this.tasksService.list({ page, size });
+    return this.tasksService.list({ page, size, status, priority });
   }
 
   @Get('list/user')
