@@ -5,11 +5,8 @@ import type { ITasksService } from '../contracts/itasks-service';
 import type { HttpRequestConfig, IHttpClient } from '../contracts/ihttp-client';
 
 import type { CreateTaskData, UpdateTaskData } from '@/types/task-data';
-import type {
-  ListTasksPagination,
-  Pagination,
-  TaskWithCommentCount,
-} from '@challenge/shared';
+import type { TasksFilters } from '@/types/tasks-filters';
+import type { TasksList, TaskWithCommentCount } from '@challenge/shared';
 
 export class TasksService implements ITasksService {
   private readonly httpClient: IHttpClient;
@@ -28,13 +25,23 @@ export class TasksService implements ITasksService {
   }
 
   async list(
-    data: Pagination,
+    filters: TasksFilters,
     config?: HttpRequestConfig,
-  ): Promise<ListTasksPagination & { tasks: Task[] }> {
-    const { page, size } = data;
+  ): Promise<TasksList & { tasks: Task[] }> {
+    const { page, size, status, priority } = filters;
 
-    const tasks = await this.httpClient.get<ListTasksPagination>('/tasks', {
-      params: { page, size },
+    const facetedFilters: any = {};
+
+    if (typeof status === 'string') {
+      facetedFilters.status = status;
+    }
+
+    if (typeof priority === 'string') {
+      facetedFilters.priority = priority;
+    }
+
+    const tasks = await this.httpClient.get<TasksList>('/tasks', {
+      params: { page, size, ...facetedFilters },
       ...config,
     });
 

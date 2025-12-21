@@ -2,14 +2,15 @@ import type { Task } from '@/app/entities/task';
 import type { HttpRequestConfig } from './ihttp-client';
 
 import type { CreateTaskData, UpdateTaskData } from '@/types/task-data';
-import type { ListTasksPagination, Pagination } from '@challenge/shared';
+import type { TasksFilters } from '@/types/tasks-filters';
+import type { TasksList } from '@challenge/shared';
 
 export abstract class ITasksService {
   abstract get(taskId: string, config?: HttpRequestConfig): Promise<Task>;
   abstract list(
-    data: Pagination,
+    filters: TasksFilters,
     config?: HttpRequestConfig,
-  ): Promise<ListTasksPagination & { tasks: Task[] }>;
+  ): Promise<TasksList & { tasks: Task[] }>;
   abstract create(
     data: CreateTaskData,
     config?: HttpRequestConfig,
