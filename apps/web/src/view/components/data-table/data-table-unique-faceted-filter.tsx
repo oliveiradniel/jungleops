@@ -14,25 +14,25 @@ import { Button } from '../ui/button';
 
 import type { Table } from '@tanstack/react-table';
 
-interface DataTableFacetedFilterProps<T extends string> {
+interface DataTableUniqueFacetedFilterProps<T extends string> {
   table?: Table<any>;
   placeholder: string;
   column: string;
   labels: Record<T, string>;
 }
 
-export function DataTableFacetedFilter<T extends string>({
+export function DataTableUniqueFacetedFilter<T extends string>({
   table,
   placeholder,
   column,
   labels,
-}: DataTableFacetedFilterProps<T>) {
+}: DataTableUniqueFacetedFilterProps<T>) {
   const context = useDataTable();
 
   const t = table ?? context?.table;
 
   if (!t) {
-    throw new Error('DataTableTextFilter requires a table instance');
+    throw new Error('DataTableUniqueFacetedFilter requires a table instance');
   }
 
   const tableColumn = t.getColumn(column);

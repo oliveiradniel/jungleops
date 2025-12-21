@@ -9,7 +9,7 @@ import { DataTableContent } from '@/view/components/data-table/data-table-conten
 import { DataTableFallback } from '@/view/components/data-table/data-table-fallback';
 import { EmptyLog } from './empty-log';
 import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
-import { DataTableFacetedFilter } from '@/view/components/data-table/data-table-faceted-filter';
+import { DataTableUniqueFacetedFilter } from '@/view/components/data-table/data-table-unique-faceted-filter';
 
 import type { TaskStatus } from '@/app/enums/TaskStatus';
 import type { TaskPriority } from '@/app/enums/TaskPriority';
@@ -42,13 +42,13 @@ export function TaskCreationAuditLogTable() {
             <DataTableTextFilter placeholder="Procurar por autor ou título" />
 
             <div className="flex items-center gap-1">
-              <DataTableFacetedFilter<TaskStatus>
+              <DataTableUniqueFacetedFilter<TaskStatus>
                 placeholder="Status"
                 column="status"
                 labels={statusLabels}
               />
 
-              <DataTableFacetedFilter<TaskPriority>
+              <DataTableUniqueFacetedFilter<TaskPriority>
                 placeholder="Prioridade"
                 column="priority"
                 labels={priorityLabels}

@@ -9,7 +9,7 @@ import { DataTableContent } from '@/view/components/data-table/data-table-conten
 import { DataTableFallback } from '@/view/components/data-table/data-table-fallback';
 import { EmptyLog } from './empty-log';
 import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
-import { DataTableFacetedFilter } from '@/view/components/data-table/data-table-faceted-filter';
+import { DataTableUniqueFacetedFilter } from '@/view/components/data-table/data-table-unique-faceted-filter';
 
 import type { FieldName } from '@challenge/shared';
 
@@ -43,7 +43,7 @@ export function TaskUpdateAuditLogTable() {
             <DataTableTextFilter placeholder="Procure por autor, título, campo ou valores" />
 
             <div className="flex items-center gap-1">
-              <DataTableFacetedFilter<FieldName>
+              <DataTableUniqueFacetedFilter<FieldName>
                 placeholder="Campo"
                 column="fieldName"
                 labels={fieldLabels}

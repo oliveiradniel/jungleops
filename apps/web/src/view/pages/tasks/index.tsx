@@ -9,7 +9,7 @@ import { EmptyFilteredTasks } from './components/empty-filtered-tasks';
 import { EmptyTasks } from './components/empty-tasks';
 import { Spinner } from '@/view/components/ui/spinner';
 import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
-import { DataTableFacetedFilter } from '@/view/components/data-table/data-table-faceted-filter';
+import { DataTableManyFacetedFilter } from '@/view/components/data-table/data-table-many-faceted-filter';
 import { PaginationControls } from '@/view/components/pagination-controls';
 
 export function Tasks() {
@@ -35,14 +35,14 @@ export function Tasks() {
                 column="title"
               />
 
-              <DataTableFacetedFilter
+              <DataTableManyFacetedFilter
                 table={table}
                 column="status"
                 labels={statusLabels}
                 placeholder="Status"
               />
 
-              <DataTableFacetedFilter
+              <DataTableManyFacetedFilter
                 table={table}
                 column="priority"
                 labels={priorityLabels}
