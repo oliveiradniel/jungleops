@@ -11,10 +11,20 @@ export const taskColumns: ColumnDef<Task>[] = [
   {
     id: 'status',
     accessorFn: (row) => row.status.value,
+    filterFn: (row, columnId, filterValue: string[]) => {
+      if (!filterValue?.length) return true;
+
+      return filterValue.includes(row.getValue(columnId));
+    },
   },
   {
     id: 'priority',
     accessorFn: (row) => row.priority.value,
+    filterFn: (row, columnId, filterValue: string[]) => {
+      if (!filterValue?.length) return true;
+
+      return filterValue.includes(row.getValue(columnId));
+    },
   },
   {
     accessorKey: 'term',
