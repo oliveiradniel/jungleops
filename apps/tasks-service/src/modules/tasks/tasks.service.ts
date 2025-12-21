@@ -15,15 +15,15 @@ import type { ITasksRepository } from 'src/database/contracts/tasks-repository.c
 
 import {
   type CreateTaskData,
-  type Pagination,
   type Task,
   type UpdateTaskData,
   type UpdatedTaskNotificationPayload,
   type AssignedToTaskNotificationPayload,
-  type ListTasksPagination,
   type ChangedField,
   type TaskAuditLog,
   type TaskWithCommentCount,
+  type TasksList,
+  type TasksFilters,
   AuditAction,
   FieldName,
 } from '@challenge/shared';
@@ -48,10 +48,10 @@ export class TasksService {
     return this.verifyTaskExists(id);
   }
 
-  async list(pagination: Pagination): Promise<ListTasksPagination> {
-    const { page, size } = pagination;
+  async list(pagination: TasksFilters): Promise<TasksList> {
+    const { page, size, status, priority } = pagination;
 
-    return this.tasksRepository.list({ page, size });
+    return this.tasksRepository.list({ page, size, status, priority });
   }
 
   async listTasksByUserId(userId: string): Promise<TaskWithCommentCount[]> {
