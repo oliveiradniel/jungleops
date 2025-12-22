@@ -8,7 +8,7 @@ import { firstValueFrom } from 'rxjs';
 import {
   CreateTaskData,
   Task,
-  TasksFilters,
+  TaskFilters,
   TasksList,
   UpdateTaskData,
 } from '@challenge/shared';
@@ -32,11 +32,11 @@ export class TasksService {
     return data;
   }
 
-  async list(filters: TasksFilters): Promise<TasksList> {
+  async list(filters: TaskFilters): Promise<TasksList> {
     const { page, size, status, priority } = filters;
 
     const { data } = await firstValueFrom(
-      this.httpService.get<TasksList, { params: TasksFilters }>(
+      this.httpService.get<TasksList, { params: TaskFilters }>(
         `${this.baseURL}`,
         {
           params: {

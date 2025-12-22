@@ -1,4 +1,4 @@
-export interface TasksFilters {
+export interface TaskFilters {
   page: number;
   size: number;
   status?: string;

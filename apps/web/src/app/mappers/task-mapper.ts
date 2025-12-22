@@ -12,7 +12,7 @@ import type {
   TaskWithCommentCount,
   CreateTaskData as PersistenceCreateTaskData,
   UpdateTaskData as PersistenceUpdateTaskData,
-  ListTasksPagination,
+  TasksList,
 } from '@challenge/shared';
 
 export class TaskMapper {
@@ -54,9 +54,7 @@ export class TaskMapper {
     };
   }
 
-  static toDomainList(
-    data: ListTasksPagination,
-  ): ListTasksPagination & { tasks: Task[] } {
+  static toDomainList(data: TasksList): TasksList & { tasks: Task[] } {
     const tasksList = data.tasks.map((task) => TaskMapper.toDomain(task));
 
     return {

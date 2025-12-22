@@ -11,7 +11,7 @@ import type {
   UpdateTaskData,
   Task,
   TaskWithCommentCount,
-  TasksFilters,
+  TaskFilters,
   TasksList,
 } from '@challenge/shared';
 
@@ -63,7 +63,7 @@ export class TasksRepository implements ITasksRepository {
     return taskEntity ? TaskMapper.toDomain(taskEntity) : null;
   }
 
-  async list(filters: TasksFilters): Promise<TasksList> {
+  async list(filters: TaskFilters): Promise<TasksList> {
     const { page, size, status, priority } = filters;
 
     const parsedStatus =

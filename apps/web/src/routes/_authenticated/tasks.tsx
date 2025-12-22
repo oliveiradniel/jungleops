@@ -1,11 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { PaginationSearchSchema } from '@/app/schemas/pagination-search-schema';
-
 import { Tasks } from '@/view/pages/tasks';
+import { TaskFiltersSchema } from '@/app/schemas/task-filters-schema';
 
 export const Route = createFileRoute('/_authenticated/tasks')({
-  validateSearch: PaginationSearchSchema,
+  validateSearch: TaskFiltersSchema,
 
   component: RouteComponent,
 });

@@ -2,8 +2,6 @@ import { useMemo } from 'react';
 import { useSearch } from '@tanstack/react-router';
 import {
   getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
   getFilteredRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -21,19 +19,14 @@ export function useTasksController() {
 
   useNotificationsSocket({ userId: user?.id });
 
-  const { page, size } = useSearch({ from: '/_authenticated/tasks' });
+  const { page, size, status, priority } = useSearch({
+    from: '/_authenticated/tasks',
+  });
 
-  const {
-    tasksList,
-    totalTasksCount,
-    totalPages,
-    hasNext,
-    hasPrevious,
-    isTasksLoading,
-    isTasksPending,
-  } = useListTasksQuery({ page, size });
+  const { tasks, total, pagination, facets, isTasksLoading, isTasksFetching } =
+    useListTasksQuery({ page, size, status, priority });
 
-  const pagination = useMemo(
+  const paginationTST = useMemo(
     () => ({
       pageIndex: page - 1,
       pageSize: size,
@@ -42,27 +35,24 @@ export function useTasksController() {
   );
 
   const table = useReactTable({
-    data: tasksList,
+    data: tasks,
     columns: taskColumns,
     state: {
-      pagination,
+      pagination: paginationTST,
     },
     manualPagination: true,
+    manualFiltering: true,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFacetedRowModel: getFacetedRowModel(),
   });
 
   return {
     table,
-    totalTasksCount,
+    total,
+    pagination,
+    facets,
     isTasksLoading,
-    isTasksPending,
-    hasPrevious: hasPrevious!,
-    hasNext: hasNext!,
-    page,
-    totalPages: totalPages!,
+    isTasksFetching,
     handleOpenNewTaskSheet,
   };
 }

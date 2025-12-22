@@ -9,19 +9,12 @@ import { EmptyFilteredTasks } from './components/empty-filtered-tasks';
 import { EmptyTasks } from './components/empty-tasks';
 import { Spinner } from '@/view/components/ui/spinner';
 import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
-import { DataTableManyFacetedFilter } from '@/view/components/data-table/data-table-many-faceted-filter';
 import { PaginationControls } from '@/view/components/pagination-controls';
+import { ManyFacetedTasksFilter } from '@/view/components/many-faceted-task-filters';
 
 export function Tasks() {
-  const {
-    table,
-    totalTasksCount,
-    isTasksLoading,
-    isTasksPending,
-    hasPrevious,
-    hasNext,
-    totalPages,
-  } = useTasksController();
+  const { table, total, pagination, facets, isTasksLoading, isTasksFetching } =
+    useTasksController();
 
   return (
     <>
@@ -35,51 +28,51 @@ export function Tasks() {
                 column="title"
               />
 
-              <DataTableManyFacetedFilter
-                table={table}
-                column="status"
+              <ManyFacetedTasksFilter
+                param="status"
+                facets={facets?.status}
                 labels={statusLabels}
                 placeholder="Status"
               />
 
-              <DataTableManyFacetedFilter
-                table={table}
-                column="priority"
+              <ManyFacetedTasksFilter
+                param="priority"
+                facets={facets?.priority}
                 labels={priorityLabels}
                 placeholder="Prioridade"
               />
             </div>
 
             <PaginationControls
-              hasPrevious={hasPrevious}
-              hasNext={hasNext}
-              totalPages={totalPages}
-              isLoading={isTasksPending}
+              hasPrevious={pagination?.hasPrevious ?? false}
+              hasNext={pagination?.hasNext ?? false}
+              totalPages={pagination?.totalPages ?? 0}
+              isLoading={isTasksFetching}
             />
           </header>
 
           <Separator />
 
-          <div className="flex items-center gap-4">
+          <div className="flex gap-2">
             <h1 className="flex items-baseline gap-2 text-2xl font-medium">
               Todas as tarefas
               {isTasksLoading ? (
                 <span className="text-muted-foreground text-[16px]">...</span>
               ) : (
-                !isTasksPending && (
+                !isTasksFetching && (
                   <span className="text-muted-foreground text-[16px]">
-                    ({totalTasksCount ?? 0})
+                    ({total ?? 0})
                   </span>
                 )
               )}
             </h1>
 
-            {!isTasksLoading && isTasksPending && (
-              <Spinner className="text-primary size-6" />
+            {!isTasksLoading && isTasksFetching && (
+              <Spinner className="text-primary mt-3 size-4" />
             )}
           </div>
 
-          {isTasksLoading && isTasksPending && (
+          {isTasksLoading && isTasksFetching && (
             <div className="flex flex-wrap gap-2">
               {[...Array(8)].map((_, index) => (
                 <Skeleton
@@ -94,17 +87,13 @@ export function Tasks() {
             <TasksCard table={table} />
           )}
 
-          {!isTasksLoading && totalTasksCount === 0 && <EmptyTasks />}
+          {!isTasksLoading && total === 0 && <EmptyTasks />}
 
-          {!isTasksLoading &&
-            table.getRowCount() === 0 &&
-            totalTasksCount > 0 && (
-              <EmptyFilteredTasks
-                searchInput={
-                  table.getColumn('title')?.getFilterValue() as string
-                }
-              />
-            )}
+          {!isTasksLoading && table.getRowCount() === 0 && total > 0 && (
+            <EmptyFilteredTasks
+              searchInput={table.getColumn('title')?.getFilterValue() as string}
+            />
+          )}
         </div>
       </div>
     </>

@@ -23,7 +23,7 @@ import {
   type TaskAuditLog,
   type TaskWithCommentCount,
   type TasksList,
-  type TasksFilters,
+  type TaskFilters,
   AuditAction,
   FieldName,
 } from '@challenge/shared';
@@ -48,7 +48,7 @@ export class TasksService {
     return this.verifyTaskExists(id);
   }
 
-  async list(pagination: TasksFilters): Promise<TasksList> {
+  async list(pagination: TaskFilters): Promise<TasksList> {
     const { page, size, status, priority } = pagination;
 
     return this.tasksRepository.list({ page, size, status, priority });

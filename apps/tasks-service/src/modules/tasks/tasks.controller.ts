@@ -19,7 +19,7 @@ import type {
   UpdateTaskData,
   Task,
   TaskWithCommentCount,
-  TasksFilters,
+  TaskFilters,
   TasksList,
 } from '@challenge/shared';
 
@@ -35,7 +35,7 @@ export class TasksController {
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  list(@Query() queryParams: TasksFilters): Promise<TasksList> {
+  list(@Query() queryParams: TaskFilters): Promise<TasksList> {
     const { page, size, status, priority } = queryParams;
 
     return this.tasksService.list({ page, size, status, priority });

@@ -2,13 +2,12 @@ import type { Task } from '@/app/entities/task';
 import type { HttpRequestConfig } from './ihttp-client';
 
 import type { CreateTaskData, UpdateTaskData } from '@/types/task-data';
-import type { TasksFilters } from '@/types/tasks-filters';
-import type { TasksList } from '@challenge/shared';
+import type { TaskFilters, TasksList } from '@challenge/shared';
 
 export abstract class ITasksService {
   abstract get(taskId: string, config?: HttpRequestConfig): Promise<Task>;
   abstract list(
-    filters: TasksFilters,
+    filters: TaskFilters,
     config?: HttpRequestConfig,
   ): Promise<TasksList & { tasks: Task[] }>;
   abstract create(

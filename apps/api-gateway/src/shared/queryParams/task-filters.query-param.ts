@@ -3,9 +3,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
-import { TasksFilters } from '@challenge/shared';
+import { TaskFilters } from '@challenge/shared';
 
-export class TaskFiltersQueryParam implements TasksFilters {
+export class TaskFiltersQueryParam implements TaskFilters {
   @ApiProperty({
     example: 1,
     description: 'Page number (starts from 1).',

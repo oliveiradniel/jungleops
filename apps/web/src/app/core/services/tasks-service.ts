@@ -5,8 +5,11 @@ import type { ITasksService } from '../contracts/itasks-service';
 import type { HttpRequestConfig, IHttpClient } from '../contracts/ihttp-client';
 
 import type { CreateTaskData, UpdateTaskData } from '@/types/task-data';
-import type { TasksFilters } from '@/types/tasks-filters';
-import type { TasksList, TaskWithCommentCount } from '@challenge/shared';
+import type {
+  TaskFilters,
+  TasksList,
+  TaskWithCommentCount,
+} from '@challenge/shared';
 
 export class TasksService implements ITasksService {
   private readonly httpClient: IHttpClient;
@@ -25,7 +28,7 @@ export class TasksService implements ITasksService {
   }
 
   async list(
-    filters: TasksFilters,
+    filters: TaskFilters,
     config?: HttpRequestConfig,
   ): Promise<TasksList & { tasks: Task[] }> {
     const { page, size, status, priority } = filters;
