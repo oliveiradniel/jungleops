@@ -33,7 +33,7 @@ export class TasksService {
   }
 
   async list(filters: TaskFilters): Promise<TasksList> {
-    const { page, size, status, priority } = filters;
+    const { page, size, orderBy, order, status, priority } = filters;
 
     const { data } = await firstValueFrom(
       this.httpService.get<TasksList, { params: TaskFilters }>(
@@ -42,6 +42,8 @@ export class TasksService {
           params: {
             page,
             size,
+            orderBy,
+            order,
             status,
             priority,
           },
