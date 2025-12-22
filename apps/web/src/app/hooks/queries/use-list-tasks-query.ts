@@ -2,24 +2,22 @@ import { useQuery } from '@tanstack/react-query';
 
 import { makeTasksService } from '@/app/factories/make-tasks-service';
 
-export interface UseListsTasksQueryParams {
-  page: number;
-  size: number;
-  status?: string;
-  priority?: string;
-}
+import type { TaskFilters } from '@challenge/shared';
 
 export function useListTasksQuery({
   page,
   size,
+  orderBy,
+  order,
   status,
   priority,
-}: UseListsTasksQueryParams) {
+}: TaskFilters) {
   const tasksService = makeTasksService();
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: ['tasks', page, size, status, priority],
-    queryFn: () => tasksService.list({ page, size, status, priority }),
+    queryKey: ['tasks', page, size, orderBy, order, status, priority],
+    queryFn: () =>
+      tasksService.list({ page, size, orderBy, order, status, priority }),
     placeholderData: (previousData) => previousData,
   });
 

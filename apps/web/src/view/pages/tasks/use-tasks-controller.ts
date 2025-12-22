@@ -19,12 +19,12 @@ export function useTasksController() {
 
   useNotificationsSocket({ userId: user?.id });
 
-  const { page, size, status, priority } = useSearch({
+  const { page, size, orderBy, order, status, priority } = useSearch({
     from: '/_authenticated/tasks',
   });
 
   const { tasks, total, pagination, facets, isTasksLoading, isTasksFetching } =
-    useListTasksQuery({ page, size, status, priority });
+    useListTasksQuery({ page, size, orderBy, order, status, priority });
 
   const paginationTST = useMemo(
     () => ({

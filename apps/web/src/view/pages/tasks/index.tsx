@@ -11,6 +11,7 @@ import { Spinner } from '@/view/components/ui/spinner';
 import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
 import { PaginationControls } from '@/view/components/pagination-controls';
 import { ManyFacetedTasksFilter } from '@/view/components/many-faceted-task-filters';
+import { SortFilter } from './components/sort-filter';
 
 export function Tasks() {
   const { table, total, pagination, facets, isTasksLoading, isTasksFetching } =
@@ -27,6 +28,8 @@ export function Tasks() {
                 placeholder="Digite o título de uma tarefa"
                 column="title"
               />
+
+              <SortFilter placeholder="Ordenar por" />
 
               <ManyFacetedTasksFilter
                 param="status"

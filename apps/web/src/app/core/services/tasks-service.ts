@@ -31,7 +31,7 @@ export class TasksService implements ITasksService {
     filters: TaskFilters,
     config?: HttpRequestConfig,
   ): Promise<TasksList & { tasks: Task[] }> {
-    const { page, size, status, priority } = filters;
+    const { page, size, orderBy, order, status, priority } = filters;
 
     const facetedFilters: any = {};
 
@@ -44,7 +44,7 @@ export class TasksService implements ITasksService {
     }
 
     const tasks = await this.httpClient.get<TasksList>('/tasks', {
-      params: { page, size, ...facetedFilters },
+      params: { page, size, orderBy, order, ...facetedFilters },
       ...config,
     });
 

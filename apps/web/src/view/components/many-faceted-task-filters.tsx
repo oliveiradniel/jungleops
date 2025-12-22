@@ -62,7 +62,7 @@ export function ManyFacetedTasksFilter<T extends string>({
 
     navigate({
       to: '/tasks',
-      search: (old) => ({ ...old, [param]: undefined }),
+      search: (old) => ({ ...old, [param]: undefined, page: 1 }),
     });
   }
 
