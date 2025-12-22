@@ -89,7 +89,8 @@ export class TasksController {
   @HttpCode(HttpStatus.OK)
   @Get()
   async list(@Query() queryParams: TaskFiltersQueryParam): Promise<TasksList> {
-    const { page, size, orderBy, order, status, priority } = queryParams;
+    const { page, size, orderBy, order, status, priority, search } =
+      queryParams;
 
     return this.tasksService.list({
       page,
@@ -98,6 +99,7 @@ export class TasksController {
       order,
       status,
       priority,
+      search,
     });
   }
 
