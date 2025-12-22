@@ -49,7 +49,7 @@ export class TasksService {
   }
 
   async list(pagination: TaskFilters): Promise<TasksList> {
-    const { page, size, orderBy, order, status, priority } = pagination;
+    const { page, size, orderBy, order, status, priority, search } = pagination;
 
     return this.tasksRepository.list({
       page,
@@ -58,6 +58,7 @@ export class TasksService {
       order,
       status,
       priority,
+      search,
     });
   }
 

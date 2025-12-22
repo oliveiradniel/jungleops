@@ -64,7 +64,7 @@ export class TasksRepository implements ITasksRepository {
   }
 
   async list(filters: TaskFilters): Promise<TasksList> {
-    const { page, size, orderBy, order, status, priority } = filters;
+    const { page, size, orderBy, order, status, priority, search } = filters;
 
     const parsedStatus =
       typeof status === 'string'
@@ -78,14 +78,24 @@ export class TasksRepository implements ITasksRepository {
 
     const skip = (page - 1) * size;
 
-    const where: any = {};
+    const baseFilters: any = {};
+    let where: any[] = [];
 
-    if (Array.isArray(parsedStatus) && parsedStatus.length > 0) {
-      where.status = In(parsedStatus);
+    if (parsedStatus?.length) {
+      baseFilters.status = In(parsedStatus);
     }
 
-    if (Array.isArray(parsedPriority) && parsedPriority.length > 0) {
-      where.priority = In(parsedPriority);
+    if (parsedPriority?.length) {
+      baseFilters.priority = In(parsedPriority);
+    }
+
+    if (typeof search === 'string' && search.trim()) {
+      where.push(
+        { ...baseFilters, title: ILike(`%${search}%`) },
+        { ...baseFilters, description: ILike(`%${search}%`) },
+      );
+    } else {
+      where.push(baseFilters);
     }
 
     const dateLabels = {
@@ -111,10 +121,10 @@ export class TasksRepository implements ITasksRepository {
       }),
     );
 
-    const statusWhere = { ...where };
+    const statusWhere = { ...baseFilters };
     delete statusWhere.status;
 
-    const priorityWhere = { ...where };
+    const priorityWhere = { ...baseFilters };
     delete priorityWhere.priority;
 
     const statusFacetsRaw = await this.tasksRepository
