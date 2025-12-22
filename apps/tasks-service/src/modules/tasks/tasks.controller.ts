@@ -36,9 +36,16 @@ export class TasksController {
   @HttpCode(HttpStatus.OK)
   @Get()
   list(@Query() queryParams: TaskFilters): Promise<TasksList> {
-    const { page, size, status, priority } = queryParams;
+    const { page, size, orderBy, order, status, priority } = queryParams;
 
-    return this.tasksService.list({ page, size, status, priority });
+    return this.tasksService.list({
+      page,
+      size,
+      orderBy,
+      order,
+      status,
+      priority,
+    });
   }
 
   @Get('user/:userId')

@@ -64,7 +64,7 @@ export class TasksRepository implements ITasksRepository {
   }
 
   async list(filters: TaskFilters): Promise<TasksList> {
-    const { page, size, status, priority } = filters;
+    const { page, size, orderBy, order, status, priority } = filters;
 
     const parsedStatus =
       typeof status === 'string'
@@ -88,10 +88,18 @@ export class TasksRepository implements ITasksRepository {
       where.priority = In(parsedPriority);
     }
 
+    const dateLabels = {
+      'created-at': 'createdAt',
+      term: 'term',
+    };
+
     const [tasks, total] = await this.tasksRepository.findAndCount({
       take: size,
       skip,
       where,
+      order: {
+        [dateLabels[orderBy ?? 'term']]: order ?? 'asc',
+      },
     });
 
     const tasksWithCommentCount: TaskWithCommentCount[] = await Promise.all(

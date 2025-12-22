@@ -49,9 +49,16 @@ export class TasksService {
   }
 
   async list(pagination: TaskFilters): Promise<TasksList> {
-    const { page, size, status, priority } = pagination;
+    const { page, size, orderBy, order, status, priority } = pagination;
 
-    return this.tasksRepository.list({ page, size, status, priority });
+    return this.tasksRepository.list({
+      page,
+      size,
+      orderBy,
+      order,
+      status,
+      priority,
+    });
   }
 
   async listTasksByUserId(userId: string): Promise<TaskWithCommentCount[]> {
