@@ -11,13 +11,22 @@ export function useListTasksQuery({
   order,
   status,
   priority,
+  search,
 }: TaskFilters) {
   const tasksService = makeTasksService();
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: ['tasks', page, size, orderBy, order, status, priority],
+    queryKey: ['tasks', page, size, orderBy, order, status, priority, search],
     queryFn: () =>
-      tasksService.list({ page, size, orderBy, order, status, priority }),
+      tasksService.list({
+        page,
+        size,
+        orderBy,
+        order,
+        status,
+        priority,
+        search,
+      }),
     placeholderData: (previousData) => previousData,
   });
 

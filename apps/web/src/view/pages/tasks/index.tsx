@@ -8,10 +8,10 @@ import { Separator } from '@/view/components/ui/separator';
 import { EmptyFilteredTasks } from './components/empty-filtered-tasks';
 import { EmptyTasks } from './components/empty-tasks';
 import { Spinner } from '@/view/components/ui/spinner';
-import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
 import { PaginationControls } from '@/view/components/pagination-controls';
 import { ManyFacetedTasksFilter } from '@/view/components/many-faceted-task-filters';
 import { SortFilter } from './components/sort-filter';
+import { TextFilter } from './components/text-filter';
 
 export function Tasks() {
   const { table, total, pagination, facets, isTasksLoading, isTasksFetching } =
@@ -23,11 +23,7 @@ export function Tasks() {
         <div className="flex h-full w-full flex-col gap-6 p-6">
           <header className="flex flex-col items-start justify-between gap-2">
             <div className="flex w-full items-start gap-2">
-              <DataTableTextFilter
-                table={table}
-                placeholder="Digite o título de uma tarefa"
-                column="title"
-              />
+              <TextFilter numberOfTasksFound={total} />
 
               <SortFilter placeholder="Ordenar por" />
 

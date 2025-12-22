@@ -1,10 +1,6 @@
 import { useMemo } from 'react';
 import { useSearch } from '@tanstack/react-router';
-import {
-  getCoreRowModel,
-  getFilteredRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useAuth } from '@/app/hooks/use-auth';
 import { useTasks } from '@/app/hooks/use-tasks';
 import { useListTasksQuery } from '@/app/hooks/queries/use-list-tasks-query';
@@ -19,12 +15,20 @@ export function useTasksController() {
 
   useNotificationsSocket({ userId: user?.id });
 
-  const { page, size, orderBy, order, status, priority } = useSearch({
+  const { page, size, orderBy, order, status, priority, q } = useSearch({
     from: '/_authenticated/tasks',
   });
 
   const { tasks, total, pagination, facets, isTasksLoading, isTasksFetching } =
-    useListTasksQuery({ page, size, orderBy, order, status, priority });
+    useListTasksQuery({
+      page,
+      size,
+      orderBy,
+      order,
+      status,
+      priority,
+      search: q,
+    });
 
   const paginationTST = useMemo(
     () => ({
@@ -42,8 +46,8 @@ export function useTasksController() {
     },
     manualPagination: true,
     manualFiltering: true,
+    manualSorting: true,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
   });
 
   return {
