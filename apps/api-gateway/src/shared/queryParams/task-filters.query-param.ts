@@ -83,4 +83,13 @@ export class TaskFiltersQueryParam implements TaskFilters {
   @IsOptional()
   @IsString()
   priority?: string;
+
+  @ApiProperty({
+    description: 'Text search in title or description',
+    example: 'login',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  search?: string;
 }
