@@ -6,6 +6,28 @@ import { TaskPriorityValues, type TaskPriority } from '../enums/TaskPriority';
 export const TaskFiltersSchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   size: z.coerce.number().int().positive().default(10),
+  orderBy: z
+    .preprocess(
+      (value) => {
+        if (typeof value === 'string') {
+          const val = value?.toLowerCase();
+          return val === 'created-at' || val === 'term' ? val : 'term';
+        }
+      },
+      z.enum(['created-at', 'term']),
+    )
+    .default('term'),
+  order: z
+    .preprocess(
+      (value) => {
+        if (typeof value === 'string') {
+          const val = value?.toLowerCase();
+          return val === 'asc' || val === 'desc' ? val : 'asc';
+        }
+      },
+      z.enum(['asc', 'desc']),
+    )
+    .default('asc'),
   status: z
     .preprocess(
       (value) => {

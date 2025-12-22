@@ -41,6 +41,7 @@ export class TaskFiltersQueryParam implements TaskFilters {
   @ApiProperty({
     description: 'Type filter sorting',
     example: 'term',
+    default: 'term',
     required: false,
   })
   @IsOptional()
@@ -54,6 +55,7 @@ export class TaskFiltersQueryParam implements TaskFilters {
   @ApiProperty({
     description: 'Filter sorting',
     example: 'asc',
+    default: 'asc',
     required: false,
   })
   @IsOptional()
