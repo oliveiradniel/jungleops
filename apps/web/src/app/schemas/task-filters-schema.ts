@@ -66,4 +66,5 @@ export const TaskFiltersSchema = z.object({
       return values.map((value) => value.toLowerCase()).join(',');
     })
     .optional(),
+  q: z.string().optional(),
 });
