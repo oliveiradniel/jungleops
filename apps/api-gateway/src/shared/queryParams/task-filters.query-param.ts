@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 import { Transform } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
 import { TaskFilters } from '@challenge/shared';
 
@@ -37,6 +37,32 @@ export class TaskFiltersQueryParam implements TaskFilters {
     return Math.max(1, numValue);
   })
   size: number = 10;
+
+  @ApiProperty({
+    description: 'Type filter sorting',
+    example: 'term',
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(['created-at', 'term'])
+  @Transform(({ value }: { value: string }) => {
+    const val = value?.toLowerCase();
+    return val === 'created-at' || val === 'term' ? val : 'term';
+  })
+  orderBy?: 'created-at' | 'term';
+
+  @ApiProperty({
+    description: 'Filter sorting',
+    example: 'asc',
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(['asc', 'desc'])
+  @Transform(({ value }: { value: string }) => {
+    const val = value?.toLowerCase();
+    return val === 'asc' || val === 'desc' ? val : 'asc';
+  })
+  order?: 'asc' | 'desc';
 
   @ApiProperty({
     description: 'Filter tasks by status (comma separated)',
