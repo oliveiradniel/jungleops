@@ -5,4 +5,5 @@ export interface TaskFilters {
   order?: 'asc' | 'desc';
   status?: string;
   priority?: string;
+  search?: string;
 }
