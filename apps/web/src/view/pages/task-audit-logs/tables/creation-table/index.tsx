@@ -13,6 +13,7 @@ import { DataTableUniqueFacetedFilter } from '@/view/components/data-table/data-
 
 import type { TaskStatus } from '@/app/enums/TaskStatus';
 import type { TaskPriority } from '@/app/enums/TaskPriority';
+import { DataTablePagination } from '@/view/components/data-table/data-table-pagination';
 
 export function TaskCreationAuditLogTable() {
   const { taskCreationAuditLogsList, isTaskCreationAuditLogsLoading } =
@@ -21,7 +22,7 @@ export function TaskCreationAuditLogTable() {
   const columns = useColumns();
 
   return (
-    <div className="h-full">
+    <div>
       {!isTaskCreationAuditLogsLoading &&
         taskCreationAuditLogsList.length === 0 && <EmptyLog />}
 
@@ -36,9 +37,13 @@ export function TaskCreationAuditLogTable() {
         />
       )}
 
-      <DataTable data={taskCreationAuditLogsList} columns={columns}>
+      <DataTable
+        data={taskCreationAuditLogsList}
+        columns={columns}
+        pagination={{ pageIndex: 0, pageSize: 5 }}
+      >
         {taskCreationAuditLogsList.length > 0 && (
-          <div className="mb-8 flex items-center gap-4">
+          <div className="mb-2 flex items-center gap-4">
             <DataTableTextFilter placeholder="Procurar por autor ou título" />
 
             <div className="flex items-center gap-1">
@@ -58,6 +63,8 @@ export function TaskCreationAuditLogTable() {
             </div>
           </div>
         )}
+
+        <DataTablePagination />
 
         {!isTaskCreationAuditLogsLoading &&
           taskCreationAuditLogsList.length > 0 && <DataTableContent />}

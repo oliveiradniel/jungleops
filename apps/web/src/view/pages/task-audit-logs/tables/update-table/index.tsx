@@ -10,6 +10,7 @@ import { DataTableFallback } from '@/view/components/data-table/data-table-fallb
 import { EmptyLog } from './empty-log';
 import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
 import { DataTableUniqueFacetedFilter } from '@/view/components/data-table/data-table-unique-faceted-filter';
+import { DataTablePagination } from '@/view/components/data-table/data-table-pagination';
 
 import type { FieldName } from '@challenge/shared';
 
@@ -20,7 +21,7 @@ export function TaskUpdateAuditLogTable() {
   const columns = useColumns();
 
   return (
-    <>
+    <div>
       {!isTaskUpdateAuditLogsLoading &&
         taskUpdateAuditLogsList.length === 0 && <EmptyLog />}
 
@@ -37,9 +38,13 @@ export function TaskUpdateAuditLogTable() {
         />
       )}
 
-      <DataTable data={taskUpdateAuditLogsList} columns={columns}>
+      <DataTable
+        data={taskUpdateAuditLogsList}
+        columns={columns}
+        pagination={{ pageIndex: 0, pageSize: 5 }}
+      >
         {taskUpdateAuditLogsList.length > 0 && (
-          <div className="flex items-center gap-4">
+          <div className="mb-2 flex items-center gap-4">
             <DataTableTextFilter placeholder="Procure por autor, título, campo ou valores" />
 
             <div className="flex items-center gap-1">
@@ -54,9 +59,11 @@ export function TaskUpdateAuditLogTable() {
           </div>
         )}
 
+        <DataTablePagination />
+
         {!isTaskUpdateAuditLogsLoading &&
           taskUpdateAuditLogsList.length > 0 && <DataTableContent />}
       </DataTable>
-    </>
+    </div>
   );
 }

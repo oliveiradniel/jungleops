@@ -13,6 +13,7 @@ import { DataTableUniqueFacetedFilter } from '@/view/components/data-table/data-
 
 import type { TaskStatus } from '@/app/enums/TaskStatus';
 import type { TaskPriority } from '@/app/enums/TaskPriority';
+import { DataTablePagination } from '@/view/components/data-table/data-table-pagination';
 
 export function TaskDeletionAuditLogTable() {
   const { taskDeletionAuditLogsList, isTaskDeletionAuditLogsLoading } =
@@ -21,7 +22,7 @@ export function TaskDeletionAuditLogTable() {
   const columns = useColumns();
 
   return (
-    <>
+    <div>
       {!isTaskDeletionAuditLogsLoading &&
         taskDeletionAuditLogsList.length === 0 && <EmptyLog />}
 
@@ -36,9 +37,13 @@ export function TaskDeletionAuditLogTable() {
         />
       )}
 
-      <DataTable data={taskDeletionAuditLogsList} columns={columns}>
+      <DataTable
+        data={taskDeletionAuditLogsList}
+        columns={columns}
+        pagination={{ pageIndex: 0, pageSize: 5 }}
+      >
         {taskDeletionAuditLogsList.length > 0 && (
-          <div className="flex items-center gap-4">
+          <div className="mb-2 flex items-center gap-4">
             <DataTableTextFilter placeholder="Procurar por autor ou título" />
 
             <div className="flex items-center gap-1">
@@ -59,9 +64,11 @@ export function TaskDeletionAuditLogTable() {
           </div>
         )}
 
+        <DataTablePagination />
+
         {!isTaskDeletionAuditLogsLoading &&
           taskDeletionAuditLogsList.length > 0 && <DataTableContent />}
       </DataTable>
-    </>
+    </div>
   );
 }
