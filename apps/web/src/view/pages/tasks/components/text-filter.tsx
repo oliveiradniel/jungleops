@@ -12,9 +12,10 @@ import {
 
 interface TextFilterProps {
   numberOfTasksFound?: number;
+  disabled?: boolean;
 }
 
-export function TextFilter({ numberOfTasksFound }: TextFilterProps) {
+export function TextFilter({ numberOfTasksFound, disabled }: TextFilterProps) {
   const { q } = useSearch({ from: '/_authenticated/tasks' });
   const navigate = useNavigate();
 
@@ -34,6 +35,7 @@ export function TextFilter({ numberOfTasksFound }: TextFilterProps) {
   return (
     <InputGroup>
       <InputGroupInput
+        disabled={disabled}
         placeholder="Digite o título ou descrição de uma tarefa"
         value={search ?? ''}
         onChange={(event) => setSearch(event.target.value)}
@@ -43,7 +45,7 @@ export function TextFilter({ numberOfTasksFound }: TextFilterProps) {
         <SearchIcon />
       </InputGroupAddon>
 
-      {q && (
+      {q && !disabled && (
         <InputGroupAddon align="inline-end" className="animate-fade-in">
           ({numberOfTasksFound ?? 0})
         </InputGroupAddon>

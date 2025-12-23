@@ -32,7 +32,8 @@ export function useListTasksQuery({
 
   return {
     tasks: data?.tasks ?? [],
-    total: data?.total ?? 0,
+    totalAll: data?.totalAll ?? 0,
+    totalFiltered: data?.totalFiltered ?? 0,
     pagination: data?.pagination,
     facets: data?.facets,
     isTasksLoading: isLoading,

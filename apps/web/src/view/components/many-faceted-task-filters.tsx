@@ -18,6 +18,7 @@ interface ManyFacetedTasksFilterProps<T extends string> {
   facets?: FacetItem<T>[];
   placeholder: string;
   labels: Record<T, string>;
+  disabled?: boolean;
 }
 
 export function ManyFacetedTasksFilter<T extends string>({
@@ -25,6 +26,7 @@ export function ManyFacetedTasksFilter<T extends string>({
   placeholder,
   facets,
   labels,
+  disabled,
 }: ManyFacetedTasksFilterProps<T>) {
   const navigate = useNavigate();
   const search = useSearch({ from: '/_authenticated/tasks' });
@@ -69,7 +71,7 @@ export function ManyFacetedTasksFilter<T extends string>({
   return (
     <div className="flex items-center gap-1">
       <Popover>
-        <PopoverTrigger asChild>
+        <PopoverTrigger asChild disabled={disabled}>
           <Button
             aria-label="Abrir filtros"
             variant="outline"

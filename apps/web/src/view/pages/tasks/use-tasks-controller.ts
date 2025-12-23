@@ -19,16 +19,23 @@ export function useTasksController() {
     from: '/_authenticated/tasks',
   });
 
-  const { tasks, total, pagination, facets, isTasksLoading, isTasksFetching } =
-    useListTasksQuery({
-      page,
-      size,
-      orderBy,
-      order,
-      status,
-      priority,
-      search: q,
-    });
+  const {
+    tasks,
+    totalAll,
+    totalFiltered,
+    pagination,
+    facets,
+    isTasksLoading,
+    isTasksFetching,
+  } = useListTasksQuery({
+    page,
+    size,
+    orderBy,
+    order,
+    status,
+    priority,
+    search: q,
+  });
 
   const paginationTST = useMemo(
     () => ({
@@ -52,7 +59,8 @@ export function useTasksController() {
 
   return {
     table,
-    total,
+    totalAll,
+    totalFiltered,
     pagination,
     facets,
     isTasksLoading,

@@ -103,7 +103,9 @@ export class TasksRepository implements ITasksRepository {
       term: 'term',
     };
 
-    const [tasks, total] = await this.tasksRepository.findAndCount({
+    const totalAll = await this.tasksRepository.count();
+
+    const [tasks, totalFiltered] = await this.tasksRepository.findAndCount({
       take: size,
       skip,
       where,
@@ -153,11 +155,12 @@ export class TasksRepository implements ITasksRepository {
       count: Number(facet.count),
     }));
 
-    const totalPages = Math.ceil(total / size);
+    const totalPages = Math.ceil(totalFiltered / size);
 
     return {
       tasks: tasksWithCommentCount,
-      total,
+      totalAll,
+      totalFiltered,
       pagination: {
         totalPages,
         hasNext: page < totalPages,

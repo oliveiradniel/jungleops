@@ -3,7 +3,8 @@ import { TaskPriority, TaskStatus } from "enums";
 
 export type TasksList = {
   tasks: TaskWithCommentCount[];
-  total: number;
+  totalAll: number;
+  totalFiltered: number;
   pagination: {
     totalPages: number;
     hasNext: boolean;

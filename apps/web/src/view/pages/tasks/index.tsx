@@ -1,3 +1,4 @@
+import { useSearch } from '@tanstack/react-router';
 import { useTasksController } from './use-tasks-controller';
 
 import { priorityLabels, statusLabels } from '@/config/labels';
@@ -14,8 +15,19 @@ import { SortFilter } from './components/sort-filter';
 import { TextFilter } from './components/text-filter';
 
 export function Tasks() {
-  const { table, total, pagination, facets, isTasksLoading, isTasksFetching } =
-    useTasksController();
+  const {
+    table,
+    totalAll,
+    totalFiltered,
+    pagination,
+    facets,
+    isTasksLoading,
+    isTasksFetching,
+  } = useTasksController();
+
+  const { q } = useSearch({ from: '/_authenticated/tasks' });
+
+  const disabled = totalAll <= 0 || totalFiltered <= 0;
 
   return (
     <>
@@ -23,15 +35,19 @@ export function Tasks() {
         <div className="flex h-full w-full flex-col gap-6 p-6">
           <header className="flex flex-col items-start justify-between gap-2">
             <div className="flex w-full items-start gap-2">
-              <TextFilter numberOfTasksFound={total} />
+              <TextFilter
+                disabled={totalAll <= 0}
+                numberOfTasksFound={totalFiltered}
+              />
 
-              <SortFilter placeholder="Ordenar por" />
+              <SortFilter disabled={disabled} placeholder="Ordenar por" />
 
               <ManyFacetedTasksFilter
                 param="status"
                 facets={facets?.status}
                 labels={statusLabels}
                 placeholder="Status"
+                disabled={disabled}
               />
 
               <ManyFacetedTasksFilter
@@ -39,6 +55,7 @@ export function Tasks() {
                 facets={facets?.priority}
                 labels={priorityLabels}
                 placeholder="Prioridade"
+                disabled={disabled}
               />
             </div>
 
@@ -47,29 +64,26 @@ export function Tasks() {
               hasNext={pagination?.hasNext ?? false}
               totalPages={pagination?.totalPages ?? 0}
               isLoading={isTasksFetching}
+              disabled={disabled}
             />
           </header>
 
           <Separator />
 
-          <div className="flex gap-2">
-            <h1 className="flex items-baseline gap-2 text-2xl font-medium">
-              Todas as tarefas
-              {isTasksLoading ? (
-                <span className="text-muted-foreground text-[16px]">...</span>
-              ) : (
-                !isTasksFetching && (
-                  <span className="text-muted-foreground text-[16px]">
-                    ({total ?? 0})
-                  </span>
-                )
-              )}
-            </h1>
+          {totalAll > 0 && (
+            <div className="flex gap-2">
+              <h1 className="flex items-baseline gap-2 text-2xl font-medium">
+                Todas as tarefas
+                <span className="text-muted-foreground text-sm">
+                  ({isTasksLoading ? '...' : totalAll})
+                </span>
+              </h1>
 
-            {!isTasksLoading && isTasksFetching && (
-              <Spinner className="text-primary mt-3 size-4" />
-            )}
-          </div>
+              {!isTasksLoading && isTasksFetching && (
+                <Spinner className="text-primary mt-3 size-4" />
+              )}
+            </div>
+          )}
 
           {isTasksLoading && isTasksFetching && (
             <div className="flex flex-wrap gap-2">
@@ -86,12 +100,10 @@ export function Tasks() {
             <TasksCard table={table} />
           )}
 
-          {!isTasksLoading && total === 0 && <EmptyTasks />}
+          {!isTasksLoading && totalAll === 0 && <EmptyTasks />}
 
-          {!isTasksLoading && table.getRowCount() === 0 && total > 0 && (
-            <EmptyFilteredTasks
-              searchInput={table.getColumn('title')?.getFilterValue() as string}
-            />
+          {!isTasksLoading && totalAll > 0 && totalFiltered === 0 && (
+            <EmptyFilteredTasks searchInput={q ?? ''} />
           )}
         </div>
       </div>

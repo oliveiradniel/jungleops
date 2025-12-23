@@ -20,6 +20,7 @@ import {
 
 interface SortFilterProps {
   placeholder: string;
+  disabled?: boolean;
 }
 
 type Sort = {
@@ -27,7 +28,7 @@ type Sort = {
   order: 'asc' | 'desc';
 };
 
-export function SortFilter({ placeholder }: SortFilterProps) {
+export function SortFilter({ placeholder, disabled }: SortFilterProps) {
   const { orderBy, order } = useSearch({ from: '/_authenticated/tasks' });
   const navigate = useNavigate();
 
@@ -40,7 +41,7 @@ export function SortFilter({ placeholder }: SortFilterProps) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild disabled={disabled}>
         <Button
           variant="outline"
           className="data-[state=open]:bg-accent font-normal"

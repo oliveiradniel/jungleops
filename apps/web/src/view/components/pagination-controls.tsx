@@ -21,7 +21,8 @@ interface DataTablePaginationProps {
   hasPrevious: boolean;
   hasNext: boolean;
   totalPages: number;
-  isLoading: boolean;
+  isLoading?: boolean;
+  disabled?: boolean;
 }
 
 export function PaginationControls({
@@ -29,6 +30,7 @@ export function PaginationControls({
   hasNext,
   totalPages,
   isLoading,
+  disabled,
 }: DataTablePaginationProps) {
   const { page, size } = useSearch({ from: '/_authenticated/tasks' });
   const navigate = useNavigate();
@@ -55,7 +57,7 @@ export function PaginationControls({
           value={String(page)}
           onValueChange={(value) => handlePageNavigation(Number(value))}
         >
-          <SelectTrigger>
+          <SelectTrigger disabled={disabled}>
             <SelectValue>{page}</SelectValue>
           </SelectTrigger>
 
@@ -78,7 +80,7 @@ export function PaginationControls({
           value={String(size)}
           onValueChange={(value) => handleSizePerPage(Number(value))}
         >
-          <SelectTrigger>
+          <SelectTrigger disabled={disabled}>
             <SelectValue>{size}</SelectValue>
           </SelectTrigger>
 
