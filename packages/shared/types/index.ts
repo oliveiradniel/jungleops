@@ -6,3 +6,4 @@ export * from './comment/index';
 export * from './notification/index';
 export * from './task/index';
 export * from './task-audit-log';
+export * from './message';
