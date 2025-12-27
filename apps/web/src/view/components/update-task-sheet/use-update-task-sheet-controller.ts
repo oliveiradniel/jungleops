@@ -3,11 +3,9 @@ import { useListUsersQuery } from '@/app/hooks/queries/use-list-users-query';
 import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTaskController } from '@/view/pages/task/use-task-controller';
-import { useAuth } from '@/app/hooks/use-auth';
 import { useUpdateTaskMutation } from '@/app/hooks/mutations/use-update-task-mutation';
 import { useTasks } from '@/app/hooks/use-tasks';
 import { useListUsersByTaskIdQuery } from '@/app/hooks/queries/use-list-users-by-task-id-query';
-import { useNotificationsSocket } from '@/app/hooks/use-notifications-socket';
 
 import { AxiosError } from 'axios';
 
@@ -56,8 +54,6 @@ export function useUpdateTaskSheetController(taskData: Task | undefined) {
 
   const queryClient = useQueryClient();
 
-  const { user } = useAuth();
-
   const { currentPage } = useTaskController();
 
   const { updateTask, isUpdateTaskLoading } = useUpdateTaskMutation();
@@ -66,8 +62,6 @@ export function useUpdateTaskSheetController(taskData: Task | undefined) {
   const { participants } = useListUsersByTaskIdQuery({ taskId: id });
 
   const participantIds = participants?.map((participant) => participant.id);
-
-  useNotificationsSocket({ userId: user?.id, taskId: id });
 
   const handleSubmit = reactHookHandleSubmit(
     async (data: Omit<UpdateTaskData, 'lastEditedBy'>) => {

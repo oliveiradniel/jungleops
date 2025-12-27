@@ -1,13 +1,12 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import { useTasks } from '@/app/hooks/use-tasks';
 import { useDeleteTaskMutation } from '@/app/hooks/mutations/use-delete-task-mutation';
-import { useNotificationsSocket } from '@/app/hooks/use-notifications-socket';
+
+import { AxiosError } from 'axios';
 
 import { toast } from '@/app/utils/toast';
-import { useRouter } from '@tanstack/react-router';
-import { useAuth } from '@/app/hooks/use-auth';
-import { AxiosError } from 'axios';
 
 interface UseDeleteTaskDialogProps {
   taskId: string;
@@ -27,10 +26,6 @@ export function useDeleteTaskDialog({
   const { isDeleteTaskDialogOpen, handleCloseDeleteTaskDialog } = useTasks();
 
   const queryClient = useQueryClient();
-
-  const { user } = useAuth();
-
-  useNotificationsSocket({ userId: user?.id });
 
   const { deleteTask, isDeleteTaskLoading } = useDeleteTaskMutation();
 

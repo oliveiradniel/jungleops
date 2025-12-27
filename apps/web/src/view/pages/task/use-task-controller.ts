@@ -9,7 +9,6 @@ import { useAuth } from '@/app/hooks/use-auth';
 import { usePagination } from '@/app/hooks/use-pagination';
 import { useTasks } from '@/app/hooks/use-tasks';
 import { useListUsersByTaskIdQuery } from '@/app/hooks/queries/use-list-users-by-task-id-query';
-import { useNotificationsSocket } from '@/app/hooks/use-notifications-socket';
 
 import { toast } from '@/app/utils/toast';
 
@@ -40,8 +39,6 @@ export function useTaskController() {
       from: '/_authenticated/tasks_/$taskId',
       to: '/tasks/$taskId',
     });
-
-  useNotificationsSocket({ userId: user?.id, taskId });
 
   const {
     commentsList,

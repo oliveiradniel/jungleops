@@ -1,19 +1,13 @@
 import { useMemo } from 'react';
 import { useSearch } from '@tanstack/react-router';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useAuth } from '@/app/hooks/use-auth';
 import { useTasks } from '@/app/hooks/use-tasks';
 import { useListTasksQuery } from '@/app/hooks/queries/use-list-tasks-query';
-import { useNotificationsSocket } from '@/app/hooks/use-notifications-socket';
 
 import { taskColumns } from './task-columns';
 
 export function useTasksController() {
   const { handleOpenNewTaskSheet } = useTasks();
-
-  const { user } = useAuth();
-
-  useNotificationsSocket({ userId: user?.id });
 
   const { page, size, orderBy, order, status, priority, q } = useSearch({
     from: '/_authenticated/tasks',
