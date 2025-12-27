@@ -1,4 +1,4 @@
-import { TaskPriority, TaskStatus } from 'enums';
+import { TaskPriority, TaskStatus } from '../../enums';
 
 export type UpdateTaskData = {
   title?: string;

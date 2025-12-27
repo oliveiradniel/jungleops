@@ -1,4 +1,4 @@
-import { UserWithoutPassword } from 'entities';
+import { UserWithoutPassword } from '../../entities';
 
 export type AuthPayload = {
   user: UserWithoutPassword;

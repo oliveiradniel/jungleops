@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "rootDir": "."
+  },
+  "include": [
+    "index.ts",
+    "types/**/*",
+    "entities/**/*",
+    "enums/**/*",
+    "config/**/*",
+    "routing-keys/**/*"
+  ]
+}

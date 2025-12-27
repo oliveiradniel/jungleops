@@ -1,4 +1,4 @@
-import { TaskWithCommentCount, UserWithoutPassword, TFieldName } from "entities";
+import { TaskWithCommentCount, UserWithoutPassword, TFieldName } from "../../entities";
 
 export interface ListCreationTaskAuditLog {
   id: string;

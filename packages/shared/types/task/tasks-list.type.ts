@@ -1,5 +1,5 @@
-import { TaskWithCommentCount } from "entities";
-import { TaskPriority, TaskStatus } from "enums";
+import { TaskWithCommentCount } from "../../entities";
+import { TaskPriority, TaskStatus } from "../../enums";
 
 export type TasksList = {
   tasks: TaskWithCommentCount[];
