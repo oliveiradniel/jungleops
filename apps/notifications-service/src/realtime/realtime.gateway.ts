@@ -49,96 +49,96 @@ export class RealTimeGateway
   }
 
   notifyCreatedTask(payload: TaskCreatedNotification) {
-    const { authorId } = payload;
+    const { author } = payload;
 
     this.clients.forEach((client, userId) => {
-      if (userId !== authorId) {
+      if (userId !== author.id) {
         client.emit(SOCKET_EVENT_KEYS.TASK_CREATED, payload);
       }
     });
   }
 
   notifyUpdatedTaskTitle(payload: TaskTitleUpdatedNotification) {
-    const { authorId, task } = payload;
+    const { author, task } = payload;
 
     this.notifyParticipants({
       event: SOCKET_EVENT_KEYS.TASK_TITLE_UPDATED,
       payload,
-      authorId,
+      authorId: author.id,
       participantIds: task.participantIds,
     });
   }
 
   notifyUpdatedTaskStatus(payload: TaskStatusUpdatedNotification) {
-    const { authorId, task } = payload;
+    const { author, task } = payload;
 
     this.notifyParticipants({
       event: SOCKET_EVENT_KEYS.TASK_STATUS_UPDATED,
       payload,
-      authorId,
+      authorId: author.id,
       participantIds: task.participantIds,
     });
   }
 
   notifyUpdatedTaskPriority(payload: TaskPriorityUpdatedNotification) {
-    const { authorId, task } = payload;
+    const { author, task } = payload;
 
     this.notifyParticipants({
       event: SOCKET_EVENT_KEYS.TASK_PRIORITY_UPDATED,
       payload,
-      authorId,
+      authorId: author.id,
       participantIds: task.participantIds,
     });
   }
 
   notifyUpdatedTaskTerm(payload: TaskTermUpdatedNotification) {
-    const { authorId, task } = payload;
+    const { author, task } = payload;
 
     this.notifyParticipants({
       event: SOCKET_EVENT_KEYS.TASK_TERM_UPDATED,
       payload,
-      authorId,
+      authorId: author.id,
       participantIds: task.participantIds,
     });
   }
 
   notifyAssignedUsers(payload: TaskAssignedNotification) {
-    const { authorId, task } = payload;
+    const { author, task } = payload;
 
     this.notifyParticipants({
       event: SOCKET_EVENT_KEYS.TASK_ASSIGNED,
       payload,
-      authorId,
+      authorId: author.id,
       participantIds: [...task.participantIds, ...task.addedParticipantIds],
     });
   }
 
   notifyUnassignedUsers(payload: TaskUnassignedNotification) {
-    const { authorId, task } = payload;
+    const { author, task } = payload;
 
     this.notifyParticipants({
       event: SOCKET_EVENT_KEYS.TASK_UNASSIGNED,
       payload,
-      authorId,
+      authorId: author.id,
       participantIds: [...task.participantIds, ...task.removedParticipantIds],
     });
   }
 
   notifyDeletedTask(payload: TaskDeletedNotification) {
-    const { authorId } = payload;
+    const { author } = payload;
 
     this.clients.forEach((client, userId) => {
-      if (userId !== authorId) {
+      if (userId !== author.id) {
         client.emit(SOCKET_EVENT_KEYS.TASK_DELETED, payload);
       }
     });
   }
 
   notifyTaskCommentCreated(payload: TaskCommentCreatedNotification) {
-    const { authorId, task } = payload;
+    const { author, task } = payload;
 
     this.clients.forEach((client, userId) => {
-      if (userId !== authorId && task.participantIds.includes(userId)) {
+      if (userId !== author.id && task.participantIds.includes(userId)) {
         client.emit(SOCKET_EVENT_KEYS.TASK_COMMENT_CREATED, payload);
       }
     });

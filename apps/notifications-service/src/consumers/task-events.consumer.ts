@@ -27,7 +27,7 @@ export class TaskEventsConsumer {
 
   @EventPattern(EVENT_KEYS.TASK_CREATED)
   async taskCreated(@Payload() payload: TaskCreatedNotification) {
-    const { targetUserIds, task } = payload;
+    const { targetUserIds, author, task } = payload;
 
     await Promise.all(
       targetUserIds.map((userId) =>
@@ -35,6 +35,7 @@ export class TaskEventsConsumer {
           userId,
           kind: 'task.created',
           metadata: {
+            author,
             task,
           },
         }),
@@ -46,7 +47,7 @@ export class TaskEventsConsumer {
 
   @EventPattern(EVENT_KEYS.TASK_TITLE_UPDATED)
   async taskTitleUpdated(@Payload() payload: TaskTitleUpdatedNotification) {
-    const { task } = payload;
+    const { task, author } = payload;
 
     await Promise.all(
       task.participantIds.map((userId) =>
@@ -54,6 +55,7 @@ export class TaskEventsConsumer {
           userId,
           kind: 'task.title.updated',
           metadata: {
+            author,
             task,
           },
         }),
@@ -68,7 +70,7 @@ export class TaskEventsConsumer {
     @Payload()
     payload: TaskStatusUpdatedNotification,
   ) {
-    const { task } = payload;
+    const { author, task } = payload;
 
     await Promise.all(
       task.participantIds.map((userId) =>
@@ -76,6 +78,7 @@ export class TaskEventsConsumer {
           userId,
           kind: 'task.status.updated',
           metadata: {
+            author,
             task,
           },
         }),
@@ -90,7 +93,7 @@ export class TaskEventsConsumer {
     @Payload()
     payload: TaskPriorityUpdatedNotification,
   ) {
-    const { task } = payload;
+    const { author, task } = payload;
 
     await Promise.all(
       task.participantIds.map((userId) =>
@@ -98,6 +101,7 @@ export class TaskEventsConsumer {
           userId,
           kind: 'task.priority.updated',
           metadata: {
+            author,
             task,
           },
         }),
@@ -109,7 +113,7 @@ export class TaskEventsConsumer {
 
   @EventPattern(EVENT_KEYS.TASK_TERM_UPDATED)
   async taskTermUpdated(@Payload() payload: TaskTermUpdatedNotification) {
-    const { task } = payload;
+    const { author, task } = payload;
 
     await Promise.all(
       task.participantIds.map((userId) =>
@@ -117,6 +121,7 @@ export class TaskEventsConsumer {
           userId,
           kind: 'task.term.updated',
           metadata: {
+            author,
             task,
           },
         }),
@@ -126,7 +131,7 @@ export class TaskEventsConsumer {
 
   @EventPattern(EVENT_KEYS.TASK_ASSIGNED)
   async taskAssigned(@Payload() payload: TaskAssignedNotification) {
-    const { task } = payload;
+    const { author, task } = payload;
 
     await Promise.all(
       task.participantIds.map((userId) =>
@@ -134,6 +139,7 @@ export class TaskEventsConsumer {
           userId,
           kind: 'task.assigned',
           metadata: {
+            author,
             task,
           },
         }),
@@ -145,7 +151,7 @@ export class TaskEventsConsumer {
 
   @EventPattern(EVENT_KEYS.TASK_UNASSIGNED)
   async taskUnassigned(@Payload() payload: TaskUnassignedNotification) {
-    const { authorId, task } = payload;
+    const { author, task } = payload;
 
     await Promise.all(
       task.removedParticipantIds.map((userId) =>
@@ -153,7 +159,7 @@ export class TaskEventsConsumer {
           userId,
           kind: 'task.unassigned',
           metadata: {
-            authorId,
+            author,
             task,
           },
         }),

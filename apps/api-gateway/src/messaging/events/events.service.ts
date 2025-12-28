@@ -33,9 +33,13 @@ export class EventsService {
     const { authorId, task } = payload;
 
     const userIds = await this.usersService.listUserIds();
+    const { id, username } = await this.usersService.find(authorId);
 
     this.client.emit<string, TaskCreatedNotification>(EVENT_KEYS.TASK_CREATED, {
-      authorId,
+      author: {
+        id,
+        username,
+      },
       targetUserIds: userIds,
       task,
     });
@@ -58,11 +62,16 @@ export class EventsService {
     const hasAssignedUser = addedParticipantIds.length > 0;
     const hasUnassignedUser = removedParticipantIds.length > 0;
 
+    const { id: userId, username } = await this.usersService.find(authorId);
+
     if (hasTitleBeenUpdated) {
       this.client.emit<string, TaskTitleUpdatedNotification>(
         EVENT_KEYS.TASK_TITLE_UPDATED,
         {
-          authorId,
+          author: {
+            id,
+            username,
+          },
           task: {
             id,
             participantIds,
@@ -77,7 +86,10 @@ export class EventsService {
       this.client.emit<string, TaskStatusUpdatedNotification>(
         EVENT_KEYS.TASK_STATUS_UPDATED,
         {
-          authorId,
+          author: {
+            id,
+            username,
+          },
           task: {
             id,
             participantIds,
@@ -93,7 +105,10 @@ export class EventsService {
       this.client.emit<string, TaskPriorityUpdatedNotification>(
         EVENT_KEYS.TASK_PRIORITY_UPDATED,
         {
-          authorId,
+          author: {
+            id,
+            username,
+          },
           task: {
             id,
             participantIds,
@@ -109,7 +124,10 @@ export class EventsService {
       this.client.emit<string, TaskTermUpdatedNotification>(
         EVENT_KEYS.TASK_TERM_UPDATED,
         {
-          authorId,
+          author: {
+            id,
+            username,
+          },
           task: {
             id,
             participantIds,
@@ -125,7 +143,10 @@ export class EventsService {
       this.client.emit<string, TaskAssignedNotification>(
         EVENT_KEYS.TASK_ASSIGNED,
         {
-          authorId,
+          author: {
+            id,
+            username,
+          },
           task: {
             id,
             addedParticipantIds,
@@ -141,7 +162,10 @@ export class EventsService {
       this.client.emit<string, TaskUnassignedNotification>(
         EVENT_KEYS.TASK_UNASSIGNED,
         {
-          authorId,
+          author: {
+            id,
+            username,
+          },
           task: {
             id,
             title: parsedTitle,
@@ -157,21 +181,30 @@ export class EventsService {
     const { authorId, task } = payload;
 
     const userIds = await this.usersService.listUserIds();
+    const { id, username } = await this.usersService.find(authorId);
 
     this.client.emit<string, TaskDeletedNotification>(EVENT_KEYS.TASK_DELETED, {
-      authorId,
+      author: {
+        id,
+        username,
+      },
       targetUserIds: userIds,
       task,
     });
   }
 
-  taskCommentCreated(payload: TaskCommentCreatedEvent) {
+  async taskCommentCreated(payload: TaskCommentCreatedEvent) {
     const { authorId, task } = payload;
+
+    const { id, username } = await this.usersService.find(authorId);
 
     this.client.emit<string, TaskCommentCreatedNotification>(
       EVENT_KEYS.TASK_COMMENT_CREATED,
       {
-        authorId,
+        author: {
+          id,
+          username,
+        },
         task,
       },
     );

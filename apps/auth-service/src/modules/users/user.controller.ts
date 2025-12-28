@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
 import { UsersService } from './users.service';
 
@@ -13,7 +13,7 @@ export class UsersController {
     return this.usersService.findUsers(ids);
   }
 
-  @Get()
+  @Get('list')
   list(): Promise<UserWithoutPassword[]> {
     return this.usersService.listUsers();
   }
@@ -21,5 +21,10 @@ export class UsersController {
   @Get('ids')
   listUserIds(): Promise<string[]> {
     return this.usersService.listUserIds();
+  }
+
+  @Get(':userId')
+  findUser(@Param('userId') userId: string): Promise<UserWithoutPassword> {
+    return this.usersService.findById(userId);
   }
 }

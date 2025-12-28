@@ -17,10 +17,10 @@ export class UsersRepository implements IUsersRepository {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async getById(id: string): Promise<User | null> {
+  async getById(id: string): Promise<UserWithoutPassword | null> {
     const user = await this.userRepository.findOneBy({ id });
 
-    return user ? UserMapper.toDomain(user) : null;
+    return user ? UserMapper.toDomainWithoutPassword(user) : null;
   }
 
   async getByEmail(email: string): Promise<User | null> {
@@ -29,12 +29,12 @@ export class UsersRepository implements IUsersRepository {
     return user ? UserMapper.toDomain(user) : null;
   }
 
-  async getByUsername(username: string): Promise<User | null> {
+  async getByUsername(username: string): Promise<UserWithoutPassword | null> {
     const user = await this.userRepository.findOne({
       where: { username: ILike(username) },
     });
 
-    return user ? UserMapper.toDomain(user) : null;
+    return user ? UserMapper.toDomainWithoutPassword(user) : null;
   }
 
   async getUsers(ids: string[]): Promise<UserWithoutPassword[]> {

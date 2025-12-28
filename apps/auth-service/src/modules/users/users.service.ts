@@ -15,7 +15,7 @@ export class UsersService {
     private readonly usersRepository: IUsersRepository,
   ) {}
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<UserWithoutPassword> {
     const user = await this.usersRepository.getById(id);
 
     if (!user) {
@@ -25,11 +25,17 @@ export class UsersService {
     return user;
   }
 
-  findByEmail(email: string): Promise<User | null> {
-    return this.usersRepository.getByEmail(email);
+  async findByEmail(email: string): Promise<User | null> {
+    const user = await this.usersRepository.getByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+
+    return user;
   }
 
-  findByUsername(username: string): Promise<User | null> {
+  findByUsername(username: string): Promise<UserWithoutPassword | null> {
     return this.usersRepository.getByUsername(username);
   }
 
