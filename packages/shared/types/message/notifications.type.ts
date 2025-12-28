@@ -5,7 +5,10 @@ interface BaseNotification {
 }
 
 export interface TaskCreatedNotification extends BaseNotification {
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  }
   task: {
     id: string;
     title: string;
@@ -14,7 +17,10 @@ export interface TaskCreatedNotification extends BaseNotification {
 }
 
 export interface TaskTitleUpdatedNotification {
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  }
   task: {
     id: string;
     oldTitle?: string;
@@ -24,7 +30,10 @@ export interface TaskTitleUpdatedNotification {
 }
 
 export interface TaskStatusUpdatedNotification {
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  }
   task: {
     id: string;
     title: string;
@@ -35,7 +44,10 @@ export interface TaskStatusUpdatedNotification {
 }
 
 export interface TaskPriorityUpdatedNotification {
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  }
   task: {
     id: string;
     title: string;
@@ -46,7 +58,10 @@ export interface TaskPriorityUpdatedNotification {
 }
 
 export interface TaskTermUpdatedNotification {
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  }
   task: {
     id: string;
     title: string;
@@ -57,7 +72,10 @@ export interface TaskTermUpdatedNotification {
 }
 
 export interface TaskAssignedNotification {
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  }
   task: {
     id: string;
     title: string;
@@ -68,7 +86,10 @@ export interface TaskAssignedNotification {
 }
 
 export interface TaskUnassignedNotification {
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  }
   task: {
     id: string;
     title: string;
@@ -78,7 +99,10 @@ export interface TaskUnassignedNotification {
 }
 
 export interface TaskDeletedNotification extends BaseNotification {
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  }
   task: {
     title: string;
     participantIds: string[];
@@ -86,7 +110,10 @@ export interface TaskDeletedNotification extends BaseNotification {
 }
 
 export interface TaskCommentCreatedNotification {
-  authorId: string;
+  author: {
+    id: string;
+    username: string;
+  }
   task: {
     id: string;
     title: string;
