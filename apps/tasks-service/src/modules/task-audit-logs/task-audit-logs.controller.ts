@@ -2,6 +2,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   HttpCode,
   HttpStatus,
   Param,
@@ -46,7 +47,10 @@ export class TaskAuditLogsController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    await this.taskAuditLogsService.delete(id);
+  async delete(
+    @Param('id') id: string,
+    @Headers('deleted-by') deletedBy: string,
+  ) {
+    await this.taskAuditLogsService.delete(id, deletedBy);
   }
 }

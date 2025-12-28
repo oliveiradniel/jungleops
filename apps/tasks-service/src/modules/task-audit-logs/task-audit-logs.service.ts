@@ -1,14 +1,12 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
 
-import type { ITaskAuditLogsRepository } from 'src/database/contracts/task-audit-logs.contract';
+import { SignalsPublisherService } from 'src/messaging/signals-publisher.service';
 
-import { CreateTaskAuditLogData } from './types/create-task-audit-log-data.type';
+import { type ITaskAuditLogsRepository } from 'src/database/contracts/task-audit-logs.contract';
 
-import {
-  NOTIFICATIONS_SERVICE_RMQ,
-  TASK_AUDIT_LOGS_REPOSITORY,
-} from 'src/shared/constants/tokens';
+import { type CreateTaskAuditLogData } from './types/create-task-audit-log-data.type';
+
+import { TASK_AUDIT_LOGS_REPOSITORY } from 'src/shared/constants/tokens';
 
 import {
   ListCreationTaskAuditLog,
@@ -22,8 +20,7 @@ export class TaskAuditLogsService {
   constructor(
     @Inject(TASK_AUDIT_LOGS_REPOSITORY)
     private readonly taskAuditLogsRepository: ITaskAuditLogsRepository,
-    @Inject(NOTIFICATIONS_SERVICE_RMQ)
-    private readonly notificationsClient: ClientProxy,
+    private readonly signalsPublisherService: SignalsPublisherService,
   ) {}
 
   list(): Promise<TaskAuditLog[]> {
@@ -42,15 +39,11 @@ export class TaskAuditLogsService {
     return this.taskAuditLogsRepository.listTaskDeletionAuditLog();
   }
 
-  create(data: CreateTaskAuditLogData): Promise<TaskAuditLog> {
-    const { action, taskId, userId, taskTitle, oldValue, newValue, fieldName } =
+  async create(data: CreateTaskAuditLogData): Promise<TaskAuditLog> {
+    const { taskId, userId, taskTitle, action, oldValue, newValue, fieldName } =
       data;
 
-    this.notificationsClient.emit('task-audit-log.changed', {
-      action,
-    });
-
-    return this.taskAuditLogsRepository.create({
+    const taskAuditLog = await this.taskAuditLogsRepository.create({
       action,
       taskId,
       userId,
@@ -59,15 +52,23 @@ export class TaskAuditLogsService {
       newValue,
       fieldName,
     });
+
+    this.signalsPublisherService.taskAuditLog({
+      action,
+      authorId: userId,
+    });
+
+    return taskAuditLog;
   }
 
-  async delete(id: string) {
+  async delete(id: string, deletedBy: string) {
     const { action } = await this.verifyTaskAuditLogExists(id);
 
     await this.taskAuditLogsRepository.delete(id);
 
-    this.notificationsClient.emit('task-audit-log.changed', {
+    this.signalsPublisherService.taskAuditLog({
       action,
+      authorId: deletedBy,
     });
   }
 
