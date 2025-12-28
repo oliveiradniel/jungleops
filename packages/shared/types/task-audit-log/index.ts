@@ -7,7 +7,6 @@ import {
   ListUpdateTaskAuditLogWithAuthor
 } from './list.type'
 
-import { ActionPayload } from './websocket-payload'
 
 export {
    ListCreationTaskAuditLog,
@@ -16,5 +15,4 @@ export {
    ListCreationTaskAuditLogWithAuthor,
    ListDeletionTaskAuditLogWithAuthor,
    ListUpdateTaskAuditLogWithAuthor,
-   ActionPayload
 }
