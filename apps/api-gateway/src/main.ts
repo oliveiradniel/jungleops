@@ -11,13 +11,16 @@ import { JWTAuthGuard } from './modules/auth/jwt-auth.guard';
 import { HttpProxyErrorFilter } from './filters/http-proxy-error.filter';
 
 import { getConfig } from './shared/config/config.helper';
+import { microserviceOptions } from './shared/modules-config/microservice.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
 
-  const { PORT, FRONTEND_ORIGIN } = getConfig(app.get(ConfigService));
+  const { PORT, FRONTEND_ORIGIN, BROKER_URL } = getConfig(
+    app.get(ConfigService),
+  );
 
   const reflector = app.get(Reflector);
 
@@ -35,6 +38,12 @@ async function bootstrap() {
     origin: FRONTEND_ORIGIN,
     credentials: true,
   });
+
+  app.connectMicroservice(
+    microserviceOptions({ brokerURL: BROKER_URL, queue: 'tasks-queue' }),
+  );
+
+  await app.startAllMicroservices();
 
   const config = new DocumentBuilder()
     .setTitle('Jungle Gaming Task Manager | API Gateway')
