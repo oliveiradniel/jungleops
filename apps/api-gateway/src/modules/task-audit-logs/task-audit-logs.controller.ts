@@ -5,7 +5,10 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Req,
 } from '@nestjs/common';
+
+import { Request } from 'express';
 
 import { TaskAuditLogsService } from './task-audit-logs.service';
 
@@ -46,7 +49,9 @@ export class TaskAuditLogsController {
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  delete(@Param('id') id: string): Promise<void> {
-    return this.taskAuditLogsService.delete(id);
+  delete(@Param('id') id: string, @Req() request: Request): Promise<void> {
+    const userId = request.user?.userId;
+
+    return this.taskAuditLogsService.delete(id, userId!);
   }
 }

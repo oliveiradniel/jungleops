@@ -17,4 +17,9 @@ export class UsersController {
   list(): Promise<UserWithoutPassword[]> {
     return this.usersService.listUsers();
   }
+
+  @Get('ids')
+  listUserIds(): Promise<string[]> {
+    return this.usersService.listUserIds();
+  }
 }

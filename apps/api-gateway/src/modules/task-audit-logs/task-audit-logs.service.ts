@@ -111,9 +111,13 @@ export class TaskAuditLogsService {
     return datadWithAuthor;
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string, userId: string): Promise<void> {
     await firstValueFrom(
-      this.httpService.delete<void>(`${this.baseURL}/${id}`),
+      this.httpService.delete<void>(`${this.baseURL}/${id}`, {
+        headers: {
+          'deleted-by': userId,
+        },
+      }),
     );
   }
 

@@ -8,5 +8,6 @@ export abstract class IUsersRepository {
   abstract getByUsername(username: string): Promise<User | null>;
   abstract getUsers(ids: string[]): Promise<UserWithoutPassword[]>;
   abstract listUsers(): Promise<UserWithoutPassword[]>;
+  abstract listUserIds(): Promise<string[]>;
   abstract create(data: CreateUserData): Promise<User>;
 }

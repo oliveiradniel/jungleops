@@ -51,6 +51,12 @@ export class UsersRepository implements IUsersRepository {
     return UserMapper.toDomainListWithoutPassword(users);
   }
 
+  async listUserIds(): Promise<string[]> {
+    const users = await this.userRepository.find({ select: { id: true } });
+
+    return users.map((user) => user.id);
+  }
+
   async create(data: CreateUserData): Promise<User> {
     const { email, username, password } = data;
 

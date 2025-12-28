@@ -37,4 +37,12 @@ export class UsersService {
 
     return data;
   }
+
+  async listUserIds(): Promise<string[]> {
+    const { data } = await firstValueFrom(
+      this.httpService.get<string[]>(`${this.baseURL}/ids`),
+    );
+
+    return data;
+  }
 }
