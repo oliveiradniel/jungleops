@@ -8,6 +8,9 @@ import { AuthContext, type LoadingType } from '@/app/contexts/auth-context';
 import { useLoginMutation } from '../hooks/mutations/use-login-mutation';
 import { useRegisterMutation } from '../hooks/mutations/use-register-mutation';
 import { useLogoutMutation } from '../hooks/mutations/use-logout-mutation';
+import { useNotifications } from '../hooks/realtime/use-notifications';
+import { useSignals } from '../hooks/realtime/use-signals';
+
 import { sessionQuery } from '@/lib/queries/session';
 
 import { router } from '@/router';
@@ -23,6 +26,8 @@ import { toast } from '../utils/toast';
 
 import { AuthLoadingScreen } from '@/view/components/auth-loading-screen';
 
+import { disconnectNotificationsSocket } from '../utils/notifications.socket';
+
 import type { LoginData, RegisterData } from '@/types/auth-data';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -35,6 +40,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { login: loginMutate, isLoginLoading } = useLoginMutation();
   const { register: registerMutate, isRegisterLoading } = useRegisterMutation();
   const { logout: logoutMutate, isLogoutLoading } = useLogoutMutation();
+
+  useNotifications({ userId: user?.id });
+  useSignals({ userId: user?.id });
 
   const isLoadingGlobal = isSessionLoading || isLogoutLoading || isNavigating;
   const loadingType: LoadingType = isSessionLoading
@@ -212,6 +220,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       await queryClient.invalidateQueries({ queryKey: ['session'] });
 
+      disconnectNotificationsSocket();
       router.invalidate();
     } catch (error) {
       toast({

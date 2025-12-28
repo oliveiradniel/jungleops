@@ -5,7 +5,7 @@ import type { LoginData, RegisterData } from '@/types/auth-data';
 import type { UserWithoutPassword } from '@challenge/shared';
 
 export interface AuthContextValue {
-  user: UserWithoutPassword | null;
+  user?: UserWithoutPassword | null;
   isAuthenticated: boolean;
   handleLogin: (data: LoginData) => Promise<void>;
   handleRegister: (data: RegisterData) => Promise<void>;
