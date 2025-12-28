@@ -1,5 +1,4 @@
-import type { TaskPriority } from '../enums/TaskPriority';
-import type { TaskStatus } from '../enums/TaskStatus';
+import type { TaskPriority, TaskStatus } from '@challenge/shared';
 
 export interface Task {
   id: string;

@@ -12,8 +12,7 @@ import { TaskRadioGroup } from '../task-radio-group';
 import { CheckboxIndicator, CheckboxItem } from '../ui/checkbox';
 
 import type { Task } from '@/app/entities/task';
-import type { TaskPriority } from '@/app/enums/TaskPriority';
-import type { TaskStatus } from '@/app/enums/TaskStatus';
+import type { TaskPriority, TaskStatus } from '@challenge/shared';
 
 export function UpdateTaskSheet({ taskData }: { taskData: Task | undefined }) {
   const {

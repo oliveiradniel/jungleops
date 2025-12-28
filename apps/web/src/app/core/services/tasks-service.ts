@@ -30,7 +30,7 @@ export class TasksService implements ITasksService {
   async list(
     filters: TaskFilters,
     config?: HttpRequestConfig,
-  ): Promise<TasksList & { tasks: Task[] }> {
+  ): Promise<Omit<TasksList, 'tasks'> & { tasks: Task[] }> {
     const { page, size, orderBy, order, status, priority, search } = filters;
 
     const facetedFilters: any = {};

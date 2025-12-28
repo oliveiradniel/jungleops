@@ -1,5 +1,4 @@
-import type { TaskPriority } from '@/app/enums/TaskPriority';
-import type { TaskStatus } from '@/app/enums/TaskStatus';
+import { TaskPriority, TaskStatus } from '@challenge/shared';
 
 interface OptionsTaskPriority {
   id: string;
@@ -16,22 +15,22 @@ interface OptionsTaskStatus {
 const optionsTaskPriority: OptionsTaskPriority[] = [
   {
     id: crypto.randomUUID(),
-    value: 'LOW',
+    value: TaskPriority.LOW,
     label: 'Baixa',
   },
   {
     id: crypto.randomUUID(),
-    value: 'MEDIUM',
+    value: TaskPriority.MEDIUM,
     label: 'Média',
   },
   {
     id: crypto.randomUUID(),
-    value: 'HIGH',
+    value: TaskPriority.HIGH,
     label: 'Alta',
   },
   {
     id: crypto.randomUUID(),
-    value: 'URGENT',
+    value: TaskPriority.URGENT,
     label: 'Urgente',
   },
 ];
@@ -39,22 +38,22 @@ const optionsTaskPriority: OptionsTaskPriority[] = [
 const optionsTaskStatus: OptionsTaskStatus[] = [
   {
     id: crypto.randomUUID(),
-    value: 'TODO',
+    value: TaskStatus.TODO,
     label: 'Pendente',
   },
   {
     id: crypto.randomUUID(),
-    value: 'IN_PROGRESS',
+    value: TaskStatus.IN_PROGRESS,
     label: 'Em progresso',
   },
   {
     id: crypto.randomUUID(),
-    value: 'REVIEW',
+    value: TaskStatus.REVIEW,
     label: 'Em revisão',
   },
   {
     id: crypto.randomUUID(),
-    value: 'DONE',
+    value: TaskStatus.DONE,
     label: 'Concluída',
   },
 ];

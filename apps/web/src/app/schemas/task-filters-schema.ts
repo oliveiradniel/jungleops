@@ -1,7 +1,6 @@
 import * as z from 'zod';
 
-import { TaskStatusValues, type TaskStatus } from '../enums/TaskStatus';
-import { TaskPriorityValues, type TaskPriority } from '../enums/TaskPriority';
+import { TaskPriority, TaskStatus } from '@challenge/shared';
 
 export const TaskFiltersSchema = z.object({
   page: z.coerce.number().int().positive().default(1),
@@ -34,13 +33,13 @@ export const TaskFiltersSchema = z.object({
         if (typeof value === 'string') {
           return value
             .split(',')
-            .map((v) => v.toUpperCase())
-            .filter((value) => TaskStatusValues.includes(value as TaskStatus));
+            .map((v) => v.toUpperCase() as TaskStatus)
+            .filter((value) => Object.values(TaskStatus).includes(value));
         }
 
         return value;
       },
-      z.array(z.enum(TaskStatusValues)),
+      z.array(z.enum(TaskStatus)),
     )
     .transform((values) => {
       return values.map((value) => value.toLowerCase()).join(',');
@@ -52,15 +51,13 @@ export const TaskFiltersSchema = z.object({
         if (typeof value === 'string') {
           return value
             .split(',')
-            .map((value) => value.toUpperCase())
-            .filter((value) =>
-              TaskPriorityValues.includes(value as TaskPriority),
-            );
+            .map((value) => value.toUpperCase() as TaskPriority)
+            .filter((value) => Object.values(TaskPriority).includes(value));
         }
 
         return value;
       },
-      z.array(z.enum(TaskPriorityValues)),
+      z.array(z.enum(TaskPriority)),
     )
     .transform((values) => {
       return values.map((value) => value.toLowerCase()).join(',');

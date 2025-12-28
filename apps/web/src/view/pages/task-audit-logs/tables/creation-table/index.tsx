@@ -10,10 +10,8 @@ import { DataTableFallback } from '@/view/components/data-table/data-table-fallb
 import { EmptyLog } from './empty-log';
 import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
 import { DataTableUniqueFacetedFilter } from '@/view/components/data-table/data-table-unique-faceted-filter';
-
-import type { TaskStatus } from '@/app/enums/TaskStatus';
-import type { TaskPriority } from '@/app/enums/TaskPriority';
 import { DataTablePagination } from '@/view/components/data-table/data-table-pagination';
+import type { TaskPriority, TaskStatus } from '@challenge/shared';
 
 export function TaskCreationAuditLogTable() {
   const { taskCreationAuditLogsList, isTaskCreationAuditLogsLoading } =

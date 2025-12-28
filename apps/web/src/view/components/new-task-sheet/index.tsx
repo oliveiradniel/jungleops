@@ -10,8 +10,7 @@ import { Textarea } from '../ui/textarea';
 import { DatePicker } from '../ui/date-picker';
 import { TaskRadioGroup } from '../task-radio-group';
 
-import type { TaskPriority } from '@/app/enums/TaskPriority';
-import type { TaskStatus } from '@/app/enums/TaskStatus';
+import type { TaskPriority, TaskStatus } from '@challenge/shared';
 
 export function NewTaskSheet() {
   const {

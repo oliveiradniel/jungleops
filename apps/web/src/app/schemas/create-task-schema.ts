@@ -1,7 +1,6 @@
 import * as z from 'zod';
 
-import { TaskPriorityValues } from '../enums/TaskPriority';
-import { TaskStatusValues } from '../enums/TaskStatus';
+import { TaskPriority, TaskStatus } from '@challenge/shared';
 
 export const CreateTaskSchema = z.object({
   title: z
@@ -15,8 +14,8 @@ export const CreateTaskSchema = z.object({
     .refine((date) => date >= new Date(new Date().setHours(0, 0, 0, 0)), {
       error: 'A data deve ser hoje ou futura.',
     }),
-  priority: z.enum(TaskPriorityValues, {
+  priority: z.enum(TaskPriority, {
     error: 'Informe uma prioriade válida.',
   }),
-  status: z.enum(TaskStatusValues, { error: 'Informe um status válido.' }),
+  status: z.enum(TaskStatus, { error: 'Informe um status válido.' }),
 });

@@ -12,6 +12,7 @@ import { toast } from '@/app/utils/toast';
 import { AxiosError } from 'axios';
 
 import type { CreateTaskData } from '@/types/task-data';
+import { TaskPriority, TaskStatus } from '@challenge/shared';
 
 export function useNewTaskSheetController() {
   const { isNewTaskSheetOpen, handleCloseNewTaskSheet } = useTasks();
@@ -25,8 +26,8 @@ export function useNewTaskSheetController() {
   } = useForm<CreateTaskData>({
     resolver: zodResolver(CreateTaskSchema),
     defaultValues: {
-      priority: 'LOW',
-      status: 'TODO',
+      priority: TaskPriority.LOW,
+      status: TaskStatus.TODO,
     },
   });
 
@@ -54,22 +55,14 @@ export function useNewTaskSheetController() {
       });
     } catch (error) {
       if (error instanceof AxiosError) {
-        if (error.response?.data.message === 'Title is already in use.')
+        if (error.response?.data.message === 'Title is already in use.') {
           toast({
             type: 'error',
             description: 'Este título já está em uso!',
           });
 
-        queryClient.invalidateQueries({
-          queryKey: ['tasks'],
-          exact: false,
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['task'],
-          exact: false,
-        });
-
-        return;
+          return;
+        }
       }
 
       toast({

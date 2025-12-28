@@ -9,7 +9,7 @@ export abstract class ITasksService {
   abstract list(
     filters: TaskFilters,
     config?: HttpRequestConfig,
-  ): Promise<TasksList & { tasks: Task[] }>;
+  ): Promise<Omit<TasksList, 'tasks'> & { tasks: Task[] }>;
   abstract create(
     data: CreateTaskData,
     config?: HttpRequestConfig,

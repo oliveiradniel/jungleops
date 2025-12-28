@@ -6,8 +6,6 @@ import type {
   CreateTaskData as DomainCreateTaskData,
   UpdateTaskData as DomainUpdateTaskData,
 } from '@/types/task-data';
-import type { TaskPriority } from '../enums/TaskPriority';
-import type { TaskStatus } from '../enums/TaskStatus';
 import type {
   TaskWithCommentCount,
   CreateTaskData as PersistenceCreateTaskData,
@@ -42,11 +40,11 @@ export class TaskMapper {
       description,
       priority: {
         value: priority,
-        label: priorityLabels[priority as TaskPriority],
+        label: priorityLabels[priority],
       },
       status: {
         value: status,
-        label: statusLabels[status as TaskStatus],
+        label: statusLabels[status],
       },
       term: formatTermDateToBR(term),
       createdAt: formatDateToBR(createdAt),
@@ -54,7 +52,9 @@ export class TaskMapper {
     };
   }
 
-  static toDomainList(data: TasksList): TasksList & { tasks: Task[] } {
+  static toDomainList(
+    data: TasksList,
+  ): Omit<TasksList, 'tasks'> & { tasks: Task[] } {
     const tasksList = data.tasks.map((task) => TaskMapper.toDomain(task));
 
     return {
@@ -80,7 +80,7 @@ export class TaskMapper {
   static toUpdatePersistence(
     task: DomainUpdateTaskData,
   ): Omit<PersistenceUpdateTaskData, 'lastEditedBy'> {
-    const { title, description, priority, status, term } = task;
+    const { title, description, priority, status, term, userIds } = task;
 
     return {
       title,
@@ -88,6 +88,7 @@ export class TaskMapper {
       priority,
       status,
       term: term ? this.toDateOnly(term) : undefined,
+      userIds,
     };
   }
 }

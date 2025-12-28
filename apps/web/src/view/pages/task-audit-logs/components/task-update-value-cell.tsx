@@ -10,10 +10,12 @@ import { PriorityBadge } from '@/view/components/ui/priority-badge';
 import { StatusBadge } from '@/view/components/ui/status-badge';
 import { TextCellTooltip } from './text-cell-tooltip';
 
-import type { TaskPriority } from '@/app/enums/TaskPriority';
-import type { TaskStatus } from '@/app/enums/TaskStatus';
-import type { UserWithoutPassword } from '@challenge/shared';
-import type { FieldName } from '@/app/enums/field-name';
+import type {
+  FieldName,
+  TaskPriority,
+  TaskStatus,
+  UserWithoutPassword,
+} from '@challenge/shared';
 
 interface TaskUpdateValueCellProps {
   value: string | UserWithoutPassword[];

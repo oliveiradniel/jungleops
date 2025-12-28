@@ -1,6 +1,4 @@
-import type { TaskPriority } from '@/app/enums/TaskPriority';
-import type { TaskStatus } from '@/app/enums/TaskStatus';
-import type { FieldName } from '@challenge/shared';
+import type { FieldName, TaskPriority, TaskStatus } from '@challenge/shared';
 
 export const priorityLabels: Record<TaskPriority, string> = {
   LOW: 'Baixa',
