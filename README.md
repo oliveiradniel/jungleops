@@ -1,24 +1,10 @@
 # Sistema de Gestão de Tarefas Colaborativo – Jungle Gaming
 
-Projeto desenvolvido como teste técnico para vaga de Full-stack Developer Júnior na Jungle Gaming.
-Monorepo com arquitetura de microserviços NestJS, com autenticação, CRUD de tarefas, comentários e notificações em tempo real utilizando React.js, RabbitMQ, WebSockets, PostgreSQL e Docker Compose.
-
-> 📌 Observação: Este repositório possui uma branch dedicada a melhorias pós-entrega técnica. Para visualizar as funcionalidades mais recentes, recomendo mudar para:
-
-```bash
-improvements/post-delivery
-```
-
-Nesta branch estou implementando:
-
-- Rota de fallback para lidar com paths inexistentes (404 Not Found)
-- Página de auditoria (Audit Log) listando criações, alterações e exclusões de tarefas
-- Página “Minhas tarefas”, exibindo apenas as tarefas que o usuário participa
-- Correção e estabilização do fluxo de refresh token, incluindo ajustes nos cookies
-
 # ⚙️ Arquitetura do Sistema
 
-Este projeto implementa uma arquitetura baseada em microserviços, com comunicação híbrida entre HTTP, RabbitMQ e WebSockets. O objetivo é oferecer autenticação, gerenciamento de tarefas/comentários e notificações em tempo real.
+Este projeto adota uma arquitetura de microserviços em monorepo, construída com NestJS, utilizando um modelo de comunicação híbrido baseado em HTTP, RabbitMQ e WebSockets. A solução contempla autenticação centralizada, gerenciamento completo de tarefas e comentários, além de um sistema de notificações em tempo real.
+
+O ecossistema é composto por serviços desacoplados, com persistência em PostgreSQL, mensageria assíncrona via RabbitMQ e comunicação em tempo real por WebSockets. O frontend foi desenvolvido em React.js, e todo o ambiente é orquestrado com Docker Compose, garantindo padronização, escalabilidade e facilidade de deploy.
 
 ---
 
@@ -185,72 +171,6 @@ Este projeto implementa uma arquitetura baseada em microserviços, com comunica�
 
 ---
 
-## ⏱️ Tempo gasto
-
-- Dia 1 (8 de novembro)
-    - Estudo sobre monorepo e turbo
-    - Configuração do monorepo
-    - Configuração das configurações globais (eslint, prettier e tsconfig)
-
-- Dia 2, Dia 3 (9 e 10 de novembro)
-    - Início dos microservices
-    - Configuração do TypeORM, autenticação e CRUD das tarefas
-
-- Dia 4, Dia 5 (11 e 12 de novembro)
-    - Estudo sobre API Gateway no NestJS
-    - Implementação do API Gateway
-    - Estudo sobre passport e proteção das rotas
-
-- Dia 6 (13 de novembro)
-    - Finalização da documentação com Swagger
-    - Estudo sobre refresh token no back-end
-    - Implementar rota de refresh token
-
-- Dia  (14 de novembro)
-    - Estudo sobre domínio, microservices e comunicação com RabbitMQ
-
-- Dia 8 (15 de novembro)
-    - Implementação de mensageria com RabbitMQ
-    - Criação do notifications-service
-    - Estudo sobre WebSocket
-    - Emitir mensagens para os ouvintes no WebSocket
-
-- Dia 9 (16 de novembro)
-    - Início do front-end
-    - Configuração do TanStack Router e Query
-    - Criação da Service Layer
-
-- Dia 10 (17 de novembro)
-    - Estudo sobre funcionamento do Shadcn e escolha da paleta de cores
-    - Iniciar construção do front-end
-
-- Dia 11 (18 de novembro)
-    - Criação da página de autenticação (login/register)
-    - Proteção das rotas com Context API e TanStack Router
-
-- Dia 12 (19 de novembro)
-    - Estudo sobre refresh token no front-end
-    - Implementar refresh token no interceptor do Axios
-    - Criação da página de listagem de tarefas, paginação e o CRUD da mesma
-    - Criação da página para informações adicionais da tarefa com listagem para comentários
-
-- Dia 13 (20 de novembro)
-    - Finalização de ajustes para experiência do usuários com loading Skeleton
-    - Estudo sobre WebSocket no front-end
-    - Implementar conexão com WebSocket
-
-- Dia 14 (21 de novembro)
-    - Refinar invalidações em queries através do WebSocket
-    - Melhorar notifições aos usuários
-    - Criar tabela para audit log e cadastrar na criação, alteração e exclusão de tarefas.
-
-- Dia 15 (22 de novembro)
-    - Ajustes para as imagens funcionarem corretamente.
-    - Criar script para rodar as migrations do banco de dados.
-    - Fazer testes finais e subir para o repostório.
-
----
-
 ## 🚀 Instruções para rodar o projeto
 
 - Pré-requisitos
@@ -341,30 +261,6 @@ O projeto utiliza um arquivo `.env` com as seguintes variáveis:
 > ⚠️ Lembre-se de usar secrets diferentes para a geração do Access e Refresh token JWT.
 
 ---
-
-## Componentes do Shadcn utilizados (21)
-
-- Button
-- Calendar
-- Card
-- Checkbox
-- Date Picker
-- Dialog
-- Form Group
-- Input Group
-- Input
-- Label
-- Pagination
-- Popover
-- Radio Group
-- Separator
-- Sheet
-- Sidebar
-- Skeleton
-- Sonner
-- Textarea
-- Tooltip
-- Spinner
 
 ## 🔗 Links
 
