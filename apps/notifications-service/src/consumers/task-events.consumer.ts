@@ -15,6 +15,7 @@ import {
   type TaskDeletedNotification,
   type TaskCommentCreatedNotification,
   type TaskUnassignedNotification,
+  type NotificationKind,
   EVENT_KEYS,
 } from '@challenge/shared';
 
@@ -29,18 +30,14 @@ export class TaskEventsConsumer {
   async taskCreated(@Payload() payload: TaskCreatedNotification) {
     const { targetUserIds, author, task } = payload;
 
-    await Promise.all(
-      targetUserIds.map((userId) =>
-        this.notificationsService.create({
-          userId,
-          kind: 'task.created',
-          metadata: {
-            author,
-            task,
-          },
-        }),
-      ),
-    );
+    await this.persistNotification({
+      targetUserIds,
+      notificationKind: 'task.created',
+      metadata: {
+        author,
+        task,
+      },
+    });
 
     this.realTimeGateway.notifyCreatedTask(payload);
   }
@@ -53,18 +50,14 @@ export class TaskEventsConsumer {
       (userId) => userId !== author.id,
     );
 
-    await Promise.all(
-      targetUserIds.map((userId) =>
-        this.notificationsService.create({
-          userId,
-          kind: 'task.title.updated',
-          metadata: {
-            author,
-            task,
-          },
-        }),
-      ),
-    );
+    await this.persistNotification({
+      targetUserIds,
+      notificationKind: 'task.title.updated',
+      metadata: {
+        author,
+        task,
+      },
+    });
 
     this.realTimeGateway.notifyUpdatedTaskTitle(payload);
   }
@@ -80,18 +73,14 @@ export class TaskEventsConsumer {
       (userId) => userId !== author.id,
     );
 
-    await Promise.all(
-      targetUserIds.map((userId) =>
-        this.notificationsService.create({
-          userId,
-          kind: 'task.status.updated',
-          metadata: {
-            author,
-            task,
-          },
-        }),
-      ),
-    );
+    await this.persistNotification({
+      targetUserIds,
+      notificationKind: 'task.status.updated',
+      metadata: {
+        author,
+        task,
+      },
+    });
 
     this.realTimeGateway.notifyUpdatedTaskStatus(payload);
   }
@@ -107,18 +96,14 @@ export class TaskEventsConsumer {
       (userId) => userId !== author.id,
     );
 
-    await Promise.all(
-      targetUserIds.map((userId) =>
-        this.notificationsService.create({
-          userId,
-          kind: 'task.priority.updated',
-          metadata: {
-            author,
-            task,
-          },
-        }),
-      ),
-    );
+    await this.persistNotification({
+      targetUserIds,
+      notificationKind: 'task.priority.updated',
+      metadata: {
+        author,
+        task,
+      },
+    });
 
     this.realTimeGateway.notifyUpdatedTaskPriority(payload);
   }
@@ -131,18 +116,14 @@ export class TaskEventsConsumer {
       (userId) => userId !== author.id,
     );
 
-    await Promise.all(
-      targetUserIds.map((userId) =>
-        this.notificationsService.create({
-          userId,
-          kind: 'task.term.updated',
-          metadata: {
-            author,
-            task,
-          },
-        }),
-      ),
-    );
+    await this.persistNotification({
+      targetUserIds,
+      notificationKind: 'task.term.updated',
+      metadata: {
+        author,
+        task,
+      },
+    });
   }
 
   @EventPattern(EVENT_KEYS.TASK_ASSIGNED)
@@ -153,18 +134,14 @@ export class TaskEventsConsumer {
       (userId) => userId !== author.id,
     );
 
-    await Promise.all(
-      targetUserIds.map((userId) =>
-        this.notificationsService.create({
-          userId,
-          kind: 'task.assigned',
-          metadata: {
-            author,
-            task,
-          },
-        }),
-      ),
-    );
+    await this.persistNotification({
+      targetUserIds,
+      notificationKind: 'task.assigned',
+      metadata: {
+        author,
+        task,
+      },
+    });
 
     this.realTimeGateway.notifyAssignedUsers(payload);
   }
@@ -177,18 +154,14 @@ export class TaskEventsConsumer {
       (userId) => userId !== author.id,
     );
 
-    await Promise.all(
-      targetUserIds.map((userId) =>
-        this.notificationsService.create({
-          userId,
-          kind: 'task.unassigned',
-          metadata: {
-            author,
-            task,
-          },
-        }),
-      ),
-    );
+    await this.persistNotification({
+      targetUserIds,
+      notificationKind: 'task.unassigned',
+      metadata: {
+        author,
+        task,
+      },
+    });
 
     this.realTimeGateway.notifyUnassignedUsers(payload);
   }
@@ -197,18 +170,14 @@ export class TaskEventsConsumer {
   async taskDeleted(@Payload() payload: TaskDeletedNotification) {
     const { targetUserIds, author, task } = payload;
 
-    await Promise.all(
-      targetUserIds.map((userId) =>
-        this.notificationsService.create({
-          userId,
-          kind: 'task.deleted',
-          metadata: {
-            author,
-            task,
-          },
-        }),
-      ),
-    );
+    await this.persistNotification({
+      targetUserIds,
+      notificationKind: 'task.deleted',
+      metadata: {
+        author,
+        task,
+      },
+    });
 
     this.realTimeGateway.notifyDeletedTask(payload);
   }
@@ -221,19 +190,35 @@ export class TaskEventsConsumer {
       (userId) => userId !== author.id,
     );
 
+    await this.persistNotification({
+      targetUserIds,
+      notificationKind: 'task.comment.created',
+      metadata: {
+        author,
+        task,
+      },
+    });
+
+    this.realTimeGateway.notifyTaskCommentCreated(payload);
+  }
+
+  private async persistNotification({
+    targetUserIds,
+    notificationKind,
+    metadata,
+  }: {
+    targetUserIds: string[];
+    notificationKind: NotificationKind;
+    metadata: Record<string, any>;
+  }) {
     await Promise.all(
       targetUserIds.map((userId) =>
         this.notificationsService.create({
           userId,
-          kind: 'task.comment.created',
-          metadata: {
-            author,
-            task,
-          },
+          kind: notificationKind,
+          metadata,
         }),
       ),
     );
-
-    this.realTimeGateway.notifyTaskCommentCreated(payload);
   }
 }
