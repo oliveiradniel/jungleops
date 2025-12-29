@@ -145,10 +145,10 @@ export class RealTimeGateway
   }
 
   sinalizeTaskUpdated(payload: TaskUpdatedSignal) {
-    const { authorId, task } = payload;
+    const { authorId } = payload;
 
     this.clients.forEach((client, userId) => {
-      if (userId !== authorId && !task.participantIds.includes(userId)) {
+      if (userId !== authorId) {
         client.emit<string>(SOCKET_SIGNAL_KEYS.TASK_UPDATED, payload);
       }
     });
