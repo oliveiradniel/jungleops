@@ -35,12 +35,14 @@ export class EventsService {
     const userIds = await this.usersService.listUserIds();
     const { id, username } = await this.usersService.find(authorId);
 
+    const targetUserIds = userIds.filter((userId) => userId !== authorId);
+
     this.client.emit<string, TaskCreatedNotification>(EVENT_KEYS.TASK_CREATED, {
       author: {
         id,
         username,
       },
-      targetUserIds: userIds,
+      targetUserIds,
       task,
     });
   }
@@ -62,15 +64,15 @@ export class EventsService {
     const hasAssignedUser = addedParticipantIds.length > 0;
     const hasUnassignedUser = removedParticipantIds.length > 0;
 
-    const { id: userId, username } = await this.usersService.find(authorId);
+    const user = await this.usersService.find(authorId);
 
     if (hasTitleBeenUpdated) {
       this.client.emit<string, TaskTitleUpdatedNotification>(
         EVENT_KEYS.TASK_TITLE_UPDATED,
         {
           author: {
-            id,
-            username,
+            id: user.id,
+            username: user.username,
           },
           task: {
             id,
@@ -87,8 +89,8 @@ export class EventsService {
         EVENT_KEYS.TASK_STATUS_UPDATED,
         {
           author: {
-            id,
-            username,
+            id: user.id,
+            username: user.username,
           },
           task: {
             id,
@@ -106,8 +108,8 @@ export class EventsService {
         EVENT_KEYS.TASK_PRIORITY_UPDATED,
         {
           author: {
-            id,
-            username,
+            id: user.id,
+            username: user.username,
           },
           task: {
             id,
@@ -125,8 +127,8 @@ export class EventsService {
         EVENT_KEYS.TASK_TERM_UPDATED,
         {
           author: {
-            id,
-            username,
+            id: user.id,
+            username: user.username,
           },
           task: {
             id,
@@ -144,8 +146,8 @@ export class EventsService {
         EVENT_KEYS.TASK_ASSIGNED,
         {
           author: {
-            id,
-            username,
+            id: user.id,
+            username: user.username,
           },
           task: {
             id,
@@ -163,8 +165,8 @@ export class EventsService {
         EVENT_KEYS.TASK_UNASSIGNED,
         {
           author: {
-            id,
-            username,
+            id: user.id,
+            username: user.username,
           },
           task: {
             id,

@@ -49,8 +49,12 @@ export class TaskEventsConsumer {
   async taskTitleUpdated(@Payload() payload: TaskTitleUpdatedNotification) {
     const { task, author } = payload;
 
+    const targetUserIds = task.participantIds.filter(
+      (userId) => userId !== author.id,
+    );
+
     await Promise.all(
-      task.participantIds.map((userId) =>
+      targetUserIds.map((userId) =>
         this.notificationsService.create({
           userId,
           kind: 'task.title.updated',
@@ -72,8 +76,12 @@ export class TaskEventsConsumer {
   ) {
     const { author, task } = payload;
 
+    const targetUserIds = task.participantIds.filter(
+      (userId) => userId !== author.id,
+    );
+
     await Promise.all(
-      task.participantIds.map((userId) =>
+      targetUserIds.map((userId) =>
         this.notificationsService.create({
           userId,
           kind: 'task.status.updated',
@@ -95,8 +103,12 @@ export class TaskEventsConsumer {
   ) {
     const { author, task } = payload;
 
+    const targetUserIds = task.participantIds.filter(
+      (userId) => userId !== author.id,
+    );
+
     await Promise.all(
-      task.participantIds.map((userId) =>
+      targetUserIds.map((userId) =>
         this.notificationsService.create({
           userId,
           kind: 'task.priority.updated',
@@ -115,8 +127,12 @@ export class TaskEventsConsumer {
   async taskTermUpdated(@Payload() payload: TaskTermUpdatedNotification) {
     const { author, task } = payload;
 
+    const targetUserIds = task.participantIds.filter(
+      (userId) => userId !== author.id,
+    );
+
     await Promise.all(
-      task.participantIds.map((userId) =>
+      targetUserIds.map((userId) =>
         this.notificationsService.create({
           userId,
           kind: 'task.term.updated',
@@ -133,8 +149,12 @@ export class TaskEventsConsumer {
   async taskAssigned(@Payload() payload: TaskAssignedNotification) {
     const { author, task } = payload;
 
+    const targetUserIds = task.participantIds.filter(
+      (userId) => userId !== author.id,
+    );
+
     await Promise.all(
-      task.participantIds.map((userId) =>
+      targetUserIds.map((userId) =>
         this.notificationsService.create({
           userId,
           kind: 'task.assigned',
@@ -153,8 +173,12 @@ export class TaskEventsConsumer {
   async taskUnassigned(@Payload() payload: TaskUnassignedNotification) {
     const { author, task } = payload;
 
+    const targetUserIds = task.removedParticipantIds.filter(
+      (userId) => userId !== author.id,
+    );
+
     await Promise.all(
-      task.removedParticipantIds.map((userId) =>
+      targetUserIds.map((userId) =>
         this.notificationsService.create({
           userId,
           kind: 'task.unassigned',
@@ -171,7 +195,7 @@ export class TaskEventsConsumer {
 
   @EventPattern(EVENT_KEYS.TASK_DELETED)
   async taskDeleted(@Payload() payload: TaskDeletedNotification) {
-    const { targetUserIds, task } = payload;
+    const { targetUserIds, author, task } = payload;
 
     await Promise.all(
       targetUserIds.map((userId) =>
@@ -179,6 +203,7 @@ export class TaskEventsConsumer {
           userId,
           kind: 'task.deleted',
           metadata: {
+            author,
             task,
           },
         }),
@@ -190,14 +215,19 @@ export class TaskEventsConsumer {
 
   @EventPattern(EVENT_KEYS.TASK_COMMENT_CREATED)
   async taskCommentCreated(@Payload() payload: TaskCommentCreatedNotification) {
-    const { task } = payload;
+    const { author, task } = payload;
+
+    const targetUserIds = task.participantIds.filter(
+      (userId) => userId !== author.id,
+    );
 
     await Promise.all(
-      task.participantIds.map((userId) =>
+      targetUserIds.map((userId) =>
         this.notificationsService.create({
           userId,
           kind: 'task.comment.created',
           metadata: {
+            author,
             task,
           },
         }),
