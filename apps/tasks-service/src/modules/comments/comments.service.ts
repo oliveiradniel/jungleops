@@ -61,7 +61,10 @@ export class CommentsService {
 
     this.signalsPublisherService.taskCommentCreated({
       authorId: userId,
-      taskId,
+      task: {
+        id: taskId,
+        participantIds: assignedUserIds,
+      },
     });
 
     return createdComment;

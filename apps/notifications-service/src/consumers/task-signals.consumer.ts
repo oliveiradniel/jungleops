@@ -23,9 +23,9 @@ export class TaskSignalsConsumer {
 
   @EventPattern(SIGNAL_KEYS.TASK_COMMENT_CREATED)
   taskCommentCreated(@Payload() payload: TaskCommentCreatedSignal) {
-    const { authorId, taskId } = payload;
+    const { authorId, task } = payload;
 
-    this.realTimeGateway.sinalizeTaskCommentCreated({ authorId, taskId });
+    this.realTimeGateway.sinalizeTaskCommentCreated({ authorId, task });
   }
 
   @EventPattern(SIGNAL_KEYS.TASK_AUDIT_LOG)

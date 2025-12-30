@@ -22,11 +22,11 @@ export class SignalsPublisher {
   }
 
   handleTaskCommentCreated(payload: TaskCommentCreatedSignal) {
-    const { authorId, taskId } = payload;
+    const { authorId, task } = payload;
 
     this.signalsService.taskCommentCreated({
       authorId,
-      taskId,
+      task,
     });
   }
 

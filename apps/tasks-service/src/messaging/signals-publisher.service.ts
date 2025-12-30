@@ -27,13 +27,13 @@ export class SignalsPublisherService {
   }
 
   taskCommentCreated(payload: TaskCommentCreatedSignal) {
-    const { authorId, taskId } = payload;
+    const { authorId, task } = payload;
 
     this.client.emit<string, TaskCommentCreatedSignal>(
       DOMAIN_SIGNAL_KEYS.TASK_COMMENT_CREATED,
       {
         authorId,
-        taskId,
+        task,
       },
     );
   }

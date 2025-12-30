@@ -138,28 +138,33 @@ export class RealTimeGateway
   notifyTaskCommentCreated(payload: TaskCommentCreatedNotification) {
     const { author, task } = payload;
 
-    this.clients.forEach((client, userId) => {
-      if (userId !== author.id && task.participantIds.includes(userId)) {
-        client.emit(SOCKET_EVENT_KEYS.TASK_COMMENT_CREATED, payload);
-      }
+    this.notifyParticipants({
+      event: SOCKET_EVENT_KEYS.TASK_COMMENT_CREATED,
+      payload,
+      authorId: author.id,
+      participantIds: [...task.participantIds],
     });
   }
 
   sinalizeTaskUpdated(payload: TaskUpdatedSignal) {
-    const { authorId } = payload;
+    const { authorId, task } = payload;
 
     this.clients.forEach((client, userId) => {
-      if (userId !== authorId) {
+      const isParticipant = task.participantIds.includes(userId);
+
+      if (userId !== authorId && !isParticipant) {
         client.emit(SOCKET_SIGNAL_KEYS.TASK_UPDATED, payload);
       }
     });
   }
 
   sinalizeTaskCommentCreated(payload: TaskCommentCreatedSignal) {
-    const { authorId } = payload;
+    const { authorId, task } = payload;
 
     this.clients.forEach((client, userId) => {
-      if (userId !== authorId) {
+      const isParticipant = task.participantIds.includes(userId);
+
+      if (userId !== authorId && !isParticipant) {
         client.emit(SOCKET_SIGNAL_KEYS.TASK_COMMENT_CREATED, payload);
       }
     });

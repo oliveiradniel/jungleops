@@ -8,7 +8,10 @@ export interface TaskUpdatedSignal {
 
 export interface TaskCommentCreatedSignal {
   authorId: string;
-  taskId: string;
+  task: {
+    id: string;
+    participantIds: string[];
+  }
 }
 
 export interface TaskAuditLogSignal {
