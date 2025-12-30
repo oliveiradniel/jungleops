@@ -27,6 +27,7 @@ import { toast } from '../utils/toast';
 import { AuthLoadingScreen } from '@/view/components/auth-loading-screen';
 
 import { disconnectNotificationsSocket } from '../utils/notifications.socket';
+import { invalidateQueries } from '../utils/invalidate-queries';
 
 import type { LoginData, RegisterData } from '@/types/auth-data';
 
@@ -50,6 +51,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     : isLogoutLoading
       ? 'is-logout'
       : 'is-login/is-register';
+
+  function handleInvalidateSessionQuery() {
+    invalidateQueries({
+      queryClient,
+      invalidateQuery: [{ queryKey: ['session'] }],
+    });
+  }
 
   useLayoutEffect(() => {
     const request = httpClient.interceptors.request.use((config) => {
@@ -77,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (originalRequest?.url === '/auth/refresh') {
           removeAccessToken();
 
-          queryClient.invalidateQueries({ queryKey: ['session'] });
+          handleInvalidateSessionQuery();
 
           return Promise.reject(error);
         }
@@ -114,7 +122,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           removeAccessToken();
 
-          queryClient.invalidateQueries({ queryKey: ['session'] });
+          handleInvalidateSessionQuery();
 
           return Promise.reject(refreshError);
         }
@@ -135,7 +143,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         setIsNavigating(true);
 
-        await queryClient.invalidateQueries({ queryKey: ['session'] });
+        handleInvalidateSessionQuery();
 
         router.invalidate();
       } catch (error) {
@@ -171,7 +179,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         setIsNavigating(true);
 
-        await queryClient.invalidateQueries({ queryKey: ['session'] });
+        handleInvalidateSessionQuery();
 
         router.invalidate();
       } catch (error) {
@@ -218,7 +226,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setIsNavigating(true);
 
-      await queryClient.invalidateQueries({ queryKey: ['session'] });
+      handleInvalidateSessionQuery();
 
       disconnectNotificationsSocket();
       router.invalidate();
