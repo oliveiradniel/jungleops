@@ -130,12 +130,16 @@ export class TaskEventsConsumer {
   async taskAssigned(@Payload() payload: TaskAssignedNotification) {
     const { author, task } = payload;
 
-    const targetUserIds = task.participantIds.filter(
+    const addedParticipantIds = task.addedParticipantIds.filter(
+      (userId) => userId !== author.id,
+    );
+
+    const participantIds = task.participantIds.filter(
       (userId) => userId !== author.id,
     );
 
     await this.persistNotification({
-      targetUserIds,
+      targetUserIds: [...addedParticipantIds, ...participantIds],
       notificationKind: 'task.assigned',
       metadata: {
         author,
