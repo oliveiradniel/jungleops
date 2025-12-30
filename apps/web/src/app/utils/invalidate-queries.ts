@@ -9,8 +9,8 @@ export type InvalidateQuery =
   | {
       queryKey: [
         'tasks',
-        page?: string,
-        size?: string,
+        page?: number,
+        size?: number,
         orderBy?: string,
         order?: string,
         status?: string,

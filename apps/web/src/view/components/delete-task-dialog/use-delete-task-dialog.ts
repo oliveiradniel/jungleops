@@ -7,6 +7,10 @@ import { useDeleteTaskMutation } from '@/app/hooks/mutations/use-delete-task-mut
 import { AxiosError } from 'axios';
 
 import { toast } from '@/app/utils/toast';
+import {
+  invalidateQueries,
+  type InvalidateQuery,
+} from '@/app/utils/invalidate-queries';
 
 interface UseDeleteTaskDialogProps {
   taskId: string;
@@ -33,6 +37,13 @@ export function useDeleteTaskDialog({
 
   const buttonDeleteTaskDisabled = titleConfirmation !== title;
 
+  function handleInvalidateQueries(invalidateQuery: InvalidateQuery[]) {
+    invalidateQueries({
+      queryClient,
+      invalidateQuery,
+    });
+  }
+
   function handleChangeTitleConfirmation(event: ChangeEvent<HTMLInputElement>) {
     setTitleConfirmation(event.target.value);
   }
@@ -46,12 +57,10 @@ export function useDeleteTaskDialog({
       onClosePopover?.();
       handleCloseDeleteTaskDialog();
 
-      queryClient.invalidateQueries({
-        queryKey: ['tasks', { page }],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['task-deletion-audit-logs'],
-      });
+      handleInvalidateQueries([
+        { queryKey: ['tasks', page], exact: false },
+        { queryKey: ['task-deletion-audit-logs'] },
+      ]);
 
       toast({
         type: 'successful-delete',
@@ -64,9 +73,9 @@ export function useDeleteTaskDialog({
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.data.message === 'Task not found.') {
-          queryClient.invalidateQueries({
-            queryKey: ['tasks', { page }],
-          });
+          handleInvalidateQueries([
+            { queryKey: ['tasks', page], exact: false },
+          ]);
 
           onClosePopover?.();
         }
