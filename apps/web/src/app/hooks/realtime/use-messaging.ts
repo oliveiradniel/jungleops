@@ -2,6 +2,11 @@ import type { QueryClient } from '@tanstack/react-query';
 
 import { toast } from '@/app/utils/toast';
 
+import {
+  invalidateQueries,
+  type InvalidateQuery,
+} from '@/app/utils/invalidate-queries';
+
 import type {
   TaskAssignedNotification,
   TaskAuditLogSignal,
@@ -23,16 +28,20 @@ export function useMessaging({
   userId?: string;
   queryClient: QueryClient;
 }) {
+  function handleInvalidateQueries(invalidateQuery: InvalidateQuery[]) {
+    invalidateQueries({
+      queryClient,
+      invalidateQuery,
+    });
+  }
+
   function onTaskCreated() {
     toast({
       type: 'info',
       description: 'Uma nova tarefa foi adicionada.',
     });
 
-    queryClient.invalidateQueries({
-      queryKey: ['tasks'],
-      exact: false,
-    });
+    handleInvalidateQueries([{ queryKey: ['tasks'], exact: false }]);
   }
 
   function onTaskTitleUpdated(payload: TaskTitleUpdatedNotification) {
@@ -41,13 +50,10 @@ export function useMessaging({
       description: 'Uma tarefa da qual você participa teve o título alterado.',
     });
 
-    queryClient.invalidateQueries({
-      queryKey: ['task', { taskId: payload.task.id }],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ['tasks'],
-      exact: false,
-    });
+    handleInvalidateQueries([
+      { queryKey: ['task', payload.task.id] },
+      { queryKey: ['tasks'], exact: false },
+    ]);
   }
 
   function onTaskStatusUpdated(payload: TaskStatusUpdatedNotification) {
@@ -56,13 +62,10 @@ export function useMessaging({
       description: 'Uma tarefa da qual você participa teve o status alterado.',
     });
 
-    queryClient.invalidateQueries({
-      queryKey: ['task', { taskId: payload.task.id }],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ['tasks'],
-      exact: false,
-    });
+    handleInvalidateQueries([
+      { queryKey: ['task', payload.task.id] },
+      { queryKey: ['tasks'], exact: false },
+    ]);
   }
 
   function onTaskPriorityUpdated(payload: TaskPriorityUpdatedNotification) {
@@ -72,13 +75,10 @@ export function useMessaging({
         'Uma tarefa da qual você participa teve a prioriedade alterada.',
     });
 
-    queryClient.invalidateQueries({
-      queryKey: ['task', { taskId: payload.task.id }],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ['tasks'],
-      exact: false,
-    });
+    handleInvalidateQueries([
+      { queryKey: ['task', payload.task.id] },
+      { queryKey: ['tasks'], exact: false },
+    ]);
   }
 
   function onTaskTermUpdated(payload: TaskTermUpdatedNotification) {
@@ -87,13 +87,10 @@ export function useMessaging({
       description: 'Uma tarefa da qual você participa teve o prazo alterado.',
     });
 
-    queryClient.invalidateQueries({
-      queryKey: ['task', { taskId: payload.task.id }],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ['tasks'],
-      exact: false,
-    });
+    handleInvalidateQueries([
+      { queryKey: ['task', payload.task.id] },
+      { queryKey: ['tasks'], exact: false },
+    ]);
   }
 
   function onTaskAssigned(payload: TaskAssignedNotification) {
@@ -106,9 +103,7 @@ export function useMessaging({
       });
     }
 
-    queryClient.invalidateQueries({
-      queryKey: ['task', { taskId: task.id }],
-    });
+    handleInvalidateQueries([{ queryKey: ['task', task.id] }]);
   }
 
   function onTaskUnassigned(payload: TaskUnassignedNotification) {
@@ -121,9 +116,7 @@ export function useMessaging({
       });
     }
 
-    queryClient.invalidateQueries({
-      queryKey: ['task', { taskId: task.id }],
-    });
+    handleInvalidateQueries([{ queryKey: ['task', task.id] }]);
   }
 
   function onTaskDeleted(payload: TaskDeletedNotification) {
@@ -136,10 +129,7 @@ export function useMessaging({
       });
     }
 
-    queryClient.invalidateQueries({
-      queryKey: ['tasks'],
-      exact: false,
-    });
+    handleInvalidateQueries([{ queryKey: ['tasks'], exact: false }]);
   }
 
   function onTaskCommentCreated(payload: TaskCommentCreatedNotification) {
@@ -153,53 +143,38 @@ export function useMessaging({
       });
     }
 
-    queryClient.invalidateQueries({
-      queryKey: ['comments', task.id],
-      exact: false,
-    });
-
-    queryClient.invalidateQueries({
-      queryKey: ['tasks'],
-      exact: false,
-    });
+    handleInvalidateQueries([
+      { queryKey: ['comments', task.id], exact: false },
+      { queryKey: ['tasks'], exact: false },
+    ]);
   }
 
   function sinalizeTaskUpdated(payload: TaskUpdatedSignal) {
     const taskId = payload.task.id;
 
-    queryClient.invalidateQueries({
-      queryKey: ['users-tasks', taskId],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ['task', { taskId: payload.task.id }],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ['tasks'],
-      exact: false,
-    });
+    handleInvalidateQueries([
+      { queryKey: ['users-tasks', taskId] },
+      { queryKey: ['task', taskId] },
+      { queryKey: ['tasks'], exact: false },
+    ]);
   }
 
   function sinalizeTaskCommentCreated(payload: TaskCommentCreatedSignal) {
-    const taskId = payload.task.id;
-
-    queryClient.invalidateQueries({
-      queryKey: ['comments', taskId],
-      exact: false,
-    });
+    handleInvalidateQueries([
+      { queryKey: ['comments', payload.task.id], exact: false },
+    ]);
   }
 
   function sinalizeTaskAuditLog(payload: TaskAuditLogSignal) {
-    const actionLabels = {
-      CREATE: 'creation',
-      UPDATE: 'update',
-      DELETE: 'deletion',
-    };
+    const { action } = payload;
 
-    const actionLabel = actionLabels[payload.action];
-
-    queryClient.invalidateQueries({
-      queryKey: [`task-${actionLabel}-audit-logs`],
-    });
+    if (action === 'CREATE') {
+      handleInvalidateQueries([{ queryKey: ['task-creation-audit-logs'] }]);
+    } else if (action === 'UPDATE') {
+      handleInvalidateQueries([{ queryKey: ['task-update-audit-logs'] }]);
+    } else if (action === 'DELETE') {
+      handleInvalidateQueries([{ queryKey: ['task-deletion-audit-logs'] }]);
+    }
   }
 
   return {
