@@ -13,6 +13,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { UpdateTaskSchema } from '@/app/schemas/update-task-schema';
 
 import { toast } from '@/app/utils/toast';
+import {
+  invalidateQueries,
+  type InvalidateQuery,
+} from '@/app/utils/invalidate-queries';
 
 import { optionsTaskPriority, optionsTaskStatus } from '@/config/options';
 
@@ -63,24 +67,26 @@ export function useUpdateTaskSheetController(taskData: Task | undefined) {
 
   const participantIds = participants?.map((participant) => participant.id);
 
+  function handleInvalidateQueries(invalidateQuery: InvalidateQuery[]) {
+    invalidateQueries({
+      queryClient,
+      invalidateQuery,
+    });
+  }
+
   const handleSubmit = reactHookHandleSubmit(
     async (data: Omit<UpdateTaskData, 'lastEditedBy'>) => {
       try {
         await updateTask({ taskId: id, data });
 
         reset();
-        queryClient.invalidateQueries({
-          queryKey: ['tasks', { page: currentPage }],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['task', { taskId: id }],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['users-tasks', { taskId: id }],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['task-update-audit-logs'],
-        });
+
+        handleInvalidateQueries([
+          { queryKey: ['tasks', currentPage], exact: false },
+          { queryKey: ['task', id] },
+          { queryKey: ['users-tasks', id] },
+          { queryKey: ['task-update-audit-logs'] },
+        ]);
 
         toast({
           type: 'success',
