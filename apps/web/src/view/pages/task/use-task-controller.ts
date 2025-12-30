@@ -11,6 +11,7 @@ import { useTasks } from '@/app/hooks/use-tasks';
 import { useListUsersByTaskIdQuery } from '@/app/hooks/queries/use-list-users-by-task-id-query';
 
 import { toast } from '@/app/utils/toast';
+import { invalidateQueries } from '@/app/utils/invalidate-queries';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateCommentWithoutUserIdSchema } from '@/app/schemas/create-comment-schema';
@@ -82,8 +83,9 @@ export function useTaskController() {
 
         reset();
 
-        queryClient.invalidateQueries({
-          queryKey: ['comments', { taskId, page }],
+        invalidateQueries({
+          queryClient,
+          invalidateQuery: [{ queryKey: ['comments', taskId], exact: false }],
         });
 
         toast({
