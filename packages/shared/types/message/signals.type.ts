@@ -6,6 +6,11 @@ export interface TaskUpdatedSignal {
   }
 }
 
+export interface TaskCommentCreatedSignal {
+  authorId: string;
+  taskId: string;
+}
+
 export interface TaskAuditLogSignal {
   authorId: string;
   action: 'CREATE' | 'UPDATE' | 'DELETE';

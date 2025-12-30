@@ -19,6 +19,7 @@ import {
 
 import {
   TaskUpdatedSignal,
+  TaskCommentCreatedSignal,
   TaskAuditLogSignal
 } from './signals.type'
 
@@ -37,5 +38,6 @@ export {
   TaskAssignedNotification,
   TaskUnassignedNotification,
   TaskUpdatedSignal,
+  TaskCommentCreatedSignal,
   TaskAuditLogSignal
 }
