@@ -6,6 +6,7 @@ import type {
   TaskAssignedNotification,
   TaskAuditLogSignal,
   TaskCommentCreatedNotification,
+  TaskCommentCreatedSignal,
   TaskDeletedNotification,
   TaskPriorityUpdatedNotification,
   TaskStatusUpdatedNotification,
@@ -153,12 +154,10 @@ export function useMessaging({
     }
 
     queryClient.invalidateQueries({
-      queryKey: ['comments', { taskId: task.id }],
+      queryKey: ['comments', task.id],
       exact: false,
     });
-    queryClient.invalidateQueries({
-      queryKey: ['task', { taskId: task.id }],
-    });
+
     queryClient.invalidateQueries({
       queryKey: ['tasks'],
       exact: false,
@@ -166,11 +165,25 @@ export function useMessaging({
   }
 
   function sinalizeTaskUpdated(payload: TaskUpdatedSignal) {
+    const taskId = payload.task.id;
+
+    queryClient.invalidateQueries({
+      queryKey: ['users-tasks', taskId],
+    });
     queryClient.invalidateQueries({
       queryKey: ['task', { taskId: payload.task.id }],
     });
     queryClient.invalidateQueries({
       queryKey: ['tasks'],
+      exact: false,
+    });
+  }
+
+  function sinalizeTaskCommentCreated(payload: TaskCommentCreatedSignal) {
+    const taskId = payload.task.id;
+
+    queryClient.invalidateQueries({
+      queryKey: ['comments', taskId],
       exact: false,
     });
   }
@@ -200,6 +213,7 @@ export function useMessaging({
     onTaskDeleted,
     onTaskCommentCreated,
     sinalizeTaskUpdated,
+    sinalizeTaskCommentCreated,
     sinalizeTaskAuditLog,
   };
 }
