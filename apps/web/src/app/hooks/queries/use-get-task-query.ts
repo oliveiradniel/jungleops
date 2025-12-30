@@ -5,7 +5,7 @@ export function useGetTaskQuery(taskId: string) {
   const tasksService = makeTasksService();
 
   const { data, isPending, error } = useQuery({
-    queryKey: ['task', { taskId }],
+    queryKey: ['task', taskId],
     queryFn: () => tasksService.get(taskId),
   });
 

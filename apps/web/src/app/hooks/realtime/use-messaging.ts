@@ -12,7 +12,7 @@ import type {
   TaskAuditLogSignal,
   TaskCommentCreatedNotification,
   TaskCommentCreatedSignal,
-  TaskDeletedNotification,
+  // TaskDeletedNotification,
   TaskPriorityUpdatedNotification,
   TaskStatusUpdatedNotification,
   TaskTermUpdatedNotification,
@@ -96,10 +96,18 @@ export function useMessaging({
   function onTaskAssigned(payload: TaskAssignedNotification) {
     const { task } = payload;
 
+    if (task.participantIds.includes(userId!)) {
+      toast({
+        type: 'info',
+        description:
+          'Um novo usuário foi atribuido a uma tarefa da qual você participa.',
+      });
+    }
+
     if (task.addedParticipantIds.includes(userId!)) {
       toast({
         type: 'info',
-        description: 'Você foi atribuido à uma tarefa',
+        description: 'Você foi atribuido à uma tarefa.',
       });
     }
 
@@ -108,6 +116,14 @@ export function useMessaging({
 
   function onTaskUnassigned(payload: TaskUnassignedNotification) {
     const { task } = payload;
+
+    if (task.participantIds.includes(userId!)) {
+      toast({
+        type: 'info',
+        description:
+          'Um participante foi removido de uma tarefa que você participa.',
+      });
+    }
 
     if (task.removedParticipantIds.includes(userId!)) {
       toast({
@@ -119,15 +135,11 @@ export function useMessaging({
     handleInvalidateQueries([{ queryKey: ['task', task.id] }]);
   }
 
-  function onTaskDeleted(payload: TaskDeletedNotification) {
-    const { task } = payload;
-
-    if (task.participantIds.includes(userId!)) {
-      toast({
-        type: 'info',
-        description: 'Uma tarefa da qual você participava foi excluída.',
-      });
-    }
+  function onTaskDeleted() {
+    toast({
+      type: 'info',
+      description: 'Uma tarefa da qual você participava foi excluída.',
+    });
 
     handleInvalidateQueries([{ queryKey: ['tasks'], exact: false }]);
   }
@@ -135,13 +147,10 @@ export function useMessaging({
   function onTaskCommentCreated(payload: TaskCommentCreatedNotification) {
     const { task } = payload;
 
-    if (task.participantIds.includes(userId!)) {
-      toast({
-        type: 'info',
-        description:
-          'Uma tarefa da qual você participa tem um novo comentário.',
-      });
-    }
+    toast({
+      type: 'info',
+      description: 'Uma tarefa da qual você participa tem um novo comentário.',
+    });
 
     handleInvalidateQueries([
       { queryKey: ['comments', task.id], exact: false },

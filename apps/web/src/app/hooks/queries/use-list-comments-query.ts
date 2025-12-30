@@ -17,7 +17,7 @@ export function useListCommentsQuery({
   const commentsService = makeCommentsService();
 
   const { data, isPending } = useQuery({
-    queryKey: ['comments', { taskId, page }],
+    queryKey: ['comments', taskId, page],
     queryFn: () => commentsService.list(taskId, { page, size }),
   });
 
