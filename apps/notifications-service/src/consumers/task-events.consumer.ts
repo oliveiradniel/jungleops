@@ -150,12 +150,16 @@ export class TaskEventsConsumer {
   async taskUnassigned(@Payload() payload: TaskUnassignedNotification) {
     const { author, task } = payload;
 
-    const targetUserIds = task.removedParticipantIds.filter(
+    const removedParticipantIds = task.removedParticipantIds.filter(
+      (userId) => userId !== author.id,
+    );
+
+    const participantIds = task.participantIds.filter(
       (userId) => userId !== author.id,
     );
 
     await this.persistNotification({
-      targetUserIds,
+      targetUserIds: [...removedParticipantIds, ...participantIds],
       notificationKind: 'task.unassigned',
       metadata: {
         author,
