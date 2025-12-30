@@ -17,8 +17,9 @@ import {
   type TaskStatusUpdatedNotification,
   type TaskTermUpdatedNotification,
   type TaskAssignedNotification,
-  type TaskUpdatedSignal,
   type TaskUnassignedNotification,
+  type TaskUpdatedSignal,
+  type TaskCommentCreatedSignal,
   SOCKET_EVENT_KEYS,
   SOCKET_SIGNAL_KEYS,
 } from '@challenge/shared';
@@ -149,7 +150,17 @@ export class RealTimeGateway
 
     this.clients.forEach((client, userId) => {
       if (userId !== authorId) {
-        client.emit<string>(SOCKET_SIGNAL_KEYS.TASK_UPDATED, payload);
+        client.emit(SOCKET_SIGNAL_KEYS.TASK_UPDATED, payload);
+      }
+    });
+  }
+
+  sinalizeTaskCommentCreated(payload: TaskCommentCreatedSignal) {
+    const { authorId } = payload;
+
+    this.clients.forEach((client, userId) => {
+      if (userId !== authorId) {
+        client.emit(SOCKET_SIGNAL_KEYS.TASK_COMMENT_CREATED, payload);
       }
     });
   }
