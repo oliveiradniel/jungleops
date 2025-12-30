@@ -4,6 +4,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import {
   DOMAIN_SIGNAL_KEYS,
   TaskAuditLogSignal,
+  TaskCommentCreatedSignal,
   TaskUpdatedSignal,
 } from '@challenge/shared';
 
@@ -21,6 +22,18 @@ export class SignalsPublisherService {
       {
         authorId,
         task,
+      },
+    );
+  }
+
+  taskCommentCreated(payload: TaskCommentCreatedSignal) {
+    const { authorId, taskId } = payload;
+
+    this.client.emit<string, TaskCommentCreatedSignal>(
+      DOMAIN_SIGNAL_KEYS.TASK_COMMENT_CREATED,
+      {
+        authorId,
+        taskId,
       },
     );
   }

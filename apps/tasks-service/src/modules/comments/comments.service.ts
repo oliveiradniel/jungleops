@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { TasksService } from '../tasks/tasks.service';
 import { UsersTasksService } from '../users-tasks/users-tasks.service';
 import { EventsPublisherService } from 'src/messaging/events-publisher.service';
+import { SignalsPublisherService } from 'src/messaging/signals-publisher.service';
 
 import type { ICommentsRepository } from 'src/database/contracts/comments-repository.contract';
 
@@ -11,7 +12,6 @@ import type {
   Pagination,
   TaskComment,
   ListCommentsPagination,
-  TaskCommentCreatedEvent,
 } from '@challenge/shared';
 
 import { COMMENTS_REPOSITORY } from 'src/shared/constants/tokens';
@@ -24,6 +24,7 @@ export class CommentsService {
     private readonly usersTasksService: UsersTasksService,
     private readonly tasksService: TasksService,
     private readonly eventsPublisherService: EventsPublisherService,
+    private readonly signalsPublisherService: SignalsPublisherService,
   ) {}
 
   async list(
@@ -56,6 +57,11 @@ export class CommentsService {
         participantIds: assignedUserIds,
         comment: comment,
       },
+    });
+
+    this.signalsPublisherService.taskCommentCreated({
+      authorId: userId,
+      taskId,
     });
 
     return createdComment;
