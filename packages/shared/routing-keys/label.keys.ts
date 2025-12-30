@@ -9,12 +9,14 @@ export const DOMAIN_EVENT_KEYS = {
 // DOMAIN SIGNALS
 export const DOMAIN_SIGNAL_KEYS = {
   TASK_UPDATED: 'task.updated.domain.signal',
+  TASK_COMMENT_CREATED: 'task.comment.created.domain.signal',
   TASK_AUDIT_LOG: 'task.audit-log.domain.signal',
 } as const;
 
 // INTEGRATION SIGNALS
 export const SIGNAL_KEYS = {
   TASK_UPDATED: 'task.updated.signal',
+  TASK_COMMENT_CREATED: 'task.comment.created.signal',
   TASK_AUDIT_LOG: 'task-audit-log.signal',
 } as const;
 
@@ -46,5 +48,6 @@ export const SOCKET_EVENT_KEYS = {
 
 export const SOCKET_SIGNAL_KEYS = {
   TASK_UPDATED: 'task:updated:signal',
+  TASK_COMMENT_CREATED: 'task:comment:created:signal',
   TASK_AUDIT_LOG: 'task-audit-log:signal',
 } as const;
