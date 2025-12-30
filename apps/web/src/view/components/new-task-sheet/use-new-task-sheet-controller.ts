@@ -9,6 +9,10 @@ import { CreateTaskSchema } from '@/app/schemas/create-task-schema';
 import { optionsTaskPriority, optionsTaskStatus } from '@/config/options';
 
 import { toast } from '@/app/utils/toast';
+import {
+  invalidateQueries,
+  type InvalidateQuery,
+} from '@/app/utils/invalidate-queries';
 import { AxiosError } from 'axios';
 
 import type { CreateTaskData } from '@/types/task-data';
@@ -35,19 +39,23 @@ export function useNewTaskSheetController() {
 
   const { createTask, isCreateTaskLoading } = useCreateTaskMutation();
 
+  function handleInvalidateQueries(invalidateQuery: InvalidateQuery[]) {
+    invalidateQueries({
+      queryClient,
+      invalidateQuery,
+    });
+  }
+
   const handleSubmit = reactHookHandleSubmit(async (data: CreateTaskData) => {
     try {
       await createTask(data);
 
       reset();
 
-      queryClient.invalidateQueries({
-        queryKey: ['tasks'],
-        exact: false,
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['task-creation-audit-logs'],
-      });
+      handleInvalidateQueries([
+        { queryKey: ['tasks'], exact: false },
+        { queryKey: ['task-creation-audit-logs'] },
+      ]);
 
       toast({
         type: 'success',
