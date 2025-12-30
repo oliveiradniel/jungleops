@@ -5,6 +5,7 @@ import { SignalsService } from './signals.service';
 import {
   type TaskAuditLogSignal,
   type TaskUpdatedSignal,
+  type TaskCommentCreatedSignal,
 } from '@challenge/shared';
 
 @Injectable()
@@ -17,6 +18,15 @@ export class SignalsPublisher {
     this.signalsService.taskUpdated({
       authorId,
       task,
+    });
+  }
+
+  handleTaskCommentCreated(payload: TaskCommentCreatedSignal) {
+    const { authorId, taskId } = payload;
+
+    this.signalsService.taskCommentCreated({
+      authorId,
+      taskId,
     });
   }
 

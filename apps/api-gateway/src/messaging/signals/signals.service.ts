@@ -8,6 +8,7 @@ import {
 } from '@challenge/shared';
 
 import { NOTIFICATIONS_SIGNALS } from 'src/shared/constants/tokens';
+import { TaskCommentCreatedSignal } from '@challenge/shared';
 
 @Injectable()
 export class SignalsService {
@@ -22,6 +23,18 @@ export class SignalsService {
       authorId,
       task,
     });
+  }
+
+  taskCommentCreated(payload: TaskCommentCreatedSignal) {
+    const { authorId, taskId } = payload;
+
+    this.client.emit<string, TaskCommentCreatedSignal>(
+      SIGNAL_KEYS.TASK_COMMENT_CREATED,
+      {
+        authorId,
+        taskId,
+      },
+    );
   }
 
   taskAuditLog(payload: TaskAuditLogSignal) {
