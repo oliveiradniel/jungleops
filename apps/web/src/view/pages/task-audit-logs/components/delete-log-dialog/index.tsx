@@ -1,7 +1,7 @@
 import {
-  useDeleteTaskDialog,
+  useDeleteLogDialog,
   type DeleteLogDialogProps,
-} from './use-delete-task-dialog';
+} from './use-delete-log-dialog';
 
 import {
   Dialog,
@@ -21,7 +21,7 @@ export function DeleteLogDialog({ selectedLogId, type }: DeleteLogDialogProps) {
     handleCloseDeleteTaskAuditLogDialog,
     isDeleteTaskAuditLogLoading,
     isDeleteTaskAuditLogDialogOpen,
-  } = useDeleteTaskDialog({
+  } = useDeleteLogDialog({
     selectedLogId,
     type,
   });
