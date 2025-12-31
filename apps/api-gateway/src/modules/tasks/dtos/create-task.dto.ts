@@ -26,6 +26,7 @@ export class CreateTaskDTO {
     description: 'Deadline for task completion (ISO 8601 format).',
   })
   @IsString()
+  @IsNotEmpty()
   term: string;
 
   @ApiProperty({
@@ -33,8 +34,8 @@ export class CreateTaskDTO {
     description: 'Priority level of the task. Defaults to LOW if not provided.',
   })
   @IsEnum(TaskPriority)
-  @IsOptional()
-  priority?: TaskPriority;
+  @IsNotEmpty()
+  priority: TaskPriority;
 
   @ApiProperty({
     example: 'TODO',
@@ -42,6 +43,6 @@ export class CreateTaskDTO {
       'Current status of the task. Defaults to TODO if not provided.',
   })
   @IsEnum(TaskStatus)
-  @IsOptional()
-  status?: TaskStatus;
+  @IsNotEmpty()
+  status: TaskStatus;
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { getConfig } from 'src/shared/config/config.helper';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, last } from 'rxjs';
 
 import {
   CreateTaskData,
@@ -19,7 +19,7 @@ export class TasksService {
 
   constructor(
     private readonly httpService: HttpService,
-    configService: ConfigService,
+    private readonly configService: ConfigService,
   ) {
     this.baseURL = getConfig(configService).TASKS_SERVICE_BASE_URL;
   }

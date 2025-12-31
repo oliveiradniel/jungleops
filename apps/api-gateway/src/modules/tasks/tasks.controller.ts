@@ -29,7 +29,6 @@ import type { Request } from 'express';
 import { TasksService } from './tasks.service';
 
 import { TaskIdParam } from 'src/shared/params/task-id.param';
-import { PaginationQueryParam } from 'src/shared/queryParams/pagination.query-param';
 
 import { UpdateTaskDTO } from './dtos/update-task.dto';
 import { CreateTaskDTO } from './dtos/create-task.dto';
