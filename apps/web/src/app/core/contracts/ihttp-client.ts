@@ -15,6 +15,11 @@ export abstract class IHttpClient {
     body?: unknown,
     config?: HttpRequestConfig,
   ): Promise<ResponseType>;
+  abstract patch(
+    path: string,
+    body?: unknown,
+    config?: HttpRequestConfig,
+  ): Promise<void>;
   abstract put(
     path: string,
     body: unknown,

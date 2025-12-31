@@ -32,6 +32,16 @@ export class HttpClient implements IHttpClient {
     return response.data;
   }
 
+  async patch(
+    path: string,
+    body: unknown,
+    config?: HttpRequestConfig,
+  ): Promise<void> {
+    await httpClient.patch<void>(path, body, {
+      ...config,
+    });
+  }
+
   async put(
     path: string,
     body: unknown,
