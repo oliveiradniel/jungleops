@@ -3,6 +3,7 @@ import { SidebarProvider, SidebarTrigger } from '../ui/sidebar';
 
 import { AppSidebar } from './app-sidebar';
 import { NotificationsPopover } from '../notifications/notifications-popover';
+import { ProfilePopover } from '../profile-popover';
 
 export function Layout() {
   return (
@@ -12,7 +13,11 @@ export function Layout() {
       <main className="h-screen w-full overflow-x-hidden overflow-y-auto">
         <header className="bg-background sticky top-0 right-0 left-0 z-40 flex h-14 items-center justify-between border-b px-4">
           <SidebarTrigger />
-          <NotificationsPopover />
+          <div className="flex items-center gap-4">
+            <ProfilePopover />
+
+            <NotificationsPopover />
+          </div>
         </header>
 
         <Outlet />

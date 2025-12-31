@@ -3,17 +3,9 @@ import { Link, useLocation } from '@tanstack/react-router';
 import { useTasks } from '@/app/hooks/use-tasks';
 import { useAuth } from '@/app/hooks/use-auth';
 
-import {
-  BookOpenText,
-  Calendar,
-  History,
-  LogOut,
-  Plus,
-  User,
-} from 'lucide-react';
+import { BookOpenText, History, Plus } from 'lucide-react';
 import jungleGamingLogo from '@/assets/images/logo.svg';
 
-import { formatDateToBR } from '@/app/utils/format-date-br';
 import { cn } from '@/lib/utils';
 
 import {
@@ -26,13 +18,11 @@ import {
   SidebarMenuItem,
 } from '../ui/sidebar';
 import { Button } from '../ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { Separator } from '../ui/separator';
 
 export function AppSidebar() {
   const location = useLocation();
 
-  const { user, handleLogout, isLogoutLoading } = useAuth();
+  const { isLogoutLoading } = useAuth();
   const { handleOpenNewTaskSheet } = useTasks();
 
   const items = [
@@ -103,52 +93,6 @@ export function AppSidebar() {
         >
           <Plus className="size-4!" /> Adicionar tarefa
         </Button>
-
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              size="lg"
-              variant="outline"
-              disabled={isLogoutLoading}
-              className="justify-start gap-4 py-6"
-            >
-              <div className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-full">
-                <span className="font-normal">
-                  {user?.username[0].toUpperCase()}
-                </span>
-              </div>
-
-              <span className="font-normal">{user?.username}</span>
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="ml-4">
-            <div className="space-y-2">
-              <div className="text-muted-foreground flex items-center gap-1">
-                <User className="size-4" />
-                <span className="text-sm">{user?.email}</span>
-              </div>
-
-              <div className="text-muted-foreground flex items-center gap-1">
-                <Calendar className="size-4" />
-                <span className="flex items-center gap-2 text-sm">
-                  Usuário desde: {formatDateToBR(user?.createdAt!)}
-                </span>
-              </div>
-
-              <Separator />
-
-              <Button
-                variant="ghost"
-                isLoading={isLogoutLoading}
-                disabled={isLogoutLoading}
-                onClick={() => handleLogout()}
-                className="text-destructive! w-full justify-start"
-              >
-                <LogOut /> Sair
-              </Button>
-            </div>
-          </PopoverContent>
-        </Popover>
       </SidebarFooter>
     </Sidebar>
   );

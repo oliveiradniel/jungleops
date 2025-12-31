@@ -40,9 +40,10 @@ export function NotificationsPopover() {
           <BellIcon className="text-primary-foreground size-4" />
         </Button>
       </PopoverTrigger>
+
       <PopoverContent
-        align="start"
-        className="bg-background max-h-[70vh] w-full max-w-[400px] overflow-y-auto p-0"
+        align="end"
+        className="bg-background max-h-[70vh] w-[400px] overflow-y-auto p-0"
       >
         <NotificationsList
           notifications={notifications}

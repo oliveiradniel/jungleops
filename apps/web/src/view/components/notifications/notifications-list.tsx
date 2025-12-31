@@ -40,7 +40,7 @@ export function NotificationsList({
   return (
     <div>
       <header className="bg-background sticky top-0 z-10 p-4 shadow-xs">
-        <div className="flex items-center justify-between">
+        <div className="flex h-10 items-center justify-between">
           <p className="text-sm font-semibold">Notificações</p>
 
           {typeNotifications === 'unread' && unreadNotificationsCount > 0 && (
@@ -73,7 +73,7 @@ export function NotificationsList({
       </header>
 
       {notifications.length === 0 && (
-        <div>
+        <div className="p-4">
           <span className="text-xs">
             {typeNotifications === 'read'
               ? 'Nenhuma notificação lida para ser exibida por enquanto.'
