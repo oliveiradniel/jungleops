@@ -20,9 +20,7 @@ export function NotificationsPopover() {
     taskDeletionAuditLogsList.map(({ task }) => task.id),
   );
 
-  const { readNotifications } = useListReadNotifications({
-    enabled: typeNotifications === 'read',
-  });
+  const { readNotifications } = useListReadNotifications();
   const { unreadNotifications } = useListUnreadNotifications();
 
   const inactiveTasksOfReadNotifications = readNotifications.filter(
