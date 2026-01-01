@@ -1,57 +1,12 @@
-import { useState } from 'react';
-import { useListReadNotifications } from '@/app/hooks/queries/use-list-read-notifications';
-import { useListUnreadNotifications } from '@/app/hooks/queries/use-list-unread-notifications copy';
-import { useListTaskDeletionAuditLogQuery } from '@/app/hooks/queries/use-list-task-deletion-audit-log-query';
-
 import { BellIcon } from 'lucide-react';
 
 import { Button } from '../ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Notifications } from './notifications';
+import { useNotifications } from './use-notification';
 
 export function NotificationsPopover() {
-  const [typeNotifications, setTypeNotifications] = useState<'read' | 'unread'>(
-    'unread',
-  );
-
-  const { taskDeletionAuditLogsList } = useListTaskDeletionAuditLogQuery();
-
-  const deletedTaskIds = new Set(
-    taskDeletionAuditLogsList.map(({ task }) => task.id),
-  );
-
-  const { readNotifications } = useListReadNotifications();
-  const { unreadNotifications } = useListUnreadNotifications();
-
-  const inactiveTasksOfReadNotifications = readNotifications.filter(
-    ({ metadata }) => deletedTaskIds.has(metadata.task.id),
-  );
-  const activeTasksOfReadNotifications = readNotifications.filter(
-    ({ metadata }) => !deletedTaskIds.has(metadata.task.id),
-  );
-
-  const inactiveTasksOfUnreadNotifications = unreadNotifications.filter(
-    ({ metadata }) => deletedTaskIds.has(metadata.task.id),
-  );
-  const activeTasksOfUnreadNotifications = unreadNotifications.filter(
-    ({ metadata }) => !deletedTaskIds.has(metadata.task.id),
-  );
-
-  const activeNotifications =
-    typeNotifications === 'read'
-      ? activeTasksOfReadNotifications
-      : activeTasksOfUnreadNotifications;
-
-  const inactiveNotifications =
-    typeNotifications === 'read'
-      ? inactiveTasksOfReadNotifications
-      : inactiveTasksOfUnreadNotifications;
-
-  const notificationsCount = unreadNotifications.length;
-
-  function handleToggleTypeNotification(type: 'read' | 'unread') {
-    setTypeNotifications(type);
-  }
+  const { notificationsCount } = useNotifications();
 
   return (
     <Popover>
@@ -71,14 +26,7 @@ export function NotificationsPopover() {
         align="end"
         className="bg-background max-h-[70vh] w-[400px] overflow-y-auto p-0"
       >
-        <Notifications
-          activeNotifications={activeNotifications}
-          inactiveNotifications={inactiveNotifications}
-          unreadNotificationsCount={unreadNotifications.length}
-          readNotificationsCount={readNotifications.length}
-          typeNotifications={typeNotifications}
-          onToggleTypeNotification={handleToggleTypeNotification}
-        />
+        <Notifications />
       </PopoverContent>
     </Popover>
   );

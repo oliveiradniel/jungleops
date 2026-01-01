@@ -1,8 +1,9 @@
+import { useNotifications } from './use-notification';
+
 import { CheckCheckIcon } from 'lucide-react';
 
 import { Button } from '../ui/button';
 
-import type { Notification } from '@/app/entities/notification';
 import {
   Accordion,
   AccordionContent,
@@ -11,25 +12,16 @@ import {
 } from '../ui/accordion';
 import { NotificationsList } from './notifications-list';
 
-interface NotificationsListProps {
-  activeNotifications: Notification[];
-  inactiveNotifications: Notification[];
-  readNotificationsCount: number;
-  unreadNotificationsCount: number;
-  typeNotifications: 'read' | 'unread';
-  onToggleTypeNotification: (type: 'read' | 'unread') => void;
-}
-
-export function Notifications({
-  activeNotifications,
-  inactiveNotifications,
-  typeNotifications,
-  readNotificationsCount,
-  unreadNotificationsCount,
-  onToggleTypeNotification,
-}: NotificationsListProps) {
-  const emptyNotifications =
-    activeNotifications.length === 0 && inactiveNotifications.length === 0;
+export function Notifications() {
+  const {
+    activeNotifications,
+    inactiveNotifications,
+    typeNotifications,
+    emptyNotifications,
+    readNotificationsCount,
+    unreadNotificationsCount,
+    handleToggleTypeNotification,
+  } = useNotifications();
 
   return (
     <div>
@@ -50,7 +42,7 @@ export function Notifications({
             variant={typeNotifications === 'unread' ? 'default' : 'secondary'}
             size="sm"
             className="text-xs"
-            onClick={() => onToggleTypeNotification('unread')}
+            onClick={() => handleToggleTypeNotification('unread')}
           >
             Não lidas ({unreadNotificationsCount})
           </Button>
@@ -59,7 +51,7 @@ export function Notifications({
             variant={typeNotifications === 'read' ? 'default' : 'secondary'}
             size="sm"
             className="text-xs"
-            onClick={() => onToggleTypeNotification('read')}
+            onClick={() => handleToggleTypeNotification('read')}
           >
             Lidas ({readNotificationsCount})
           </Button>

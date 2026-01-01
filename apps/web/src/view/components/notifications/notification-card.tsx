@@ -1,15 +1,11 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useReadNotification } from '@/app/hooks/mutations/use-read-notification';
+import { useNotifications } from './use-notification';
 import { useListTaskDeletionAuditLogQuery } from '@/app/hooks/queries/use-list-task-deletion-audit-log-query';
 
 import { formatDateToBR } from '@/app/utils/format-date-br';
 import { cn } from '@/lib/utils';
-import { invalidateQueries } from '@/app/utils/invalidate-queries';
 
 import { Link } from '@tanstack/react-router';
 import { Spinner } from '../ui/spinner';
-import { useState } from 'react';
-import { toast } from '@/app/utils/toast';
 
 import { type LucideIcon } from 'lucide-react';
 import type { Notification } from '@/app/entities/notification';
@@ -28,13 +24,11 @@ export function NotificationCard({
   kind,
   icon: Icon,
 }: NotificationCardProps) {
-  const queryClient = useQueryClient();
-
-  const [updatedNotificationId, setUpdatedNotificationId] = useState<
-    string | null
-  >(null);
-
-  const { readNotification, isReadNotificationLoading } = useReadNotification();
+  const {
+    updatedNotificationId,
+    isReadNotificationLoading,
+    handleReadNotification,
+  } = useNotifications();
 
   const { taskDeletionAuditLogsList } = useListTaskDeletionAuditLogQuery();
 
@@ -45,29 +39,6 @@ export function NotificationCard({
 
   const username = notification.metadata.author.username as string;
   const parsedCreatedAt = formatDateToBR(notification.createdAt);
-
-  async function handleReadNotifications(notificationId: string) {
-    try {
-      setUpdatedNotificationId(notificationId);
-
-      await readNotification(notificationId);
-
-      invalidateQueries({
-        queryClient,
-        invalidateQuery: [
-          { queryKey: ['read-notifications'] },
-          { queryKey: ['unread-notifications'] },
-        ],
-      });
-    } catch {
-      toast({
-        type: 'error',
-        description: 'Houve um erro ao ler a notificação!',
-      });
-    } finally {
-      setUpdatedNotificationId(null);
-    }
-  }
 
   const content = (
     <div
@@ -130,7 +101,7 @@ export function NotificationCard({
 
   if (thisTaskDeleted) {
     return (
-      <button onClick={() => handleReadNotifications(notification.id)}>
+      <button onClick={() => handleReadNotification(notification.id)}>
         {content}
       </button>
     );
@@ -140,7 +111,7 @@ export function NotificationCard({
     <Link
       to={'/tasks/$taskId'}
       params={{ taskId: notification.metadata.task.id }}
-      onClick={() => handleReadNotifications(notification.id)}
+      onClick={() => handleReadNotification(notification.id)}
     >
       {content}
     </Link>

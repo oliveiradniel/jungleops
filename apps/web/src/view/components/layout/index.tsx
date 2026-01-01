@@ -4,6 +4,7 @@ import { SidebarProvider, SidebarTrigger } from '../ui/sidebar';
 import { AppSidebar } from './app-sidebar';
 import { NotificationsPopover } from '../notifications/notifications-popover';
 import { ProfilePopover } from '../profile-popover';
+import { NotificationProvider } from '../notifications/notification-provider';
 
 export function Layout() {
   return (
@@ -16,7 +17,9 @@ export function Layout() {
           <div className="flex items-center gap-4">
             <ProfilePopover />
 
-            <NotificationsPopover />
+            <NotificationProvider>
+              <NotificationsPopover />
+            </NotificationProvider>
           </div>
         </header>
 
