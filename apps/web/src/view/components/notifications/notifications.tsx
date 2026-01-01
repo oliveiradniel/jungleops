@@ -84,7 +84,7 @@ export function Notifications({
           defaultValue="active"
           className="my-4 px-4"
         >
-          <AccordionItem value="active">
+          <AccordionItem value="active" className="border-b-0">
             <AccordionTrigger className="flex h-6 items-center">
               Ativas
             </AccordionTrigger>
