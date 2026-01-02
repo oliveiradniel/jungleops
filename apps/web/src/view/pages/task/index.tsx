@@ -1,5 +1,4 @@
 import { useTaskController } from './use-task-controller';
-import { useTasks } from '@/app/hooks/use-tasks';
 import { router } from '@/router';
 
 import {
@@ -16,15 +15,6 @@ import {
 
 import { Button } from '../../components/ui/button';
 import { Separator } from '../../components/ui/separator';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '../../components/ui/pagination';
 import { Skeleton } from '../../components/ui/skeleton';
 import {
   InputGroup,
@@ -34,17 +24,15 @@ import {
 import { UpdateTaskSheet } from '@/view/components/update-task-sheet';
 import { PriorityBadge } from '@/view/components/ui/priority-badge';
 import { StatusBadge } from '@/view/components/ui/status-badge';
-
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from '@/view/components/ui/tabs';
+import { PaginationControls } from '@/view/components/pagination-controls';
 
 export function Task() {
-  const { handleOpenUpdateTaskSheet } = useTasks();
-
   const {
     task,
     commentsList,
@@ -55,18 +43,18 @@ export function Task() {
     hasPrevious,
     isCommentsLoading,
     isTaskLoading,
+    isTasksFetching,
     currentPage,
-    startPage,
-    pagesToShow,
-    endPage,
     totalPages,
+    page,
+    size,
     isCreateCommentLoading,
+    handleOpenUpdateTaskSheet,
     handleOpenDeleteTaskDialog,
     register,
-    goToPage,
-    handlePreviousTasksPage,
-    handleNextTasksPage,
     handleSubmitCreateComment,
+    handlePageNavigation,
+    handleSizePerPage,
   } = useTaskController();
 
   return (
@@ -74,8 +62,8 @@ export function Task() {
       <UpdateTaskSheet key={task?.id} taskData={task} />
 
       <div className="px-10">
-        <header className="mt-6 flex items-start justify-between gap-4">
-          <div className="flex items-start gap-4">
+        <header className="mt-6 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
             <Button
               onClick={() => router.history.back()}
               className="text-primary-foreground"
@@ -190,82 +178,22 @@ export function Task() {
 
             <TabsContent value="comments">
               <div className="space-y-6">
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center gap-2">
                   <h2 className="text-3xl">
                     Comentários ({isTaskLoading ? '...' : totalCommentsCount})
                   </h2>
 
-                  <div>
-                    <Pagination>
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious
-                            aria-disabled={!hasPrevious || isTaskLoading}
-                            onClick={() => {
-                              if (isTaskLoading) return;
-
-                              handlePreviousTasksPage();
-                            }}
-                          />
-                        </PaginationItem>
-
-                        {startPage > 1 && (
-                          <>
-                            <PaginationItem>
-                              <PaginationLink onClick={() => goToPage(1)}>
-                                1
-                              </PaginationLink>
-                            </PaginationItem>
-                            {startPage > 2 && (
-                              <PaginationItem>
-                                <PaginationEllipsis />
-                              </PaginationItem>
-                            )}
-                          </>
-                        )}
-
-                        {pagesToShow.map((page) => (
-                          <PaginationItem key={page}>
-                            <PaginationLink
-                              aria-disabled={isTaskLoading}
-                              onClick={() => goToPage(page)}
-                              isActive={page === currentPage}
-                            >
-                              {page}
-                            </PaginationLink>
-                          </PaginationItem>
-                        ))}
-
-                        {endPage < totalPages! && (
-                          <>
-                            {endPage < totalPages! - 1 && (
-                              <PaginationItem>
-                                <PaginationEllipsis />
-                              </PaginationItem>
-                            )}
-                            <PaginationItem>
-                              <PaginationLink
-                                onClick={() => goToPage(totalPages!)}
-                              >
-                                {totalPages!}
-                              </PaginationLink>
-                            </PaginationItem>
-                          </>
-                        )}
-
-                        <PaginationItem>
-                          <PaginationNext
-                            aria-disabled={!hasNext || isTaskLoading}
-                            onClick={() => {
-                              if (isTaskLoading) return;
-
-                              handleNextTasksPage();
-                            }}
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
-                  </div>
+                  <PaginationControls
+                    hasPrevious={hasPrevious ?? false}
+                    hasNext={hasNext ?? false}
+                    totalPages={totalPages ?? 0}
+                    isLoading={isTasksFetching}
+                    disabled={totalCommentsCount <= 0}
+                    page={page}
+                    size={size}
+                    onPageNavigation={handlePageNavigation}
+                    onSizePerPage={handleSizePerPage}
+                  />
                 </div>
 
                 <Separator />

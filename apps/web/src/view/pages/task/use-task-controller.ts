@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useParams, useRouter } from '@tanstack/react-router';
+import { useParams, useRouter, useSearch } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { useGetTaskQuery } from '@/app/hooks/queries/use-get-task-query';
 import { useListCommentsQuery } from '@/app/hooks/queries/use-list-comments-query';
 import { useCreateCommentMutation } from '@/app/hooks/mutations/use-create-comment-mutation';
 import { useAuth } from '@/app/hooks/use-auth';
-import { usePagination } from '@/app/hooks/use-pagination';
 import { useTasks } from '@/app/hooks/use-tasks';
 import { useListUsersByTaskIdQuery } from '@/app/hooks/queries/use-list-users-by-task-id-query';
 
@@ -20,26 +19,22 @@ import type { CreateCommentWithoutUserIdData } from '@/types/comment-data';
 
 export function useTaskController() {
   const { taskId } = useParams({ from: '/_authenticated/tasks_/$taskId' });
+  const { page, size } = useSearch({ from: '/_authenticated/tasks_/$taskId' });
 
   const { navigate } = useRouter();
 
   const queryClient = useQueryClient();
 
   const { user } = useAuth();
-  const { isDeleteTaskDialogOpen, handleOpenDeleteTaskDialog } = useTasks();
+  const { handleOpenUpdateTaskSheet, handleOpenDeleteTaskDialog } = useTasks();
 
-  const { task, isTaskLoading, hasError } = useGetTaskQuery(taskId);
+  const { task, isTaskLoading, isTasksFetching, hasError } =
+    useGetTaskQuery(taskId);
   const { createComment, isCreateCommentLoading } = useCreateCommentMutation();
 
   const { participants, isParticipantsLoading } = useListUsersByTaskIdQuery({
     taskId,
   });
-
-  const { page, size, goToPage, handlePreviousTasksPage, handleNextTasksPage } =
-    usePagination({
-      from: '/_authenticated/tasks_/$taskId',
-      to: '/tasks/$taskId',
-    });
 
   const {
     commentsList,
@@ -101,6 +96,22 @@ export function useTaskController() {
     },
   );
 
+  function handlePageNavigation(page: number) {
+    navigate({
+      to: '/tasks/$taskId',
+      params: { taskId },
+      search: (old) => ({ ...old, page }),
+    });
+  }
+
+  function handleSizePerPage(size: number) {
+    navigate({
+      to: '/tasks/$taskId',
+      params: { taskId },
+      search: (old) => ({ ...old, size, page: 1 }),
+    });
+  }
+
   useEffect(() => {
     if (hasError) {
       navigate({ to: '/tasks' });
@@ -122,18 +133,17 @@ export function useTaskController() {
     hasPrevious,
     isCommentsLoading,
     isTaskLoading,
+    isTasksFetching,
     currentPage,
-    startPage,
-    pagesToShow,
-    endPage,
     totalPages,
+    page,
+    size,
     isCreateCommentLoading,
-    isDeleteTaskDialogOpen,
+    handleOpenUpdateTaskSheet,
     handleOpenDeleteTaskDialog,
     register,
-    goToPage,
-    handlePreviousTasksPage,
-    handleNextTasksPage,
     handleSubmitCreateComment,
+    handlePageNavigation,
+    handleSizePerPage,
   };
 }
