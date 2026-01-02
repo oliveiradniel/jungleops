@@ -11,6 +11,7 @@ import { EmptyLog } from './empty-log';
 import { DataTableTextFilter } from '@/view/components/data-table/data-table-text-filter';
 import { DataTableUniqueFacetedFilter } from '@/view/components/data-table/data-table-unique-faceted-filter';
 import { DataTablePagination } from '@/view/components/data-table/data-table-pagination';
+
 import type { TaskPriority, TaskStatus } from '@challenge/shared';
 
 export function TaskCreationAuditLogTable() {
@@ -62,7 +63,7 @@ export function TaskCreationAuditLogTable() {
           </div>
         )}
 
-        <DataTablePagination />
+        {taskCreationAuditLogsList.length > 0 && <DataTablePagination />}
 
         {!isTaskCreationAuditLogsLoading &&
           taskCreationAuditLogsList.length > 0 && <DataTableContent />}

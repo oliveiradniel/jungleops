@@ -59,7 +59,7 @@ export function TaskUpdateAuditLogTable() {
           </div>
         )}
 
-        <DataTablePagination />
+        {taskUpdateAuditLogsList.length > 0 && <DataTablePagination />}
 
         {!isTaskUpdateAuditLogsLoading &&
           taskUpdateAuditLogsList.length > 0 && <DataTableContent />}

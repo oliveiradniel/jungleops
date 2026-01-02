@@ -63,7 +63,7 @@ export function TaskDeletionAuditLogTable() {
           </div>
         )}
 
-        <DataTablePagination />
+        {taskDeletionAuditLogsList.length > 0 && <DataTablePagination />}
 
         {!isTaskDeletionAuditLogsLoading &&
           taskDeletionAuditLogsList.length > 0 && <DataTableContent />}
