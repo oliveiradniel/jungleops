@@ -2,6 +2,7 @@ import { useSearch } from '@tanstack/react-router';
 import { useTasksController } from './use-tasks-controller';
 
 import { priorityLabels, statusLabels } from '@/config/labels';
+import { cn } from '@/lib/utils';
 
 import { Skeleton } from '../../components/ui/skeleton';
 import { TasksCard } from './components/tasks-card';
@@ -21,8 +22,12 @@ export function Tasks() {
     totalFiltered,
     pagination,
     facets,
+    page,
+    size,
     isTasksLoading,
     isTasksFetching,
+    handlePageNavigation,
+    handleSizePerPage,
   } = useTasksController();
 
   const { q } = useSearch({ from: '/_authenticated/tasks' });
@@ -30,83 +35,90 @@ export function Tasks() {
   const disabled = totalAll <= 0 || totalFiltered <= 0;
 
   return (
-    <>
-      <div className="flex h-[calc(100%-90px)]">
-        <div className="flex h-full w-full flex-col gap-6 p-6">
-          <header className="flex flex-col items-start justify-between gap-2">
-            <div className="flex w-full items-start gap-2">
-              <TextFilter
-                disabled={totalAll <= 0}
-                numberOfTasksFound={totalFiltered}
-              />
+    <div
+      className={cn(
+        'flex',
+        totalAll === 0 && !isTasksLoading && 'h-[calc(100%-90px)]',
+      )}
+    >
+      <div className="flex h-full w-full flex-col gap-6 p-6">
+        <header className="flex flex-col items-start justify-between gap-2">
+          <div className="flex w-full items-start gap-2">
+            <TextFilter
+              disabled={totalAll <= 0}
+              numberOfTasksFound={totalFiltered}
+            />
 
-              <SortFilter disabled={disabled} placeholder="Ordenar por" />
+            <SortFilter disabled={disabled} placeholder="Ordenar por" />
 
-              <ManyFacetedTasksFilter
-                param="status"
-                facets={facets?.status}
-                labels={statusLabels}
-                placeholder="Status"
-                disabled={disabled}
-              />
-
-              <ManyFacetedTasksFilter
-                param="priority"
-                facets={facets?.priority}
-                labels={priorityLabels}
-                placeholder="Prioridade"
-                disabled={disabled}
-              />
-            </div>
-
-            <PaginationControls
-              hasPrevious={pagination?.hasPrevious ?? false}
-              hasNext={pagination?.hasNext ?? false}
-              totalPages={pagination?.totalPages ?? 0}
-              isLoading={isTasksFetching}
+            <ManyFacetedTasksFilter
+              param="status"
+              facets={facets?.status}
+              labels={statusLabels}
+              placeholder="Status"
               disabled={disabled}
             />
-          </header>
 
-          <Separator />
+            <ManyFacetedTasksFilter
+              param="priority"
+              facets={facets?.priority}
+              labels={priorityLabels}
+              placeholder="Prioridade"
+              disabled={disabled}
+            />
+          </div>
 
-          {totalAll > 0 && (
-            <div className="flex gap-2">
-              <h1 className="flex items-baseline gap-2 text-2xl font-medium">
-                Todas as tarefas
-                <span className="text-muted-foreground text-sm">
-                  ({isTasksLoading ? '...' : totalAll})
-                </span>
-              </h1>
+          <PaginationControls
+            hasPrevious={pagination?.hasPrevious ?? false}
+            hasNext={pagination?.hasNext ?? false}
+            totalPages={pagination?.totalPages ?? 0}
+            isLoading={isTasksFetching}
+            disabled={disabled}
+            page={page}
+            size={size}
+            onPageNavigation={handlePageNavigation}
+            onSizePerPage={handleSizePerPage}
+          />
+        </header>
 
-              {!isTasksLoading && isTasksFetching && (
-                <Spinner className="text-primary mt-3 size-4" />
-              )}
-            </div>
-          )}
+        <Separator />
 
-          {isTasksLoading && isTasksFetching && (
-            <div className="flex flex-wrap gap-2">
-              {[...Array(8)].map((_, index) => (
-                <Skeleton
-                  key={`task-${index}`}
-                  className="h-[200px] w-full max-w-[300px] rounded-xl"
-                />
-              ))}
-            </div>
-          )}
+        {totalAll > 0 && (
+          <div className="flex gap-2">
+            <h1 className="flex items-baseline gap-2 text-2xl font-medium">
+              Todas as tarefas
+              <span className="text-muted-foreground text-sm">
+                ({isTasksLoading ? '...' : totalAll})
+              </span>
+            </h1>
 
-          {!isTasksLoading && table.getRowCount() > 0 && (
-            <TasksCard table={table} />
-          )}
+            {!isTasksLoading && isTasksFetching && (
+              <Spinner className="text-primary mt-3 size-4" />
+            )}
+          </div>
+        )}
 
-          {!isTasksLoading && totalAll === 0 && <EmptyTasks />}
+        {isTasksLoading && isTasksFetching && (
+          <div className="flex flex-wrap gap-2">
+            {[...Array(8)].map((_, index) => (
+              <Skeleton
+                key={`task-${index}`}
+                className="h-[200px] w-full max-w-[300px] rounded-xl"
+              />
+            ))}
+          </div>
+        )}
 
-          {!isTasksLoading && totalAll > 0 && totalFiltered === 0 && (
-            <EmptyFilteredTasks searchInput={q ?? ''} />
-          )}
-        </div>
+        {!isTasksLoading && table.getRowCount() > 0 && (
+          <TasksCard table={table} />
+        )}
+
+        {!isTasksLoading && totalAll === 0 && <EmptyTasks />}
+
+        {!isTasksLoading && totalAll > 0 && totalFiltered === 0 && (
+          <EmptyFilteredTasks searchInput={q ?? ''} />
+        )}
       </div>
-    </>
+    </div>
   );
 }

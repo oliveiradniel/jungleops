@@ -1,5 +1,3 @@
-import { useNavigate, useSearch } from '@tanstack/react-router';
-
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -23,6 +21,10 @@ interface DataTablePaginationProps {
   totalPages: number;
   isLoading?: boolean;
   disabled?: boolean;
+  page: number;
+  size: number;
+  onPageNavigation: (page: number) => void;
+  onSizePerPage: (size: number) => void;
 }
 
 export function PaginationControls({
@@ -31,31 +33,24 @@ export function PaginationControls({
   totalPages,
   isLoading,
   disabled,
+  page,
+  size,
+  onPageNavigation,
+  onSizePerPage,
 }: DataTablePaginationProps) {
-  const { page, size } = useSearch({ from: '/_authenticated/tasks' });
-  const navigate = useNavigate();
-
   const pageIndexes = Array.from(
     { length: totalPages },
     (_, index) => index + 1,
   );
 
-  function handlePageNavigation(page: number) {
-    navigate({ to: '/tasks', search: (old) => ({ ...old, page }) });
-  }
-
-  function handleSizePerPage(size: number) {
-    navigate({ to: '/tasks', search: (old) => ({ ...old, size, page: 1 }) });
-  }
-
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex flex-wrap items-center gap-4">
       <div className="flex items-center gap-2">
         <small>Ir para a página:</small>
 
         <Select
           value={String(page)}
-          onValueChange={(value) => handlePageNavigation(Number(value))}
+          onValueChange={(value) => onPageNavigation(Number(value))}
         >
           <SelectTrigger disabled={disabled}>
             <SelectValue>{page}</SelectValue>
@@ -78,7 +73,7 @@ export function PaginationControls({
 
         <Select
           value={String(size)}
-          onValueChange={(value) => handleSizePerPage(Number(value))}
+          onValueChange={(value) => onSizePerPage(Number(value))}
         >
           <SelectTrigger disabled={disabled}>
             <SelectValue>{size}</SelectValue>
@@ -105,7 +100,7 @@ export function PaginationControls({
           disabled={!hasPrevious}
           variant="outline"
           size="sm"
-          onClick={() => handlePageNavigation(1)}
+          onClick={() => onPageNavigation(1)}
         >
           <ChevronsLeftIcon className="size-4" />
         </Button>
@@ -114,7 +109,7 @@ export function PaginationControls({
           disabled={!hasPrevious}
           variant="outline"
           size="sm"
-          onClick={() => handlePageNavigation(page - 1)}
+          onClick={() => onPageNavigation(page - 1)}
         >
           <ChevronLeftIcon className="size-4" />
         </Button>
@@ -123,7 +118,7 @@ export function PaginationControls({
           disabled={!hasNext}
           variant="outline"
           size="sm"
-          onClick={() => handlePageNavigation(page + 1)}
+          onClick={() => onPageNavigation(page + 1)}
         >
           <ChevronRightIcon className="size-4" />
         </Button>
@@ -132,7 +127,7 @@ export function PaginationControls({
           disabled={!hasNext}
           variant="outline"
           size="sm"
-          onClick={() => handlePageNavigation(totalPages)}
+          onClick={() => onPageNavigation(totalPages)}
         >
           <ChevronsRightIcon className="size-4" />
         </Button>
