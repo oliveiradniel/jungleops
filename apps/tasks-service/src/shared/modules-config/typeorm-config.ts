@@ -14,11 +14,11 @@ export function typeORMConfigOptions(
 ): DataSourceOptions {
   return {
     type: 'postgres',
-    host: getConfigService.POSTGRES_HOST,
-    port: getConfigService.POSTGRES_PORT,
-    username: getConfigService.POSTGRES_USER,
-    password: getConfigService.POSTGRES_PASSWORD,
-    database: getConfigService.POSTGRES_DB,
+    host: getConfigService.DB_TASKS_SERVICE_HOST,
+    port: getConfigService.DB_TASKS_SERVICE_PORT,
+    username: getConfigService.DB_TASKS_SERVICE_USER,
+    password: getConfigService.DB_TASKS_SERVICE_PASSWORD,
+    database: getConfigService.DB_TASKS_SERVICE_NAME,
     synchronize: false,
     entities: [TaskEntity, CommentEntity, UserTaskEntity, TaskAuditLogEntity],
     migrations: [join(__dirname, '/orm/migrations/*.{ts,js}')],
