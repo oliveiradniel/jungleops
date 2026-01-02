@@ -28,6 +28,9 @@ export class NotificationsRepository implements INotificationsRepository {
         userId,
         read: true,
       },
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 
@@ -36,6 +39,9 @@ export class NotificationsRepository implements INotificationsRepository {
       where: {
         userId,
         read: false,
+      },
+      order: {
+        createdAt: 'DESC',
       },
     });
   }
