@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 import { useMessaging } from './use-messaging';
 
 import { getNotificationsSocket } from '@/app/utils/notifications.socket';
@@ -7,7 +6,6 @@ import { getNotificationsSocket } from '@/app/utils/notifications.socket';
 import { SOCKET_EVENT_KEYS } from '@challenge/shared';
 
 export function useNotifications({ userId }: { userId?: string }) {
-  const queryClient = useQueryClient();
 
   const {
     onTaskCreated,
@@ -19,7 +17,7 @@ export function useNotifications({ userId }: { userId?: string }) {
     onTaskUnassigned,
     onTaskDeleted,
     onTaskCommentCreated,
-  } = useMessaging({ userId, queryClient });
+  } = useMessaging({ userId });
 
   const {
     TASK_CREATED,

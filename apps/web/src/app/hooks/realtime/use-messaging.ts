@@ -1,4 +1,4 @@
-import type { QueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { toast } from '@/app/utils/toast';
 
@@ -21,18 +21,18 @@ import type {
   TaskUpdatedSignal,
 } from '@challenge/shared';
 
-export function useMessaging({
-  userId,
-  queryClient,
-}: {
-  userId?: string;
-  queryClient: QueryClient;
-}) {
+export function useMessaging({ userId }: { userId?: string }) {
+  const queryClient = useQueryClient();
+
   function handleInvalidateQueries(invalidateQuery: InvalidateQuery[]) {
     invalidateQueries({
       queryClient,
       invalidateQuery,
     });
+  }
+
+  function handleInvalidateUnreadNotifications() {
+    handleInvalidateQueries([{ queryKey: ['unread-notifications'] }]);
   }
 
   function onTaskCreated() {
@@ -42,6 +42,7 @@ export function useMessaging({
     });
 
     handleInvalidateQueries([{ queryKey: ['tasks'], exact: false }]);
+    handleInvalidateUnreadNotifications();
   }
 
   function onTaskTitleUpdated(payload: TaskTitleUpdatedNotification) {
@@ -54,6 +55,7 @@ export function useMessaging({
       { queryKey: ['task', payload.task.id] },
       { queryKey: ['tasks'], exact: false },
     ]);
+    handleInvalidateUnreadNotifications();
   }
 
   function onTaskStatusUpdated(payload: TaskStatusUpdatedNotification) {
@@ -66,6 +68,7 @@ export function useMessaging({
       { queryKey: ['task', payload.task.id] },
       { queryKey: ['tasks'], exact: false },
     ]);
+    handleInvalidateUnreadNotifications();
   }
 
   function onTaskPriorityUpdated(payload: TaskPriorityUpdatedNotification) {
@@ -79,6 +82,7 @@ export function useMessaging({
       { queryKey: ['task', payload.task.id] },
       { queryKey: ['tasks'], exact: false },
     ]);
+    handleInvalidateUnreadNotifications();
   }
 
   function onTaskTermUpdated(payload: TaskTermUpdatedNotification) {
@@ -91,6 +95,7 @@ export function useMessaging({
       { queryKey: ['task', payload.task.id] },
       { queryKey: ['tasks'], exact: false },
     ]);
+    handleInvalidateUnreadNotifications();
   }
 
   function onTaskAssigned(payload: TaskAssignedNotification) {
@@ -112,6 +117,7 @@ export function useMessaging({
     }
 
     handleInvalidateQueries([{ queryKey: ['task', task.id] }]);
+    handleInvalidateUnreadNotifications();
   }
 
   function onTaskUnassigned(payload: TaskUnassignedNotification) {
@@ -133,6 +139,7 @@ export function useMessaging({
     }
 
     handleInvalidateQueries([{ queryKey: ['task', task.id] }]);
+    handleInvalidateUnreadNotifications();
   }
 
   function onTaskDeleted() {
@@ -142,6 +149,7 @@ export function useMessaging({
     });
 
     handleInvalidateQueries([{ queryKey: ['tasks'], exact: false }]);
+    handleInvalidateUnreadNotifications();
   }
 
   function onTaskCommentCreated(payload: TaskCommentCreatedNotification) {
@@ -156,6 +164,7 @@ export function useMessaging({
       { queryKey: ['comments', task.id], exact: false },
       { queryKey: ['tasks'], exact: false },
     ]);
+    handleInvalidateUnreadNotifications();
   }
 
   function sinalizeTaskUpdated(payload: TaskUpdatedSignal) {
@@ -166,12 +175,14 @@ export function useMessaging({
       { queryKey: ['task', taskId] },
       { queryKey: ['tasks'], exact: false },
     ]);
+    handleInvalidateUnreadNotifications();
   }
 
   function sinalizeTaskCommentCreated(payload: TaskCommentCreatedSignal) {
     handleInvalidateQueries([
       { queryKey: ['comments', payload.task.id], exact: false },
     ]);
+    handleInvalidateUnreadNotifications();
   }
 
   function sinalizeTaskAuditLog(payload: TaskAuditLogSignal) {
@@ -184,6 +195,8 @@ export function useMessaging({
     } else if (action === 'DELETE') {
       handleInvalidateQueries([{ queryKey: ['task-deletion-audit-logs'] }]);
     }
+
+    handleInvalidateUnreadNotifications();
   }
 
   return {

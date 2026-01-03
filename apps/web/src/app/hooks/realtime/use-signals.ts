@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 import { useMessaging } from './use-messaging';
 
 import { getNotificationsSocket } from '@/app/utils/notifications.socket';
@@ -7,14 +6,11 @@ import { getNotificationsSocket } from '@/app/utils/notifications.socket';
 import { SOCKET_SIGNAL_KEYS } from '@challenge/shared';
 
 export function useSignals({ userId }: { userId?: string }) {
-  const queryClient = useQueryClient();
-
   const {
     sinalizeTaskUpdated,
     sinalizeTaskCommentCreated,
     sinalizeTaskAuditLog,
   } = useMessaging({
-    queryClient,
     userId,
   });
 
