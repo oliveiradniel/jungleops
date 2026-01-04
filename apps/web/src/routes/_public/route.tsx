@@ -4,8 +4,13 @@ import { sessionQuery } from '@/lib/queries/session';
 
 export const Route = createFileRoute('/_public')({
   validateSearch: (search) => {
+    const destination =
+      search.redirect === '/login' || search.redirect === '/register'
+        ? '/tasks'
+        : (search.redirect as string);
+
     return {
-      redirect: (search.redirect as string) || '/tasks',
+      redirect: destination,
     };
   },
   beforeLoad: async ({ context, search }) => {

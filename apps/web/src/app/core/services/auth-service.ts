@@ -37,13 +37,17 @@ export class AuthService implements IAuthService {
     });
   }
 
-  session(config?: HttpRequestConfig): Promise<SessionPayload> {
-    const accessToken = getAccessToken();
+  session(
+    accessToken?: string,
+    config?: HttpRequestConfig,
+  ): Promise<SessionPayload> {
+    const token = accessToken ?? getAccessToken();
 
     return this.httpClient.get<SessionPayload>('/auth/get-active-user', {
       ...config,
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        ...config?.headers,
+        Authorization: `Bearer ${token}`,
       },
     });
   }

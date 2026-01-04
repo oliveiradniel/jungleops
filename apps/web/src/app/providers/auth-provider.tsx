@@ -27,7 +27,6 @@ import { toast } from '../utils/toast';
 import { AuthLoadingScreen } from '@/view/components/auth-loading-screen';
 
 import { disconnectNotificationsSocket } from '../utils/notifications.socket';
-import { invalidateQueries } from '../utils/invalidate-queries';
 
 import type { LoginData, RegisterData } from '@/types/auth-data';
 
@@ -51,13 +50,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     : isLogoutLoading
       ? 'is-logout'
       : 'is-login/is-register';
-
-  function handleInvalidateSessionQuery() {
-    invalidateQueries({
-      queryClient,
-      invalidateQuery: [{ queryKey: ['session'] }],
-    });
-  }
 
   useLayoutEffect(() => {
     const request = httpClient.interceptors.request.use((config) => {
@@ -85,7 +77,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (originalRequest?.url === '/auth/refresh') {
           removeAccessToken();
 
-          handleInvalidateSessionQuery();
+          queryClient.invalidateQueries({ queryKey: ['session'] });
+          queryClient.setQueryData(['session'], null);
+
+          await router.invalidate();
 
           return Promise.reject(error);
         }
@@ -122,7 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           removeAccessToken();
 
-          handleInvalidateSessionQuery();
+          queryClient.invalidateQueries({ queryKey: ['session'] });
 
           return Promise.reject(refreshError);
         }
@@ -138,14 +133,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (data: LoginData) => {
       try {
         const { accessToken } = await loginMutate(data);
-
         setAccessToken(accessToken);
-
         setIsNavigating(true);
 
-        handleInvalidateSessionQuery();
+        const authService = makeAuthService();
+        const { user } = await authService.session(accessToken);
 
-        router.invalidate();
+        await queryClient.setQueryData(['session'], user);
+
+        await router.invalidate();
+        router.navigate({ to: '/tasks' });
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.response?.data.message === 'Invalid credentials.') {
@@ -174,14 +171,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (data: RegisterData) => {
       try {
         const { accessToken } = await registerMutate(data);
-
         setAccessToken(accessToken);
-
         setIsNavigating(true);
 
-        handleInvalidateSessionQuery();
+        const authService = makeAuthService();
+        const { user } = await authService.session(accessToken);
 
-        router.invalidate();
+        await queryClient.setQueryData(['session'], user);
+
+        await router.invalidate();
+        router.navigate({ to: '/tasks' });
       } catch (error) {
         if (error instanceof AxiosError) {
           if (
@@ -221,15 +220,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const handleLogout = useCallback(async () => {
     try {
       await logoutMutate();
-
       removeAccessToken();
-
       setIsNavigating(true);
 
-      handleInvalidateSessionQuery();
+      await queryClient.invalidateQueries({ queryKey: ['session'] });
+
+      await router.invalidate();
+      router.navigate({ to: '/login', search: { redirect: '/tasks' } });
 
       disconnectNotificationsSocket();
-      router.invalidate();
     } catch (error) {
       toast({
         type: 'error',

@@ -16,7 +16,10 @@ export abstract class IAuthService {
 
   abstract refresh(config?: HttpRequestConfig): Promise<SessionPayload>;
 
-  abstract session(config?: HttpRequestConfig): Promise<SessionPayload>;
+  abstract session(
+    accessToken?: string,
+    config?: HttpRequestConfig,
+  ): Promise<SessionPayload>;
 
   abstract logout(config?: HttpRequestConfig): Promise<void>;
 }
