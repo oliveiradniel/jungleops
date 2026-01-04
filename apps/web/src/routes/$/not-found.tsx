@@ -25,13 +25,17 @@ export function NotFound() {
 
           {isAuthenticated ? (
             <div className="flex items-center gap-2">
-              <Button>
+              <Button asChild>
                 <Link to="/tasks" replace>
                   Tarefas
                 </Link>
               </Button>
-              {/* <Button>Minhas tarefas</Button>
-              <Button>Histórico de alterações</Button> */}
+              {/* <Button>Minhas tarefas</Button> */}
+              <Button asChild>
+                <Link to="/tasks/audit-logs/creation" replace>
+                  Histórico de alterações
+                </Link>
+              </Button>
             </div>
           ) : (
             <div className="flex items-center gap-2">
