@@ -4,9 +4,13 @@ import { Calendar, LogOut, User } from 'lucide-react';
 
 import { formatDateToBR } from '@/app/utils/format-date-br';
 
-import { Button } from './ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Separator } from './ui/separator';
+import { Button } from '@/view/components/ui/button';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/view/components/ui/popover';
+import { Separator } from '@/view/components/ui/separator';
 
 export function ProfilePopover() {
   const { user, handleLogout, isLogoutLoading } = useAuth();

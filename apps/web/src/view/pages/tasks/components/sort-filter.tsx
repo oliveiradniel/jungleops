@@ -29,7 +29,9 @@ type Sort = {
 };
 
 export function SortFilter({ placeholder, disabled }: SortFilterProps) {
-  const { orderBy, order } = useSearch({ from: '/_authenticated/tasks' });
+  const { orderBy, order } = useSearch({
+    from: '/_authenticated/_layout/tasks',
+  });
   const navigate = useNavigate();
 
   function handleSort({ orderBy, order }: Sort) {

@@ -2,17 +2,16 @@ import { useNotifications } from './use-notification';
 
 import { CheckCheckIcon } from 'lucide-react';
 
-import { Button } from '../ui/button';
-
+import { Button } from '@/view/components/ui/button';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '../ui/accordion';
+} from '@/view/components/ui/accordion';
 import { NotificationsList } from './notifications-list';
 
-export function Notifications() {
+export function NotificationsContent() {
   const {
     activeNotifications,
     inactiveNotifications,

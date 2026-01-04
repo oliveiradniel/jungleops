@@ -1,9 +1,14 @@
+import { useNotifications } from './use-notification';
+
 import { BellIcon } from 'lucide-react';
 
-import { Button } from '../ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { Notifications } from './notifications';
-import { useNotifications } from './use-notification';
+import { NotificationsContent } from './notifications-content';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/view/components/ui/popover';
+import { Button } from '@/view/components/ui/button';
 
 export function NotificationsPopover() {
   const { notificationsCount } = useNotifications();
@@ -26,7 +31,7 @@ export function NotificationsPopover() {
         align="end"
         className="bg-background max-h-[70vh] w-[400px] overflow-y-auto p-0"
       >
-        <Notifications />
+        <NotificationsContent />
       </PopoverContent>
     </Popover>
   );

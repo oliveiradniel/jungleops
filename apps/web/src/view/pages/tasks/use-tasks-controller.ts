@@ -12,7 +12,7 @@ export function useTasksController() {
   const navigate = useNavigate();
 
   const { page, size, orderBy, order, status, priority, q } = useSearch({
-    from: '/_authenticated/tasks',
+    from: '/_authenticated/_layout/tasks',
   });
 
   const {

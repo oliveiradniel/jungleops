@@ -10,11 +10,9 @@ import { NotificationsContext } from './notifications-context';
 import { toast } from '@/app/utils/toast';
 import { invalidateQueries } from '@/app/utils/invalidate-queries';
 
-export function NotificationProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import { NotificationsPopover } from './notifications-popover';
+
+export function Notifications() {
   const queryClient = useQueryClient();
 
   const [typeNotifications, setTypeNotifications] = useState<'read' | 'unread'>(
@@ -108,7 +106,7 @@ export function NotificationProvider({
         handleReadNotification,
       }}
     >
-      {children}
+      <NotificationsPopover />
     </NotificationsContext.Provider>
   );
 }

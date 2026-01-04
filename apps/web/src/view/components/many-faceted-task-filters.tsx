@@ -29,7 +29,7 @@ export function ManyFacetedTasksFilter<T extends string>({
   disabled,
 }: ManyFacetedTasksFilterProps<T>) {
   const navigate = useNavigate();
-  const search = useSearch({ from: '/_authenticated/tasks' });
+  const search = useSearch({ from: '/_authenticated/_layout/tasks' });
 
   const [selectedFilters, setSelectedFilters] = useState<T[]>(
     search[param]?.split(',').map((value) => value.toUpperCase() as T) ?? [],

@@ -5,7 +5,7 @@ import { formatDateToBR } from '@/app/utils/format-date-br';
 import { cn } from '@/lib/utils';
 
 import { Link } from '@tanstack/react-router';
-import { Spinner } from '../ui/spinner';
+import { Spinner } from '@/view/components/ui/spinner';
 
 import { type LucideIcon } from 'lucide-react';
 import type { Notification } from '@/app/entities/notification';

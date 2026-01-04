@@ -16,8 +16,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '../ui/sidebar';
-import { Button } from '../ui/button';
+} from '@/view/components/ui/sidebar';
+import { Button } from '@/view/components/ui/button';
 
 export function AppSidebar() {
   const location = useLocation();

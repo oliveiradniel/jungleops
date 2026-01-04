@@ -1,11 +1,10 @@
 import { useTasks } from '@/app/hooks/use-tasks';
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
+
+import { sessionQuery } from '@/lib/queries/session';
 
 import { DeleteTaskDialog } from '@/view/components/delete-task-dialog';
 import { NewTaskSheet } from '@/view/components/new-task-sheet';
-
-import { Layout } from '@/view/components/layout';
-import { sessionQuery } from '@/lib/queries/session';
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async ({ context, location }) => {
@@ -39,7 +38,7 @@ function RouteComponent() {
 
       <NewTaskSheet />
 
-      <Layout />
+      <Outlet />
     </>
   );
 }

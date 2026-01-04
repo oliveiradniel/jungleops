@@ -18,8 +18,12 @@ import { CreateCommentWithoutUserIdSchema } from '@/app/schemas/create-comment-s
 import type { CreateCommentWithoutUserIdData } from '@/types/comment-data';
 
 export function useTaskController() {
-  const { taskId } = useParams({ from: '/_authenticated/tasks_/$taskId' });
-  const { page, size } = useSearch({ from: '/_authenticated/tasks_/$taskId' });
+  const { taskId } = useParams({
+    from: '/_authenticated/_layout/tasks_/$taskId',
+  });
+  const { page, size } = useSearch({
+    from: '/_authenticated/_layout/tasks_/$taskId',
+  });
 
   const { navigate } = useRouter();
 

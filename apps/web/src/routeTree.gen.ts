@@ -14,12 +14,13 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as PublicRegisterRouteImport } from './routes/_public/register'
 import { Route as PublicLoginRouteImport } from './routes/_public/login'
-import { Route as AuthenticatedTasksRouteImport } from './routes/_authenticated/tasks'
-import { Route as AuthenticatedTasksAuditLogsRouteImport } from './routes/_authenticated/tasks_/audit-logs'
-import { Route as AuthenticatedTasksTaskIdRouteImport } from './routes/_authenticated/tasks_/$taskId'
-import { Route as AuthenticatedTasksAuditLogsUpdateRouteImport } from './routes/_authenticated/tasks_/audit-logs/update'
-import { Route as AuthenticatedTasksAuditLogsDeletionRouteImport } from './routes/_authenticated/tasks_/audit-logs/deletion'
-import { Route as AuthenticatedTasksAuditLogsCreationRouteImport } from './routes/_authenticated/tasks_/audit-logs/creation'
+import { Route as AuthenticatedLayoutRouteRouteImport } from './routes/_authenticated/_layout/route'
+import { Route as AuthenticatedLayoutTasksRouteImport } from './routes/_authenticated/_layout/tasks'
+import { Route as AuthenticatedLayoutTasksAuditLogsRouteImport } from './routes/_authenticated/_layout/tasks_/audit-logs'
+import { Route as AuthenticatedLayoutTasksTaskIdRouteImport } from './routes/_authenticated/_layout/tasks_/$taskId'
+import { Route as AuthenticatedLayoutTasksAuditLogsUpdateRouteImport } from './routes/_authenticated/_layout/tasks_/audit-logs/update'
+import { Route as AuthenticatedLayoutTasksAuditLogsDeletionRouteImport } from './routes/_authenticated/_layout/tasks_/audit-logs/deletion'
+import { Route as AuthenticatedLayoutTasksAuditLogsCreationRouteImport } from './routes/_authenticated/_layout/tasks_/audit-logs/creation'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -44,85 +45,92 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => PublicRoute,
 } as any)
-const AuthenticatedTasksRoute = AuthenticatedTasksRouteImport.update({
-  id: '/tasks',
-  path: '/tasks',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedTasksAuditLogsRoute =
-  AuthenticatedTasksAuditLogsRouteImport.update({
+const AuthenticatedLayoutRouteRoute =
+  AuthenticatedLayoutRouteRouteImport.update({
+    id: '/_layout',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedLayoutTasksRoute =
+  AuthenticatedLayoutTasksRouteImport.update({
+    id: '/tasks',
+    path: '/tasks',
+    getParentRoute: () => AuthenticatedLayoutRouteRoute,
+  } as any)
+const AuthenticatedLayoutTasksAuditLogsRoute =
+  AuthenticatedLayoutTasksAuditLogsRouteImport.update({
     id: '/tasks_/audit-logs',
     path: '/tasks/audit-logs',
-    getParentRoute: () => AuthenticatedRoute,
+    getParentRoute: () => AuthenticatedLayoutRouteRoute,
   } as any)
-const AuthenticatedTasksTaskIdRoute =
-  AuthenticatedTasksTaskIdRouteImport.update({
+const AuthenticatedLayoutTasksTaskIdRoute =
+  AuthenticatedLayoutTasksTaskIdRouteImport.update({
     id: '/tasks_/$taskId',
     path: '/tasks/$taskId',
-    getParentRoute: () => AuthenticatedRoute,
+    getParentRoute: () => AuthenticatedLayoutRouteRoute,
   } as any)
-const AuthenticatedTasksAuditLogsUpdateRoute =
-  AuthenticatedTasksAuditLogsUpdateRouteImport.update({
+const AuthenticatedLayoutTasksAuditLogsUpdateRoute =
+  AuthenticatedLayoutTasksAuditLogsUpdateRouteImport.update({
     id: '/update',
     path: '/update',
-    getParentRoute: () => AuthenticatedTasksAuditLogsRoute,
+    getParentRoute: () => AuthenticatedLayoutTasksAuditLogsRoute,
   } as any)
-const AuthenticatedTasksAuditLogsDeletionRoute =
-  AuthenticatedTasksAuditLogsDeletionRouteImport.update({
+const AuthenticatedLayoutTasksAuditLogsDeletionRoute =
+  AuthenticatedLayoutTasksAuditLogsDeletionRouteImport.update({
     id: '/deletion',
     path: '/deletion',
-    getParentRoute: () => AuthenticatedTasksAuditLogsRoute,
+    getParentRoute: () => AuthenticatedLayoutTasksAuditLogsRoute,
   } as any)
-const AuthenticatedTasksAuditLogsCreationRoute =
-  AuthenticatedTasksAuditLogsCreationRouteImport.update({
+const AuthenticatedLayoutTasksAuditLogsCreationRoute =
+  AuthenticatedLayoutTasksAuditLogsCreationRouteImport.update({
     id: '/creation',
     path: '/creation',
-    getParentRoute: () => AuthenticatedTasksAuditLogsRoute,
+    getParentRoute: () => AuthenticatedLayoutTasksAuditLogsRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
-  '/tasks': typeof AuthenticatedTasksRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
-  '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
-  '/tasks/audit-logs': typeof AuthenticatedTasksAuditLogsRouteWithChildren
-  '/tasks/audit-logs/creation': typeof AuthenticatedTasksAuditLogsCreationRoute
-  '/tasks/audit-logs/deletion': typeof AuthenticatedTasksAuditLogsDeletionRoute
-  '/tasks/audit-logs/update': typeof AuthenticatedTasksAuditLogsUpdateRoute
+  '/tasks': typeof AuthenticatedLayoutTasksRoute
+  '/tasks/$taskId': typeof AuthenticatedLayoutTasksTaskIdRoute
+  '/tasks/audit-logs': typeof AuthenticatedLayoutTasksAuditLogsRouteWithChildren
+  '/tasks/audit-logs/creation': typeof AuthenticatedLayoutTasksAuditLogsCreationRoute
+  '/tasks/audit-logs/deletion': typeof AuthenticatedLayoutTasksAuditLogsDeletionRoute
+  '/tasks/audit-logs/update': typeof AuthenticatedLayoutTasksAuditLogsUpdateRoute
 }
 export interface FileRoutesByTo {
   '/$': typeof SplatRoute
-  '/tasks': typeof AuthenticatedTasksRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
-  '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
-  '/tasks/audit-logs': typeof AuthenticatedTasksAuditLogsRouteWithChildren
-  '/tasks/audit-logs/creation': typeof AuthenticatedTasksAuditLogsCreationRoute
-  '/tasks/audit-logs/deletion': typeof AuthenticatedTasksAuditLogsDeletionRoute
-  '/tasks/audit-logs/update': typeof AuthenticatedTasksAuditLogsUpdateRoute
+  '/tasks': typeof AuthenticatedLayoutTasksRoute
+  '/tasks/$taskId': typeof AuthenticatedLayoutTasksTaskIdRoute
+  '/tasks/audit-logs': typeof AuthenticatedLayoutTasksAuditLogsRouteWithChildren
+  '/tasks/audit-logs/creation': typeof AuthenticatedLayoutTasksAuditLogsCreationRoute
+  '/tasks/audit-logs/deletion': typeof AuthenticatedLayoutTasksAuditLogsDeletionRoute
+  '/tasks/audit-logs/update': typeof AuthenticatedLayoutTasksAuditLogsUpdateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/$': typeof SplatRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
-  '/_authenticated/tasks': typeof AuthenticatedTasksRoute
+  '/_authenticated/_layout': typeof AuthenticatedLayoutRouteRouteWithChildren
   '/_public/login': typeof PublicLoginRoute
   '/_public/register': typeof PublicRegisterRoute
-  '/_authenticated/tasks_/$taskId': typeof AuthenticatedTasksTaskIdRoute
-  '/_authenticated/tasks_/audit-logs': typeof AuthenticatedTasksAuditLogsRouteWithChildren
-  '/_authenticated/tasks_/audit-logs/creation': typeof AuthenticatedTasksAuditLogsCreationRoute
-  '/_authenticated/tasks_/audit-logs/deletion': typeof AuthenticatedTasksAuditLogsDeletionRoute
-  '/_authenticated/tasks_/audit-logs/update': typeof AuthenticatedTasksAuditLogsUpdateRoute
+  '/_authenticated/_layout/tasks': typeof AuthenticatedLayoutTasksRoute
+  '/_authenticated/_layout/tasks_/$taskId': typeof AuthenticatedLayoutTasksTaskIdRoute
+  '/_authenticated/_layout/tasks_/audit-logs': typeof AuthenticatedLayoutTasksAuditLogsRouteWithChildren
+  '/_authenticated/_layout/tasks_/audit-logs/creation': typeof AuthenticatedLayoutTasksAuditLogsCreationRoute
+  '/_authenticated/_layout/tasks_/audit-logs/deletion': typeof AuthenticatedLayoutTasksAuditLogsDeletionRoute
+  '/_authenticated/_layout/tasks_/audit-logs/update': typeof AuthenticatedLayoutTasksAuditLogsUpdateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/$'
-    | '/tasks'
     | '/login'
     | '/register'
+    | '/tasks'
     | '/tasks/$taskId'
     | '/tasks/audit-logs'
     | '/tasks/audit-logs/creation'
@@ -131,9 +139,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/$'
-    | '/tasks'
     | '/login'
     | '/register'
+    | '/tasks'
     | '/tasks/$taskId'
     | '/tasks/audit-logs'
     | '/tasks/audit-logs/creation'
@@ -144,14 +152,15 @@ export interface FileRouteTypes {
     | '/$'
     | '/_authenticated'
     | '/_public'
-    | '/_authenticated/tasks'
+    | '/_authenticated/_layout'
     | '/_public/login'
     | '/_public/register'
-    | '/_authenticated/tasks_/$taskId'
-    | '/_authenticated/tasks_/audit-logs'
-    | '/_authenticated/tasks_/audit-logs/creation'
-    | '/_authenticated/tasks_/audit-logs/deletion'
-    | '/_authenticated/tasks_/audit-logs/update'
+    | '/_authenticated/_layout/tasks'
+    | '/_authenticated/_layout/tasks_/$taskId'
+    | '/_authenticated/_layout/tasks_/audit-logs'
+    | '/_authenticated/_layout/tasks_/audit-logs/creation'
+    | '/_authenticated/_layout/tasks_/audit-logs/deletion'
+    | '/_authenticated/_layout/tasks_/audit-logs/update'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -197,83 +206,104 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof PublicRoute
     }
-    '/_authenticated/tasks': {
-      id: '/_authenticated/tasks'
+    '/_authenticated/_layout': {
+      id: '/_authenticated/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedLayoutRouteRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/_layout/tasks': {
+      id: '/_authenticated/_layout/tasks'
       path: '/tasks'
       fullPath: '/tasks'
-      preLoaderRoute: typeof AuthenticatedTasksRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof AuthenticatedLayoutTasksRouteImport
+      parentRoute: typeof AuthenticatedLayoutRouteRoute
     }
-    '/_authenticated/tasks_/audit-logs': {
-      id: '/_authenticated/tasks_/audit-logs'
+    '/_authenticated/_layout/tasks_/audit-logs': {
+      id: '/_authenticated/_layout/tasks_/audit-logs'
       path: '/tasks/audit-logs'
       fullPath: '/tasks/audit-logs'
-      preLoaderRoute: typeof AuthenticatedTasksAuditLogsRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof AuthenticatedLayoutTasksAuditLogsRouteImport
+      parentRoute: typeof AuthenticatedLayoutRouteRoute
     }
-    '/_authenticated/tasks_/$taskId': {
-      id: '/_authenticated/tasks_/$taskId'
+    '/_authenticated/_layout/tasks_/$taskId': {
+      id: '/_authenticated/_layout/tasks_/$taskId'
       path: '/tasks/$taskId'
       fullPath: '/tasks/$taskId'
-      preLoaderRoute: typeof AuthenticatedTasksTaskIdRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof AuthenticatedLayoutTasksTaskIdRouteImport
+      parentRoute: typeof AuthenticatedLayoutRouteRoute
     }
-    '/_authenticated/tasks_/audit-logs/update': {
-      id: '/_authenticated/tasks_/audit-logs/update'
+    '/_authenticated/_layout/tasks_/audit-logs/update': {
+      id: '/_authenticated/_layout/tasks_/audit-logs/update'
       path: '/update'
       fullPath: '/tasks/audit-logs/update'
-      preLoaderRoute: typeof AuthenticatedTasksAuditLogsUpdateRouteImport
-      parentRoute: typeof AuthenticatedTasksAuditLogsRoute
+      preLoaderRoute: typeof AuthenticatedLayoutTasksAuditLogsUpdateRouteImport
+      parentRoute: typeof AuthenticatedLayoutTasksAuditLogsRoute
     }
-    '/_authenticated/tasks_/audit-logs/deletion': {
-      id: '/_authenticated/tasks_/audit-logs/deletion'
+    '/_authenticated/_layout/tasks_/audit-logs/deletion': {
+      id: '/_authenticated/_layout/tasks_/audit-logs/deletion'
       path: '/deletion'
       fullPath: '/tasks/audit-logs/deletion'
-      preLoaderRoute: typeof AuthenticatedTasksAuditLogsDeletionRouteImport
-      parentRoute: typeof AuthenticatedTasksAuditLogsRoute
+      preLoaderRoute: typeof AuthenticatedLayoutTasksAuditLogsDeletionRouteImport
+      parentRoute: typeof AuthenticatedLayoutTasksAuditLogsRoute
     }
-    '/_authenticated/tasks_/audit-logs/creation': {
-      id: '/_authenticated/tasks_/audit-logs/creation'
+    '/_authenticated/_layout/tasks_/audit-logs/creation': {
+      id: '/_authenticated/_layout/tasks_/audit-logs/creation'
       path: '/creation'
       fullPath: '/tasks/audit-logs/creation'
-      preLoaderRoute: typeof AuthenticatedTasksAuditLogsCreationRouteImport
-      parentRoute: typeof AuthenticatedTasksAuditLogsRoute
+      preLoaderRoute: typeof AuthenticatedLayoutTasksAuditLogsCreationRouteImport
+      parentRoute: typeof AuthenticatedLayoutTasksAuditLogsRoute
     }
   }
 }
 
-interface AuthenticatedTasksAuditLogsRouteChildren {
-  AuthenticatedTasksAuditLogsCreationRoute: typeof AuthenticatedTasksAuditLogsCreationRoute
-  AuthenticatedTasksAuditLogsDeletionRoute: typeof AuthenticatedTasksAuditLogsDeletionRoute
-  AuthenticatedTasksAuditLogsUpdateRoute: typeof AuthenticatedTasksAuditLogsUpdateRoute
+interface AuthenticatedLayoutTasksAuditLogsRouteChildren {
+  AuthenticatedLayoutTasksAuditLogsCreationRoute: typeof AuthenticatedLayoutTasksAuditLogsCreationRoute
+  AuthenticatedLayoutTasksAuditLogsDeletionRoute: typeof AuthenticatedLayoutTasksAuditLogsDeletionRoute
+  AuthenticatedLayoutTasksAuditLogsUpdateRoute: typeof AuthenticatedLayoutTasksAuditLogsUpdateRoute
 }
 
-const AuthenticatedTasksAuditLogsRouteChildren: AuthenticatedTasksAuditLogsRouteChildren =
+const AuthenticatedLayoutTasksAuditLogsRouteChildren: AuthenticatedLayoutTasksAuditLogsRouteChildren =
   {
-    AuthenticatedTasksAuditLogsCreationRoute:
-      AuthenticatedTasksAuditLogsCreationRoute,
-    AuthenticatedTasksAuditLogsDeletionRoute:
-      AuthenticatedTasksAuditLogsDeletionRoute,
-    AuthenticatedTasksAuditLogsUpdateRoute:
-      AuthenticatedTasksAuditLogsUpdateRoute,
+    AuthenticatedLayoutTasksAuditLogsCreationRoute:
+      AuthenticatedLayoutTasksAuditLogsCreationRoute,
+    AuthenticatedLayoutTasksAuditLogsDeletionRoute:
+      AuthenticatedLayoutTasksAuditLogsDeletionRoute,
+    AuthenticatedLayoutTasksAuditLogsUpdateRoute:
+      AuthenticatedLayoutTasksAuditLogsUpdateRoute,
   }
 
-const AuthenticatedTasksAuditLogsRouteWithChildren =
-  AuthenticatedTasksAuditLogsRoute._addFileChildren(
-    AuthenticatedTasksAuditLogsRouteChildren,
+const AuthenticatedLayoutTasksAuditLogsRouteWithChildren =
+  AuthenticatedLayoutTasksAuditLogsRoute._addFileChildren(
+    AuthenticatedLayoutTasksAuditLogsRouteChildren,
+  )
+
+interface AuthenticatedLayoutRouteRouteChildren {
+  AuthenticatedLayoutTasksRoute: typeof AuthenticatedLayoutTasksRoute
+  AuthenticatedLayoutTasksTaskIdRoute: typeof AuthenticatedLayoutTasksTaskIdRoute
+  AuthenticatedLayoutTasksAuditLogsRoute: typeof AuthenticatedLayoutTasksAuditLogsRouteWithChildren
+}
+
+const AuthenticatedLayoutRouteRouteChildren: AuthenticatedLayoutRouteRouteChildren =
+  {
+    AuthenticatedLayoutTasksRoute: AuthenticatedLayoutTasksRoute,
+    AuthenticatedLayoutTasksTaskIdRoute: AuthenticatedLayoutTasksTaskIdRoute,
+    AuthenticatedLayoutTasksAuditLogsRoute:
+      AuthenticatedLayoutTasksAuditLogsRouteWithChildren,
+  }
+
+const AuthenticatedLayoutRouteRouteWithChildren =
+  AuthenticatedLayoutRouteRoute._addFileChildren(
+    AuthenticatedLayoutRouteRouteChildren,
   )
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedTasksRoute: typeof AuthenticatedTasksRoute
-  AuthenticatedTasksTaskIdRoute: typeof AuthenticatedTasksTaskIdRoute
-  AuthenticatedTasksAuditLogsRoute: typeof AuthenticatedTasksAuditLogsRouteWithChildren
+  AuthenticatedLayoutRouteRoute: typeof AuthenticatedLayoutRouteRouteWithChildren
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedTasksRoute: AuthenticatedTasksRoute,
-  AuthenticatedTasksTaskIdRoute: AuthenticatedTasksTaskIdRoute,
-  AuthenticatedTasksAuditLogsRoute:
-    AuthenticatedTasksAuditLogsRouteWithChildren,
+  AuthenticatedLayoutRouteRoute: AuthenticatedLayoutRouteRouteWithChildren,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
