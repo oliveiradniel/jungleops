@@ -3,6 +3,7 @@ import { useAuth } from '@/app/hooks/use-auth';
 import { Calendar, LogOut, User } from 'lucide-react';
 
 import { formatDateToBR } from '@/app/utils/format-date-br';
+import { truncateString } from '@/app/utils/truncate-string';
 
 import { Button } from '@/view/components/ui/button';
 import {
@@ -30,7 +31,9 @@ export function ProfilePopover() {
             </span>
           </div>
 
-          <span className="font-normal">{user?.username}</span>
+          <span className="font-normal">
+            {truncateString(user?.username ?? '', 10)}
+          </span>
         </Button>
       </PopoverTrigger>
 
