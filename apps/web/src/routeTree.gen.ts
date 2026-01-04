@@ -12,9 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as SplatRouteImport } from './routes/$'
-import { Route as PublicRegisterRouteImport } from './routes/_public/register'
-import { Route as PublicLoginRouteImport } from './routes/_public/login'
+import { Route as PublicLayoutRouteRouteImport } from './routes/_public/_layout/route'
 import { Route as AuthenticatedLayoutRouteRouteImport } from './routes/_authenticated/_layout/route'
+import { Route as PublicLayoutRegisterRouteImport } from './routes/_public/_layout/register'
+import { Route as PublicLayoutLoginRouteImport } from './routes/_public/_layout/login'
 import { Route as AuthenticatedLayoutTasksRouteImport } from './routes/_authenticated/_layout/tasks'
 import { Route as AuthenticatedLayoutTasksAuditLogsRouteImport } from './routes/_authenticated/_layout/tasks_/audit-logs'
 import { Route as AuthenticatedLayoutTasksTaskIdRouteImport } from './routes/_authenticated/_layout/tasks_/$taskId'
@@ -35,14 +36,8 @@ const SplatRoute = SplatRouteImport.update({
   path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PublicRegisterRoute = PublicRegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
-  getParentRoute: () => PublicRoute,
-} as any)
-const PublicLoginRoute = PublicLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const PublicLayoutRouteRoute = PublicLayoutRouteRouteImport.update({
+  id: '/_layout',
   getParentRoute: () => PublicRoute,
 } as any)
 const AuthenticatedLayoutRouteRoute =
@@ -50,6 +45,16 @@ const AuthenticatedLayoutRouteRoute =
     id: '/_layout',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const PublicLayoutRegisterRoute = PublicLayoutRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => PublicLayoutRouteRoute,
+} as any)
+const PublicLayoutLoginRoute = PublicLayoutLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => PublicLayoutRouteRoute,
+} as any)
 const AuthenticatedLayoutTasksRoute =
   AuthenticatedLayoutTasksRouteImport.update({
     id: '/tasks',
@@ -89,9 +94,9 @@ const AuthenticatedLayoutTasksAuditLogsCreationRoute =
 
 export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
-  '/login': typeof PublicLoginRoute
-  '/register': typeof PublicRegisterRoute
   '/tasks': typeof AuthenticatedLayoutTasksRoute
+  '/login': typeof PublicLayoutLoginRoute
+  '/register': typeof PublicLayoutRegisterRoute
   '/tasks/$taskId': typeof AuthenticatedLayoutTasksTaskIdRoute
   '/tasks/audit-logs': typeof AuthenticatedLayoutTasksAuditLogsRouteWithChildren
   '/tasks/audit-logs/creation': typeof AuthenticatedLayoutTasksAuditLogsCreationRoute
@@ -100,9 +105,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/$': typeof SplatRoute
-  '/login': typeof PublicLoginRoute
-  '/register': typeof PublicRegisterRoute
   '/tasks': typeof AuthenticatedLayoutTasksRoute
+  '/login': typeof PublicLayoutLoginRoute
+  '/register': typeof PublicLayoutRegisterRoute
   '/tasks/$taskId': typeof AuthenticatedLayoutTasksTaskIdRoute
   '/tasks/audit-logs': typeof AuthenticatedLayoutTasksAuditLogsRouteWithChildren
   '/tasks/audit-logs/creation': typeof AuthenticatedLayoutTasksAuditLogsCreationRoute
@@ -115,9 +120,10 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
   '/_authenticated/_layout': typeof AuthenticatedLayoutRouteRouteWithChildren
-  '/_public/login': typeof PublicLoginRoute
-  '/_public/register': typeof PublicRegisterRoute
+  '/_public/_layout': typeof PublicLayoutRouteRouteWithChildren
   '/_authenticated/_layout/tasks': typeof AuthenticatedLayoutTasksRoute
+  '/_public/_layout/login': typeof PublicLayoutLoginRoute
+  '/_public/_layout/register': typeof PublicLayoutRegisterRoute
   '/_authenticated/_layout/tasks_/$taskId': typeof AuthenticatedLayoutTasksTaskIdRoute
   '/_authenticated/_layout/tasks_/audit-logs': typeof AuthenticatedLayoutTasksAuditLogsRouteWithChildren
   '/_authenticated/_layout/tasks_/audit-logs/creation': typeof AuthenticatedLayoutTasksAuditLogsCreationRoute
@@ -128,9 +134,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/$'
+    | '/tasks'
     | '/login'
     | '/register'
-    | '/tasks'
     | '/tasks/$taskId'
     | '/tasks/audit-logs'
     | '/tasks/audit-logs/creation'
@@ -139,9 +145,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/$'
+    | '/tasks'
     | '/login'
     | '/register'
-    | '/tasks'
     | '/tasks/$taskId'
     | '/tasks/audit-logs'
     | '/tasks/audit-logs/creation'
@@ -153,9 +159,10 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/_public'
     | '/_authenticated/_layout'
-    | '/_public/login'
-    | '/_public/register'
+    | '/_public/_layout'
     | '/_authenticated/_layout/tasks'
+    | '/_public/_layout/login'
+    | '/_public/_layout/register'
     | '/_authenticated/_layout/tasks_/$taskId'
     | '/_authenticated/_layout/tasks_/audit-logs'
     | '/_authenticated/_layout/tasks_/audit-logs/creation'
@@ -192,18 +199,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_public/register': {
-      id: '/_public/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof PublicRegisterRouteImport
-      parentRoute: typeof PublicRoute
-    }
-    '/_public/login': {
-      id: '/_public/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof PublicLoginRouteImport
+    '/_public/_layout': {
+      id: '/_public/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PublicLayoutRouteRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_authenticated/_layout': {
@@ -212,6 +212,20 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof AuthenticatedLayoutRouteRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/_public/_layout/register': {
+      id: '/_public/_layout/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof PublicLayoutRegisterRouteImport
+      parentRoute: typeof PublicLayoutRouteRoute
+    }
+    '/_public/_layout/login': {
+      id: '/_public/_layout/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicLayoutLoginRouteImport
+      parentRoute: typeof PublicLayoutRouteRoute
     }
     '/_authenticated/_layout/tasks': {
       id: '/_authenticated/_layout/tasks'
@@ -310,14 +324,25 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
   AuthenticatedRouteChildren,
 )
 
+interface PublicLayoutRouteRouteChildren {
+  PublicLayoutLoginRoute: typeof PublicLayoutLoginRoute
+  PublicLayoutRegisterRoute: typeof PublicLayoutRegisterRoute
+}
+
+const PublicLayoutRouteRouteChildren: PublicLayoutRouteRouteChildren = {
+  PublicLayoutLoginRoute: PublicLayoutLoginRoute,
+  PublicLayoutRegisterRoute: PublicLayoutRegisterRoute,
+}
+
+const PublicLayoutRouteRouteWithChildren =
+  PublicLayoutRouteRoute._addFileChildren(PublicLayoutRouteRouteChildren)
+
 interface PublicRouteChildren {
-  PublicLoginRoute: typeof PublicLoginRoute
-  PublicRegisterRoute: typeof PublicRegisterRoute
+  PublicLayoutRouteRoute: typeof PublicLayoutRouteRouteWithChildren
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
-  PublicLoginRoute: PublicLoginRoute,
-  PublicRegisterRoute: PublicRegisterRoute,
+  PublicLayoutRouteRoute: PublicLayoutRouteRouteWithChildren,
 }
 
 const PublicRouteWithChildren =

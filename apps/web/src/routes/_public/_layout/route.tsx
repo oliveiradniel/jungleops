@@ -1,6 +1,11 @@
-import { Link, Outlet, useMatches } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useMatches,
+} from '@tanstack/react-router';
 
-import jungleGamingLogo from '../../assets/images/logo.svg';
+import jungleGamingLogo from '@/assets/images/logo.svg';
 
 import {
   Card,
@@ -9,16 +14,18 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../../view/components/ui/card';
-import { Button } from '../../view/components/ui/button';
+} from '@/view/components/ui/card';
+import { Button } from '@/view/components/ui/button';
 
-export function AuthLayout() {
+export const Route = createFileRoute('/_public/_layout')({
+  component: Layout,
+});
+
+export function Layout() {
   const matches = useMatches();
   const lastMatch = matches[matches.length - 1];
   const { lead, description, calloutText, authPrompt, authLinkLabel, href } =
     lastMatch.staticData;
-
-  console.log(href);
 
   return (
     <div className="flex h-screen items-center justify-center bg-[url('/background.jpg')] bg-cover bg-center p-4">
