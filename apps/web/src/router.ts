@@ -8,9 +8,3 @@ export const router = createRouter({
   routeTree: routeTree,
   context: {} as { queryClient: QueryClient },
 });
-
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router;
-  }
-}
