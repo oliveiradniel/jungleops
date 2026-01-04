@@ -21,7 +21,7 @@ import {
 } from '@/view/components/ui/popover';
 import { Textarea } from '@/view/components/ui/textarea';
 
-import type { TaskStatus } from '@/app/enums/TaskStatus';
+import type { TaskStatus } from '@challenge/shared';
 
 interface TaskActionsPopover {
   taskId: string;
