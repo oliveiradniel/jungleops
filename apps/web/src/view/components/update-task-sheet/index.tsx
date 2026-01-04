@@ -2,6 +2,8 @@ import { useUpdateTaskSheetController } from './use-update-task-sheet-controller
 
 import { Controller } from 'react-hook-form';
 
+import { truncateString } from '@/app/utils/truncate-string';
+
 import { SheetTemplate } from '../sheet-template';
 import { FormGroup } from '../ui/form-group';
 import { Label } from '../ui/label';
@@ -144,7 +146,7 @@ export function UpdateTaskSheet({ taskData }: { taskData: Task | undefined }) {
                           <CheckboxIndicator />
 
                           <Label htmlFor="" className="font-normal">
-                            {username}
+                            {truncateString(username, 30)}
                           </Label>
                         </CheckboxItem>
                       </div>
