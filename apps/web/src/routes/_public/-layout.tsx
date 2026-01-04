@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, Outlet, useMatches } from '@tanstack/react-router';
 
 import jungleGamingLogo from '../../assets/images/logo.svg';
 
@@ -9,30 +9,17 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../components/ui/card';
-import { Button } from './ui/button';
+} from '../../view/components/ui/card';
+import { Button } from '../../view/components/ui/button';
 
-interface AuthPageTemplateProps {
-  children: React.ReactNode;
-  lead: string;
-  description: string;
-  calloutText: string;
-  authPrompt: string;
-  authLinkLabel: string;
-  href: '/login' | '/register';
-  isSubmitLoading: boolean;
-}
+export function AuthLayout() {
+  const matches = useMatches();
+  const lastMatch = matches[matches.length - 1];
+  const { lead, description, calloutText, authPrompt, authLinkLabel, href } =
+    lastMatch.staticData;
 
-export function AuthPageTemplate({
-  children,
-  lead,
-  description,
-  calloutText,
-  authPrompt,
-  authLinkLabel,
-  href,
-  isSubmitLoading,
-}: AuthPageTemplateProps) {
+  console.log(href);
+
   return (
     <div className="flex h-screen items-center justify-center bg-[url('/background.jpg')] bg-cover bg-center p-4">
       <div className="bg-muted/10 h-full w-full rounded-4xl shadow-2xl transition-all md:p-4 lg:max-w-[80%]">
@@ -58,7 +45,9 @@ export function AuthPageTemplate({
                   </CardDescription>
                 </CardHeader>
 
-                <CardContent>{children}</CardContent>
+                <CardContent>
+                  <Outlet />
+                </CardContent>
 
                 <CardFooter className="flex flex-col items-start">
                   <div className="flex items-center gap-2">
@@ -71,10 +60,9 @@ export function AuthPageTemplate({
                       type="button"
                       size="sm"
                       variant="link"
-                      disabled={isSubmitLoading}
                       className="p-0"
                     >
-                      <Link to={href} search={{ redirect: '/tasks' }}>
+                      <Link to={href!} search={{ redirect: '/tasks' }}>
                         {authLinkLabel}
                       </Link>
                     </Button>
