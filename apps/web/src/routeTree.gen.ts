@@ -9,9 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SplatRouteImport } from './routes/$'
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as SplatRouteRouteImport } from './routes/$/route'
 import { Route as PublicLayoutRouteRouteImport } from './routes/_public/_layout/route'
 import { Route as AuthenticatedLayoutRouteRouteImport } from './routes/_authenticated/_layout/route'
 import { Route as PublicLayoutRegisterRouteImport } from './routes/_public/_layout/register'
@@ -23,17 +23,17 @@ import { Route as AuthenticatedLayoutTasksAuditLogsUpdateRouteImport } from './r
 import { Route as AuthenticatedLayoutTasksAuditLogsDeletionRouteImport } from './routes/_authenticated/_layout/tasks_/audit-logs/deletion'
 import { Route as AuthenticatedLayoutTasksAuditLogsCreationRouteImport } from './routes/_authenticated/_layout/tasks_/audit-logs/creation'
 
-const SplatRoute = SplatRouteImport.update({
-  id: '/$',
-  path: '/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplatRouteRoute = SplatRouteRouteImport.update({
+  id: '/$',
+  path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PublicLayoutRouteRoute = PublicLayoutRouteRouteImport.update({
@@ -93,7 +93,7 @@ const AuthenticatedLayoutTasksAuditLogsCreationRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/$': typeof SplatRoute
+  '/$': typeof SplatRouteRoute
   '/tasks': typeof AuthenticatedLayoutTasksRoute
   '/login': typeof PublicLayoutLoginRoute
   '/register': typeof PublicLayoutRegisterRoute
@@ -104,7 +104,7 @@ export interface FileRoutesByFullPath {
   '/tasks/audit-logs/update': typeof AuthenticatedLayoutTasksAuditLogsUpdateRoute
 }
 export interface FileRoutesByTo {
-  '/$': typeof SplatRoute
+  '/$': typeof SplatRouteRoute
   '/tasks': typeof AuthenticatedLayoutTasksRoute
   '/login': typeof PublicLayoutLoginRoute
   '/register': typeof PublicLayoutRegisterRoute
@@ -116,9 +116,9 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/$': typeof SplatRouteRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/_public': typeof PublicRouteRouteWithChildren
-  '/$': typeof SplatRoute
   '/_authenticated/_layout': typeof AuthenticatedLayoutRouteRouteWithChildren
   '/_public/_layout': typeof PublicLayoutRouteRouteWithChildren
   '/_authenticated/_layout/tasks': typeof AuthenticatedLayoutTasksRoute
@@ -155,9 +155,9 @@ export interface FileRouteTypes {
     | '/tasks/audit-logs/update'
   id:
     | '__root__'
+    | '/$'
     | '/_authenticated'
     | '/_public'
-    | '/$'
     | '/_authenticated/_layout'
     | '/_public/_layout'
     | '/_authenticated/_layout/tasks'
@@ -171,20 +171,13 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  SplatRouteRoute: typeof SplatRouteRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   PublicRouteRoute: typeof PublicRouteRouteWithChildren
-  SplatRoute: typeof SplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/$': {
-      id: '/$'
-      path: '/$'
-      fullPath: '/$'
-      preLoaderRoute: typeof SplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_public': {
       id: '/_public'
       path: ''
@@ -197,6 +190,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_public/_layout': {
@@ -349,9 +349,9 @@ const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  SplatRouteRoute: SplatRouteRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   PublicRouteRoute: PublicRouteRouteWithChildren,
-  SplatRoute: SplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

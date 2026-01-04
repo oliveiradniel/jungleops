@@ -1,10 +1,10 @@
 import { useAuth } from '@/app/hooks/use-auth';
 
-import pageNotFound from '../../assets/images/page-not-found.svg';
+import pageNotFound from '@/assets/images/page-not-found.svg';
 
-import { Separator } from '@radix-ui/react-separator';
-import { Button } from '../components/ui/button';
+import { Button } from '@/view/components/ui/button';
 import { Link } from '@tanstack/react-router';
+import { Separator } from '@/view/components/ui/separator';
 
 export function NotFound() {
   const { isAuthenticated } = useAuth();
