@@ -40,6 +40,10 @@ export class NotificationsService {
     await this.notificationsRepository.read(id);
   }
 
+  async readAllNotificationsByUserId(userId: string): Promise<void> {
+    await this.notificationsRepository.readAllNotificationsByUserId(userId);
+  }
+
   async delete(id: string): Promise<void> {
     await this.verifyNotificationExists(id);
 

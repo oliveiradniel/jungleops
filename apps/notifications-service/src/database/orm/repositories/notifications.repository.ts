@@ -64,6 +64,13 @@ export class NotificationsRepository implements INotificationsRepository {
     });
   }
 
+  async readAllNotificationsByUserId(userId: string): Promise<void> {
+    await this.notificationsRepository.update(
+      { userId, read: false },
+      { read: true },
+    );
+  }
+
   async delete(id: string): Promise<void> {
     await this.notificationsRepository.delete(id);
   }

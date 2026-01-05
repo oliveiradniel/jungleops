@@ -10,5 +10,6 @@ export abstract class INotificationsRepository {
   ): Promise<Notification[]>;
   abstract create(data: CreateNotificationData): Promise<Notification>;
   abstract read(id: string): Promise<void>;
+  abstract readAllNotificationsByUserId(userId: string): Promise<void>;
   abstract delete(id: string): Promise<void>;
 }
