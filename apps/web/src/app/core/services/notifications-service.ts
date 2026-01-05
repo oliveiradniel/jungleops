@@ -21,4 +21,8 @@ export class NotificationsService implements INotificationsService {
   read(notificationId: string): Promise<void> {
     return this.httpClient.patch(`notifications/${notificationId}`);
   }
+
+  readAllNotifications(): Promise<void> {
+    return this.httpClient.patch('notifications/read-all');
+  }
 }
