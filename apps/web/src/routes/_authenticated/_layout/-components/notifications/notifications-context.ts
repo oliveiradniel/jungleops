@@ -14,8 +14,10 @@ interface NotificationsContextValues {
   readNotificationsCount: number;
   updatedNotificationId: string | null;
   isReadNotificationLoading: boolean;
+  isReadAllNotificationsLoading: boolean;
   handleToggleTypeNotification: (type: NotificationType) => void;
   handleReadNotification: (notificationId: string) => void;
+  handleReadAllNotifications: () => void;
 }
 
 export const NotificationsContext = createContext(

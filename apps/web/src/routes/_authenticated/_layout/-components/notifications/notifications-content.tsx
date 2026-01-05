@@ -19,7 +19,9 @@ export function NotificationsContent() {
     emptyNotifications,
     readNotificationsCount,
     unreadNotificationsCount,
+    isReadAllNotificationsLoading,
     handleToggleTypeNotification,
+    handleReadAllNotifications,
   } = useNotifications();
 
   return (
@@ -29,7 +31,13 @@ export function NotificationsContent() {
           <p className="text-sm font-semibold">Notificações</p>
 
           {typeNotifications === 'unread' && unreadNotificationsCount > 0 && (
-            <Button variant="link" size="sm" className="text-primary text-xs">
+            <Button
+              disabled={isReadAllNotificationsLoading}
+              variant="link"
+              size="sm"
+              onClick={() => handleReadAllNotifications()}
+              className="text-primary text-xs"
+            >
               <CheckCheckIcon />
               Ler todas
             </Button>

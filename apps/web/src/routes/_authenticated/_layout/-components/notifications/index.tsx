@@ -4,6 +4,7 @@ import { useListTaskDeletionAuditLogQuery } from '@/app/hooks/queries/use-list-t
 import { useListReadNotifications } from '@/app/hooks/queries/use-list-read-notifications';
 import { useListUnreadNotifications } from '@/app/hooks/queries/use-list-unread-notifications copy';
 import { useReadNotification } from '@/app/hooks/mutations/use-read-notification';
+import { useReadAllNotifications } from '@/app/hooks/mutations/use-read-all-notifications';
 
 import { NotificationsContext } from './notifications-context';
 
@@ -31,6 +32,8 @@ export function Notifications() {
   const { readNotifications } = useListReadNotifications();
   const { unreadNotifications } = useListUnreadNotifications();
   const { readNotification, isReadNotificationLoading } = useReadNotification();
+  const { readAllNotifications, isReadAllNotificationsLoading } =
+    useReadAllNotifications();
 
   const inactiveTasksOfReadNotifications = readNotifications.filter(
     ({ metadata }) => deletedTaskIds.has(metadata.task.id),
@@ -67,7 +70,7 @@ export function Notifications() {
 
   async function handleReadNotification(notificationId: string) {
     try {
-      if (typeNotifications === 'read') return;
+      if (typeNotifications === 'read' || isReadAllNotificationsLoading) return;
 
       setUpdatedNotificationId(notificationId);
 
@@ -90,6 +93,25 @@ export function Notifications() {
     }
   }
 
+  async function handleReadAllNotifications() {
+    try {
+      await readAllNotifications();
+
+      invalidateQueries({
+        queryClient,
+        invalidateQuery: [
+          { queryKey: ['read-notifications'] },
+          { queryKey: ['unread-notifications'] },
+        ],
+      });
+    } catch {
+      toast({
+        type: 'error',
+        description: 'Houve um erro ao ler todas as notificações!',
+      });
+    }
+  }
+
   return (
     <NotificationsContext.Provider
       value={{
@@ -102,8 +124,10 @@ export function Notifications() {
         readNotificationsCount: readNotifications.length,
         updatedNotificationId,
         isReadNotificationLoading,
+        isReadAllNotificationsLoading,
         handleToggleTypeNotification,
         handleReadNotification,
+        handleReadAllNotifications,
       }}
     >
       <NotificationsPopover />

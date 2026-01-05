@@ -27,6 +27,7 @@ export function NotificationCard({
   const {
     updatedNotificationId,
     isReadNotificationLoading,
+    isReadAllNotificationsLoading,
     handleReadNotification,
   } = useNotifications();
 
@@ -40,11 +41,15 @@ export function NotificationCard({
   const username = notification.metadata.author.username as string;
   const parsedCreatedAt = formatDateToBR(notification.createdAt);
 
+  const isLoading =
+    (isReadNotificationLoading && updatedNotificationId === notification.id) ||
+    isReadAllNotificationsLoading;
+
   const content = (
     <div
       className={cn(
         'group flex cursor-pointer items-start gap-2 rounded-sm p-4 shadow-xs transition-all duration-300 ease-linear',
-        thisTaskDeleted
+        thisTaskDeleted || isLoading
           ? 'opacity-70'
           : 'hover:-translate-y-0.5 hover:shadow-sm',
       )}
@@ -72,10 +77,7 @@ export function NotificationCard({
           )}
         />
 
-        {isReadNotificationLoading &&
-          updatedNotificationId === notification.id && (
-            <Spinner className="text-background absolute size-6" />
-          )}
+        {isLoading && <Spinner className="text-background absolute size-6" />}
       </div>
 
       <div className="flex flex-1 flex-col gap-2">
