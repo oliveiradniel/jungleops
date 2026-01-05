@@ -30,6 +30,13 @@ export class NotificationsController {
     return this.notificationsService.listUnreadNotificationsByUserId(userId!);
   }
 
+  @Patch('read-all')
+  readAll(@Req() request: Request): Promise<void> {
+    const userId = request.user?.userId;
+
+    return this.notificationsService.readAllNotificationsByUserId(userId!);
+  }
+
   @Patch(':notificationId')
   read(@Param() params: NotificationIdParam): Promise<void> {
     const { notificationId } = params;

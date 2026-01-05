@@ -43,6 +43,12 @@ export class NotificationsService {
     );
   }
 
+  async readAllNotificationsByUserId(userId: string): Promise<void> {
+    await firstValueFrom(
+      this.httpService.patch<void>(`${this.baseURL}/read-all/${userId}`),
+    );
+  }
+
   async delete(notificationId: string): Promise<void> {
     await firstValueFrom(
       this.httpService.delete<void>(`${this.baseURL}/${notificationId}`),
