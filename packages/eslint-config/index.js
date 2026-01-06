@@ -1,6 +1,4 @@
-import nest from './nest.js';
-import react from './react.js';
-import base from './base.js';
+import { config as nest } from './nest.js';
 
-export { nest, react, base };
-export default base;
+export { nest };
+export default { nest };
