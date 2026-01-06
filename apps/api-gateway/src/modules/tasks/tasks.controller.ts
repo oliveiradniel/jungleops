@@ -186,7 +186,7 @@ export class TasksController {
   }
 
   @ApiNoContentResponse({
-    description: 'Task successfully updated. No content is returned.',
+    description: 'Task successfully deleted. No content is returned.',
   })
   @ApiNotFoundResponse({
     description: 'No task found with the provided ID.',
