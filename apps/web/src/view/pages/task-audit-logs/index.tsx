@@ -4,17 +4,31 @@ import { TaskAuditLogProvider } from './context/task-audit-log-provider';
 
 import { FilePen, Filter, PlusSquare, Trash2 } from 'lucide-react';
 
-import { Button } from '@/view/components/ui/button';
-
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/view/components/ui/popover';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/view/components/ui/select';
 
 export function TaskAuditLogs() {
   const { navigate } = useRouter();
-  const location = useLocation();
+  const { pathname } = useLocation();
+
+  const textLabel =
+    pathname === '/tasks/audit-logs/creation'
+      ? 'Criações de tarefas'
+      : pathname === '/tasks/audit-logs/update'
+        ? 'Alteração de tarefas'
+        : pathname === '/tasks/audit-logs/deletion'
+          ? 'Exclusão de tarefas'
+          : 'Selecione um tipo de ação';
+
+  const hasFilter =
+    pathname === '/tasks/audit-logs/creation' ||
+    pathname === '/tasks/audit-logs/update' ||
+    pathname === '/tasks/audit-logs/deletion';
 
   const optionsTaskAuditLogFilterAction = [
     {
@@ -38,7 +52,7 @@ export function TaskAuditLogs() {
   ];
 
   useEffect(() => {
-    if (location.pathname === '/tasks/audit-logs') {
+    if (pathname === '/tasks/audit-logs') {
       navigate({ to: '/tasks/audit-logs/creation' });
     }
   }, []);
@@ -46,49 +60,30 @@ export function TaskAuditLogs() {
   return (
     <>
       <div className="flex h-[calc(100%-90px)] w-full flex-col gap-6 p-6">
-        <h1 className="text-2xl">
-          {location.pathname === '/tasks/audit-logs/creation' &&
-            'Criações de tarefas'}
-          {location.pathname === '/tasks/audit-logs/update' &&
-            'Alteração de tarefas'}
-          {location.pathname === '/tasks/audit-logs/deletion' &&
-            'Exclusão de tarefas'}
-          {location.pathname === '/tasks/audit-logs' &&
-            'Selecione um tipo de ação'}
-        </h1>
+        <h1 className="text-2xl">{textLabel}</h1>
 
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              aria-label="Abrir filtros"
-              variant="outline"
-              className="max-w-60"
-            >
-              Filtrar pelo tipo de ação
-              <Filter />
-            </Button>
-          </PopoverTrigger>
+        <Select
+          value={hasFilter ? pathname : undefined}
+          onValueChange={(value) => navigate({ to: value })}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Filtrar pelo tipo de ação" />
+            <Filter />
+          </SelectTrigger>
 
-          <PopoverContent className="w-60">
-            <div className="flex flex-col gap-1">
-              {optionsTaskAuditLogFilterAction.map((option) => {
-                const isActive = location.pathname === option.pathname;
-
-                return (
-                  <Button
-                    key={option.id}
-                    variant={isActive ? 'default' : 'ghost'}
-                    onClick={() => navigate({ to: option.pathname })}
-                    className="text-muted-foreground justify-start"
-                  >
-                    {option.icon && <option.icon />}
-                    {option.label}
-                  </Button>
-                );
-              })}
-            </div>
-          </PopoverContent>
-        </Popover>
+          <SelectContent>
+            {optionsTaskAuditLogFilterAction.map((option) => (
+              <SelectItem
+                key={option.id}
+                value={option.pathname}
+                className="text-muted-foreground"
+              >
+                {option.icon && <option.icon />}
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
         <TaskAuditLogProvider>
           <Outlet />
