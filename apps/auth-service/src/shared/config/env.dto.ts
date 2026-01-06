@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString, NotEquals } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class EnvironmentVariablesDTO {
   @IsNumber()
