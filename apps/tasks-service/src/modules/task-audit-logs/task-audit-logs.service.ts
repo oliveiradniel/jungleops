@@ -23,10 +23,6 @@ export class TaskAuditLogsService {
     private readonly signalsPublisherService: SignalsPublisherService,
   ) {}
 
-  list(): Promise<TaskAuditLog[]> {
-    return this.taskAuditLogsRepository.list();
-  }
-
   listTaskCreationAuditLog(): Promise<ListCreationTaskAuditLog[]> {
     return this.taskAuditLogsRepository.listTaskCreationAuditLog();
   }

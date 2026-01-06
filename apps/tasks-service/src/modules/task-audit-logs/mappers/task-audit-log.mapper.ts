@@ -58,10 +58,6 @@ export class TaskAuditLogMapper {
     };
   }
 
-  static toDomainList(entities: TaskAuditLogEntity[]): TaskAuditLog[] {
-    return entities.map(this.toDomain);
-  }
-
   static toDomainCreationList(
     entities: TaskAuditLogEntity[],
   ): ListCreationTaskAuditLog[] {

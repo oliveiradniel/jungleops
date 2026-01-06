@@ -9,7 +9,6 @@ import {
 
 export abstract class ITaskAuditLogsRepository {
   abstract getById(id: string): Promise<TaskAuditLog | null>;
-  abstract list(): Promise<TaskAuditLog[]>;
   abstract listTaskCreationAuditLog(): Promise<ListCreationTaskAuditLog[]>;
   abstract listTaskUpdateAuditLog(): Promise<ListUpdateTaskAuditLog[]>;
   abstract listTaskDeletionAuditLog(): Promise<ListDeletionTaskAuditLog[]>;

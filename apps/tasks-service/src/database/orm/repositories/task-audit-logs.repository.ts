@@ -9,7 +9,6 @@ import { ITaskAuditLogsRepository } from 'src/database/contracts/task-audit-logs
 import type { CreateTaskAuditLogData } from 'src/modules/task-audit-logs/types/create-task-audit-log-data.type';
 
 import {
-  AuditAction,
   TaskAuditLog,
   ListCreationTaskAuditLog,
   ListUpdateTaskAuditLog,
@@ -28,12 +27,6 @@ export class TaskAuditLogsRepository implements ITaskAuditLogsRepository {
     });
 
     return taskAuditLog ? TaskAuditLogMapper.toDomain(taskAuditLog) : null;
-  }
-
-  async list(): Promise<TaskAuditLog[]> {
-    const listTaskAuditLogs = await this.taskAuditLogsRepository.find();
-
-    return TaskAuditLogMapper.toDomainList(listTaskAuditLogs);
   }
 
   async listTaskCreationAuditLog(): Promise<ListCreationTaskAuditLog[]> {

@@ -5,10 +5,8 @@ import type {
   AuditLogOfTaskDeletion,
   AuditLogOfTaskUpdate,
 } from '@/app/entities/task-audit-log';
-import type { TaskAuditLog } from '@challenge/shared';
 
 export abstract class ITaskAuditLogsService {
-  abstract list(config?: HttpRequestConfig): Promise<TaskAuditLog[]>;
   abstract listTaskCreationAuditLog(
     config?: HttpRequestConfig,
   ): Promise<AuditLogOfTaskCreation[]>;

@@ -14,18 +14,11 @@ import {
   ListCreationTaskAuditLog,
   ListDeletionTaskAuditLog,
   ListUpdateTaskAuditLog,
-  TaskAuditLog,
 } from '@challenge/shared';
 
 @Controller('task-audit-logs')
 export class TaskAuditLogsController {
   constructor(private readonly taskAuditLogsService: TaskAuditLogsService) {}
-
-  @HttpCode(HttpStatus.OK)
-  @Get()
-  list(): Promise<TaskAuditLog[]> {
-    return this.taskAuditLogsService.list();
-  }
 
   @HttpCode(HttpStatus.OK)
   @Get('creation')

@@ -12,7 +12,6 @@ import type {
   ListCreationTaskAuditLogWithAuthor,
   ListUpdateTaskAuditLogWithAuthor,
   ListDeletionTaskAuditLogWithAuthor,
-  TaskAuditLog,
 } from '@challenge/shared';
 
 export class TaskAuditLogsService implements ITaskAuditLogsService {
@@ -20,10 +19,6 @@ export class TaskAuditLogsService implements ITaskAuditLogsService {
 
   constructor(httpClient: IHttpClient) {
     this.httpClient = httpClient;
-  }
-
-  list(): Promise<TaskAuditLog[]> {
-    return this.httpClient.get('/task-audit-logs');
   }
 
   async listTaskCreationAuditLog(

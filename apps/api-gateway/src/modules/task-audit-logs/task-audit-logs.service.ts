@@ -14,7 +14,6 @@ import {
   ListDeletionTaskAuditLogWithAuthor,
   ListUpdateTaskAuditLog,
   ListUpdateTaskAuditLogWithAuthor,
-  TaskAuditLog,
   UserWithoutPassword,
 } from '@challenge/shared';
 
@@ -28,14 +27,6 @@ export class TaskAuditLogsService {
     configService: ConfigService,
   ) {
     this.baseURL = getConfig(configService).TASK_AUDIT_LOGS_SERVICE_BASE_URL;
-  }
-
-  async list(): Promise<TaskAuditLog[]> {
-    const { data } = await firstValueFrom(
-      this.httpService.get<TaskAuditLog[]>(this.baseURL),
-    );
-
-    return data;
   }
 
   async listTaskCreationAuditLog(): Promise<
