@@ -1,15 +1,15 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class BadGatewayResponse {
   @ApiProperty({
-    example: "Internal gateway error.",
-    description: "HTTP error message.",
+    example: 'Internal gateway error.',
+    description: 'HTTP error message.',
   })
   message: string;
 
   @ApiProperty({
     example: 502,
-    description: "HTTP status code.",
+    description: 'HTTP status code.',
   })
   statusCode: number;
 }

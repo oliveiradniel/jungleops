@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { getConfig } from 'src/shared/config/config.helper';
-import { firstValueFrom, last } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 import {
   CreateTaskData,

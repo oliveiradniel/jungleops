@@ -129,10 +129,10 @@ export class TaskAuditLogsService {
       | ListUpdateTaskAuditLog[]
       | ListDeletionTaskAuditLog[],
   ): Promise<T[]> {
-    const authorIds = data.map((log) => log.authorId);
+    const authorIds = data.map((log: { authorId: string }) => log.authorId);
     const authors = await this.usersService.findUsers(authorIds);
 
-    const dataWithAuthor = data.map((log) => {
+    const dataWithAuthor = data.map((log: { id: string; authorId: string }) => {
       const authorId = log.authorId;
 
       const author = authors.find(
@@ -145,6 +145,6 @@ export class TaskAuditLogsService {
       };
     });
 
-    return dataWithAuthor;
+    return dataWithAuthor as T[];
   }
 }

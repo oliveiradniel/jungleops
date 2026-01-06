@@ -1,11 +1,11 @@
-import { ConfigModuleOptions } from "@nestjs/config";
+import { ConfigModuleOptions } from '@nestjs/config';
 
-import { EnvironmentVariablesDTO } from "../config/config.dto";
+import { EnvironmentVariablesDTO } from '../config/config.dto';
 
-import { validate } from "@challenge/shared";
+import { validate } from '@challenge/shared';
 
 export const configModuleOptions: ConfigModuleOptions = {
   isGlobal: true,
-  envFilePath: ".env",
+  envFilePath: '.env',
   validate: (config) => validate(config, EnvironmentVariablesDTO),
 };

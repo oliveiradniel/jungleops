@@ -137,12 +137,12 @@ export class TasksController {
     @Body() createTaskDTO: CreateTaskDTO,
     @Req() request: Request,
   ): Promise<Task> {
-    const userId = request.user?.userId!;
+    const userId = request.user?.userId;
 
     const { title, description, term, priority, status } = createTaskDTO;
 
     return this.tasksService.create({
-      authorId: userId,
+      authorId: userId!,
       title,
       description,
       term,
@@ -169,13 +169,13 @@ export class TasksController {
     @Body() updateTaskDTO: UpdateTaskDTO,
     @Req() request: Request,
   ): Promise<void> {
-    const userId = request.user?.userId!;
+    const userId = request.user?.userId;
     const { taskId } = params;
     const { userIds, title, description, term, priority, status } =
       updateTaskDTO;
 
     await this.tasksService.update(taskId, {
-      lastEditedBy: userId,
+      lastEditedBy: userId!,
       userIds,
       title,
       description,

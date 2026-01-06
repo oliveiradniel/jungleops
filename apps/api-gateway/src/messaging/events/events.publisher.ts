@@ -36,9 +36,9 @@ export class EventsPublisher {
     await this.eventsService.taskDeleted({ authorId, task });
   }
 
-  handleTaskCommentCreated(payload: TaskCommentCreatedEvent) {
+  async handleTaskCommentCreated(payload: TaskCommentCreatedEvent) {
     const { authorId, task } = payload;
 
-    this.eventsService.taskCommentCreated({ authorId, task });
+    await this.eventsService.taskCommentCreated({ authorId, task });
   }
 }
