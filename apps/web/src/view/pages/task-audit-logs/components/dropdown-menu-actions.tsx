@@ -30,7 +30,7 @@ export function DropdownMenuActions({
   return (
     <div className="flex justify-end">
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="sm">
             <EllipsisIcon className="size-4" />
           </Button>

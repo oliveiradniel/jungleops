@@ -68,7 +68,6 @@ export function TaskAuditLogs() {
         >
           <SelectTrigger>
             <SelectValue placeholder="Filtrar pelo tipo de ação" />
-            <Filter />
           </SelectTrigger>
 
           <SelectContent>
