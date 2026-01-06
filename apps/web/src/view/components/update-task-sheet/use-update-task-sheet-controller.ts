@@ -32,6 +32,7 @@ export function useUpdateTaskSheetController(taskData: Task | undefined) {
     return new Date(y, m - 1, d);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const id = taskData?.id!;
   const title = taskData?.title;
   const description = taskData?.description;
@@ -138,7 +139,17 @@ export function useUpdateTaskSheetController(taskData: Task | undefined) {
         userIds: participantIds,
       });
     }
-  }, [taskData, isUpdateTaskSheetOpen, reset]);
+  }, [
+    taskData,
+    isUpdateTaskSheetOpen,
+    reset,
+    description,
+    priority,
+    status,
+    term,
+    title,
+    participantIds,
+  ]);
 
   return {
     control,

@@ -77,6 +77,7 @@ export function useTaskController() {
       try {
         await createComment({
           taskId,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
           data: { userId: user?.id!, comment: data.comment },
         });
 
@@ -125,7 +126,7 @@ export function useTaskController() {
         description: 'Houve um erro ao encontrar a tarefa.',
       });
     }
-  }, [hasError]);
+  }, [hasError, navigate]);
 
   return {
     task,

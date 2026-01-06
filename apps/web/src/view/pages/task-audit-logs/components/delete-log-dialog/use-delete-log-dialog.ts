@@ -57,7 +57,7 @@ export function useDeleteLogDialog({
       });
 
       handleCloseDeleteTaskAuditLogDialog();
-    } catch (error) {
+    } catch {
       toast({
         type: 'error',
         description: `Houve um erro ao excluir o audit log.`,

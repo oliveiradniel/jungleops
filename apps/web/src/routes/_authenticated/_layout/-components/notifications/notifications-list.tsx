@@ -29,6 +29,7 @@ export function NotificationsList({ notifications }: NotificationsListProps) {
     <div className="flex flex-col gap-2 py-4">
       {notifications.map((notification) => {
         const { id, kind, metadata } = notification;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
         const userId = user?.id!;
 
         const removedParticipantsIds = metadata.task

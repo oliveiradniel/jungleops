@@ -10,6 +10,7 @@ import { Label } from '../ui/label';
 import type { Table } from '@tanstack/react-table';
 
 interface DataTableManyFacetedFilterProps<T extends string> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table?: Table<any>;
   placeholder: string;
   column: string;

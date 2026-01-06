@@ -16,7 +16,7 @@ export const Route = createFileRoute('/_public')({
   beforeLoad: async ({ context, search }) => {
     const user = await context.queryClient.ensureQueryData(sessionQuery);
 
-    if (!!user) {
+    if (user) {
       throw redirect({ to: search.redirect });
     }
   },

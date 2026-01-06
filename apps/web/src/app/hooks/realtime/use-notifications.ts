@@ -6,7 +6,6 @@ import { getNotificationsSocket } from '@/app/utils/notifications.socket';
 import { SOCKET_EVENT_KEYS } from '@challenge/shared';
 
 export function useNotifications({ userId }: { userId?: string }) {
-
   const {
     onTaskCreated,
     onTaskTitleUpdated,
@@ -57,5 +56,25 @@ export function useNotifications({ userId }: { userId?: string }) {
       socket.off(TASK_DELETED, onTaskDeleted);
       socket.off(TASK_COMMENT_CREATED, onTaskCommentCreated);
     };
-  }, [userId]);
+  }, [
+    userId,
+    TASK_CREATED,
+    TASK_TITLE_UPDATED,
+    TASK_STATUS_UPDATED,
+    TASK_PRIORITY_UPDATED,
+    TASK_TERM_UPDATED,
+    TASK_ASSIGNED,
+    TASK_UNASSIGNED,
+    TASK_DELETED,
+    TASK_COMMENT_CREATED,
+    onTaskCreated,
+    onTaskTitleUpdated,
+    onTaskStatusUpdated,
+    onTaskPriorityUpdated,
+    onTaskTermUpdated,
+    onTaskAssigned,
+    onTaskUnassigned,
+    onTaskDeleted,
+    onTaskCommentCreated,
+  ]);
 }

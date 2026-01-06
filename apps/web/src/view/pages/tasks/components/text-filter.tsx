@@ -30,7 +30,7 @@ export function TextFilter({ numberOfTasksFound, disabled }: TextFilterProps) {
         q: debouncedValue,
       }),
     });
-  }, [debouncedValue]);
+  }, [debouncedValue, navigate]);
 
   return (
     <InputGroup>

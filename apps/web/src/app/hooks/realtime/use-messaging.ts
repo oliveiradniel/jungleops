@@ -20,22 +20,26 @@ import type {
   TaskUnassignedNotification,
   TaskUpdatedSignal,
 } from '@challenge/shared';
+import { useCallback } from 'react';
 
 export function useMessaging({ userId }: { userId?: string }) {
   const queryClient = useQueryClient();
 
-  function handleInvalidateQueries(invalidateQuery: InvalidateQuery[]) {
-    invalidateQueries({
-      queryClient,
-      invalidateQuery,
-    });
-  }
+  const handleInvalidateQueries = useCallback(
+    (invalidateQuery: InvalidateQuery[]) => {
+      invalidateQueries({
+        queryClient,
+        invalidateQuery,
+      });
+    },
+    [queryClient],
+  );
 
-  function handleInvalidateUnreadNotifications() {
+  const handleInvalidateUnreadNotifications = useCallback(() => {
     handleInvalidateQueries([{ queryKey: ['unread-notifications'] }]);
-  }
+  }, [handleInvalidateQueries]);
 
-  function onTaskCreated() {
+  const onTaskCreated = useCallback(() => {
     toast({
       type: 'info',
       description: 'Uma nova tarefa foi adicionada.',
@@ -43,106 +47,126 @@ export function useMessaging({ userId }: { userId?: string }) {
 
     handleInvalidateQueries([{ queryKey: ['tasks'], exact: false }]);
     handleInvalidateUnreadNotifications();
-  }
+  }, [handleInvalidateQueries, handleInvalidateUnreadNotifications]);
 
-  function onTaskTitleUpdated(payload: TaskTitleUpdatedNotification) {
-    toast({
-      type: 'info',
-      description: 'Uma tarefa da qual você participa teve o título alterado.',
-    });
-
-    handleInvalidateQueries([
-      { queryKey: ['task', payload.task.id] },
-      { queryKey: ['tasks'], exact: false },
-    ]);
-    handleInvalidateUnreadNotifications();
-  }
-
-  function onTaskStatusUpdated(payload: TaskStatusUpdatedNotification) {
-    toast({
-      type: 'info',
-      description: 'Uma tarefa da qual você participa teve o status alterado.',
-    });
-
-    handleInvalidateQueries([
-      { queryKey: ['task', payload.task.id] },
-      { queryKey: ['tasks'], exact: false },
-    ]);
-    handleInvalidateUnreadNotifications();
-  }
-
-  function onTaskPriorityUpdated(payload: TaskPriorityUpdatedNotification) {
-    toast({
-      type: 'info',
-      description:
-        'Uma tarefa da qual você participa teve a prioriedade alterada.',
-    });
-
-    handleInvalidateQueries([
-      { queryKey: ['task', payload.task.id] },
-      { queryKey: ['tasks'], exact: false },
-    ]);
-    handleInvalidateUnreadNotifications();
-  }
-
-  function onTaskTermUpdated(payload: TaskTermUpdatedNotification) {
-    toast({
-      type: 'info',
-      description: 'Uma tarefa da qual você participa teve o prazo alterado.',
-    });
-
-    handleInvalidateQueries([
-      { queryKey: ['task', payload.task.id] },
-      { queryKey: ['tasks'], exact: false },
-    ]);
-    handleInvalidateUnreadNotifications();
-  }
-
-  function onTaskAssigned(payload: TaskAssignedNotification) {
-    const { task } = payload;
-
-    if (task.participantIds.includes(userId!)) {
+  const onTaskTitleUpdated = useCallback(
+    (payload: TaskTitleUpdatedNotification) => {
       toast({
         type: 'info',
         description:
-          'Um novo usuário foi atribuido a uma tarefa da qual você participa.',
+          'Uma tarefa da qual você participa teve o título alterado.',
       });
-    }
 
-    if (task.addedParticipantIds.includes(userId!)) {
-      toast({
-        type: 'info',
-        description: 'Você foi atribuido à uma tarefa.',
-      });
-    }
+      handleInvalidateQueries([
+        { queryKey: ['task', payload.task.id] },
+        { queryKey: ['tasks'], exact: false },
+      ]);
+      handleInvalidateUnreadNotifications();
+    },
+    [handleInvalidateQueries, handleInvalidateUnreadNotifications],
+  );
 
-    handleInvalidateQueries([{ queryKey: ['task', task.id] }]);
-    handleInvalidateUnreadNotifications();
-  }
-
-  function onTaskUnassigned(payload: TaskUnassignedNotification) {
-    const { task } = payload;
-
-    if (task.participantIds.includes(userId!)) {
+  const onTaskStatusUpdated = useCallback(
+    (payload: TaskStatusUpdatedNotification) => {
       toast({
         type: 'info',
         description:
-          'Um participante foi removido de uma tarefa que você participa.',
+          'Uma tarefa da qual você participa teve o status alterado.',
       });
-    }
 
-    if (task.removedParticipantIds.includes(userId!)) {
+      handleInvalidateQueries([
+        { queryKey: ['task', payload.task.id] },
+        { queryKey: ['tasks'], exact: false },
+      ]);
+      handleInvalidateUnreadNotifications();
+    },
+    [handleInvalidateQueries, handleInvalidateUnreadNotifications],
+  );
+
+  const onTaskPriorityUpdated = useCallback(
+    (payload: TaskPriorityUpdatedNotification) => {
       toast({
         type: 'info',
-        description: 'Você foi removido de uma tarefa.',
+        description:
+          'Uma tarefa da qual você participa teve a prioriedade alterada.',
       });
-    }
 
-    handleInvalidateQueries([{ queryKey: ['task', task.id] }]);
-    handleInvalidateUnreadNotifications();
-  }
+      handleInvalidateQueries([
+        { queryKey: ['task', payload.task.id] },
+        { queryKey: ['tasks'], exact: false },
+      ]);
+      handleInvalidateUnreadNotifications();
+    },
+    [handleInvalidateQueries, handleInvalidateUnreadNotifications],
+  );
 
-  function onTaskDeleted() {
+  const onTaskTermUpdated = useCallback(
+    (payload: TaskTermUpdatedNotification) => {
+      toast({
+        type: 'info',
+        description: 'Uma tarefa da qual você participa teve o prazo alterado.',
+      });
+
+      handleInvalidateQueries([
+        { queryKey: ['task', payload.task.id] },
+        { queryKey: ['tasks'], exact: false },
+      ]);
+      handleInvalidateUnreadNotifications();
+    },
+    [handleInvalidateQueries, handleInvalidateUnreadNotifications],
+  );
+
+  const onTaskAssigned = useCallback(
+    (payload: TaskAssignedNotification) => {
+      const { task } = payload;
+
+      if (task.participantIds.includes(userId!)) {
+        toast({
+          type: 'info',
+          description:
+            'Um novo usuário foi atribuido a uma tarefa da qual você participa.',
+        });
+      }
+
+      if (task.addedParticipantIds.includes(userId!)) {
+        toast({
+          type: 'info',
+          description: 'Você foi atribuido à uma tarefa.',
+        });
+      }
+
+      handleInvalidateQueries([{ queryKey: ['task', task.id] }]);
+      handleInvalidateUnreadNotifications();
+    },
+    [handleInvalidateQueries, handleInvalidateUnreadNotifications, userId],
+  );
+
+  const onTaskUnassigned = useCallback(
+    (payload: TaskUnassignedNotification) => {
+      const { task } = payload;
+
+      if (task.participantIds.includes(userId!)) {
+        toast({
+          type: 'info',
+          description:
+            'Um participante foi removido de uma tarefa que você participa.',
+        });
+      }
+
+      if (task.removedParticipantIds.includes(userId!)) {
+        toast({
+          type: 'info',
+          description: 'Você foi removido de uma tarefa.',
+        });
+      }
+
+      handleInvalidateQueries([{ queryKey: ['task', task.id] }]);
+      handleInvalidateUnreadNotifications();
+    },
+    [handleInvalidateQueries, handleInvalidateUnreadNotifications, userId],
+  );
+
+  const onTaskDeleted = useCallback(() => {
     toast({
       type: 'info',
       description: 'Uma tarefa da qual você participava foi excluída.',
@@ -150,54 +174,67 @@ export function useMessaging({ userId }: { userId?: string }) {
 
     handleInvalidateQueries([{ queryKey: ['tasks'], exact: false }]);
     handleInvalidateUnreadNotifications();
-  }
+  }, [handleInvalidateQueries, handleInvalidateUnreadNotifications]);
 
-  function onTaskCommentCreated(payload: TaskCommentCreatedNotification) {
-    const { task } = payload;
+  const onTaskCommentCreated = useCallback(
+    (payload: TaskCommentCreatedNotification) => {
+      const { task } = payload;
 
-    toast({
-      type: 'info',
-      description: 'Uma tarefa da qual você participa tem um novo comentário.',
-    });
+      toast({
+        type: 'info',
+        description:
+          'Uma tarefa da qual você participa tem um novo comentário.',
+      });
 
-    handleInvalidateQueries([
-      { queryKey: ['comments', task.id], exact: false },
-      { queryKey: ['tasks'], exact: false },
-    ]);
-    handleInvalidateUnreadNotifications();
-  }
+      handleInvalidateQueries([
+        { queryKey: ['comments', task.id], exact: false },
+        { queryKey: ['tasks'], exact: false },
+      ]);
+      handleInvalidateUnreadNotifications();
+    },
+    [handleInvalidateQueries, handleInvalidateUnreadNotifications],
+  );
 
-  function sinalizeTaskUpdated(payload: TaskUpdatedSignal) {
-    const taskId = payload.task.id;
+  const sinalizeTaskUpdated = useCallback(
+    (payload: TaskUpdatedSignal) => {
+      const taskId = payload.task.id;
 
-    handleInvalidateQueries([
-      { queryKey: ['users-tasks', taskId] },
-      { queryKey: ['task', taskId] },
-      { queryKey: ['tasks'], exact: false },
-    ]);
-    handleInvalidateUnreadNotifications();
-  }
+      handleInvalidateQueries([
+        { queryKey: ['users-tasks', taskId] },
+        { queryKey: ['task', taskId] },
+        { queryKey: ['tasks'], exact: false },
+      ]);
+      handleInvalidateUnreadNotifications();
+    },
+    [handleInvalidateQueries, handleInvalidateUnreadNotifications],
+  );
 
-  function sinalizeTaskCommentCreated(payload: TaskCommentCreatedSignal) {
-    handleInvalidateQueries([
-      { queryKey: ['comments', payload.task.id], exact: false },
-    ]);
-    handleInvalidateUnreadNotifications();
-  }
+  const sinalizeTaskCommentCreated = useCallback(
+    (payload: TaskCommentCreatedSignal) => {
+      handleInvalidateQueries([
+        { queryKey: ['comments', payload.task.id], exact: false },
+      ]);
+      handleInvalidateUnreadNotifications();
+    },
+    [handleInvalidateQueries, handleInvalidateUnreadNotifications],
+  );
 
-  function sinalizeTaskAuditLog(payload: TaskAuditLogSignal) {
-    const { action } = payload;
+  const sinalizeTaskAuditLog = useCallback(
+    (payload: TaskAuditLogSignal) => {
+      const { action } = payload;
 
-    if (action === 'CREATE') {
-      handleInvalidateQueries([{ queryKey: ['task-creation-audit-logs'] }]);
-    } else if (action === 'UPDATE') {
-      handleInvalidateQueries([{ queryKey: ['task-update-audit-logs'] }]);
-    } else if (action === 'DELETE') {
-      handleInvalidateQueries([{ queryKey: ['task-deletion-audit-logs'] }]);
-    }
+      if (action === 'CREATE') {
+        handleInvalidateQueries([{ queryKey: ['task-creation-audit-logs'] }]);
+      } else if (action === 'UPDATE') {
+        handleInvalidateQueries([{ queryKey: ['task-update-audit-logs'] }]);
+      } else if (action === 'DELETE') {
+        handleInvalidateQueries([{ queryKey: ['task-deletion-audit-logs'] }]);
+      }
 
-    handleInvalidateUnreadNotifications();
-  }
+      handleInvalidateUnreadNotifications();
+    },
+    [handleInvalidateQueries, handleInvalidateUnreadNotifications],
+  );
 
   return {
     onTaskCreated,

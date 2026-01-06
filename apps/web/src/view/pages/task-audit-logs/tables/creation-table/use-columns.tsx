@@ -17,8 +17,7 @@ import type { ColumnDef } from '@tanstack/react-table';
 import type { AuditLogOfTaskCreation } from '@/app/entities/task-audit-log';
 
 export function useColumns(): ColumnDef<AuditLogOfTaskCreation>[] {
-  const { taskDeletionAuditLogsList, isTaskDeletionAuditLogsLoading } =
-    useListTaskDeletionAuditLogQuery();
+  const { taskDeletionAuditLogsList } = useListTaskDeletionAuditLogQuery();
 
   const deletedTaskIds = taskDeletionAuditLogsList.map((log) => log.task.id);
 
@@ -121,6 +120,6 @@ export function useColumns(): ColumnDef<AuditLogOfTaskCreation>[] {
         },
       },
     ],
-    [isTaskDeletionAuditLogsLoading],
+    [deletedTaskIds],
   );
 }

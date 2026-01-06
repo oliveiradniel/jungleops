@@ -15,5 +15,6 @@ declare module '@tanstack/react-router' {
     routeMeta: AuthLayoutProps;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface StaticDataRouteOption extends AuthLayoutProps {}
 }

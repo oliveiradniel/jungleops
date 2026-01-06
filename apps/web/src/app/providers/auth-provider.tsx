@@ -127,7 +127,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => {
       httpClient.interceptors.response.eject(response);
     };
-  }, []);
+  }, [queryClient]);
 
   const handleLogin = useCallback(
     async (data: LoginData) => {
@@ -229,7 +229,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       router.navigate({ to: '/login', search: { redirect: '/tasks' } });
 
       disconnectNotificationsSocket();
-    } catch (error) {
+    } catch {
       toast({
         type: 'error',
         description:

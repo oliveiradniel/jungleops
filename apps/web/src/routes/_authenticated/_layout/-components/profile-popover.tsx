@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { useAuth } from '@/app/hooks/use-auth';
 
 import { Calendar, LogOut, User } from 'lucide-react';

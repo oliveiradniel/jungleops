@@ -30,5 +30,13 @@ export function useSignals({ userId }: { userId?: string }) {
       socket.off(TASK_UPDATED, sinalizeTaskUpdated);
       socket.off(TASK_AUDIT_LOG, sinalizeTaskAuditLog);
     };
-  }, [userId]);
+  }, [
+    userId,
+    TASK_AUDIT_LOG,
+    TASK_COMMENT_CREATED,
+    TASK_UPDATED,
+    sinalizeTaskAuditLog,
+    sinalizeTaskCommentCreated,
+    sinalizeTaskUpdated,
+  ]);
 }

@@ -1,6 +1,7 @@
 import type { Row } from '@tanstack/react-table';
 
 interface AuthorCellProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   row: Row<any>;
 }
 

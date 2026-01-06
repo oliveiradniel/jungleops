@@ -33,6 +33,7 @@ export class TasksService implements ITasksService {
   ): Promise<Omit<TasksList, 'tasks'> & { tasks: Task[] }> {
     const { page, size, orderBy, order, status, priority, search } = filters;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const facetedFilters: any = {};
 
     if (typeof status === 'string') {

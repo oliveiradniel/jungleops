@@ -33,6 +33,7 @@ export function useTaskActionsPopoverController({
     event.preventDefault();
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
       await createComment({ taskId, data: { userId: user?.id!, comment } });
 
       setIsPopoverOpen(false);

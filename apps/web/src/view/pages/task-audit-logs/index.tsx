@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useRouter, Outlet, useLocation } from '@tanstack/react-router';
 import { TaskAuditLogProvider } from './context/task-audit-log-provider';
 
-import { FilePen, Filter, PlusSquare, Trash2 } from 'lucide-react';
+import { FilePen, PlusSquare, Trash2 } from 'lucide-react';
 
 import {
   Select,
@@ -55,7 +55,7 @@ export function TaskAuditLogs() {
     if (pathname === '/tasks/audit-logs') {
       navigate({ to: '/tasks/audit-logs/creation' });
     }
-  }, []);
+  }, [navigate, pathname]);
 
   return (
     <>

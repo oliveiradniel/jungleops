@@ -15,6 +15,7 @@ import { Button } from '../ui/button';
 import type { Table } from '@tanstack/react-table';
 
 interface DataTableUniqueFacetedFilterProps<T extends string> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table?: Table<any>;
   placeholder: string;
   column: string;

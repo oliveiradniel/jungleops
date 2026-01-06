@@ -103,6 +103,6 @@ export function useColumns(): ColumnDef<AuditLogOfTaskUpdate>[] {
         },
       },
     ],
-    [],
+    [deletedTaskIds],
   );
 }

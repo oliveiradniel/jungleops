@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { useTasks } from '@/app/hooks/use-tasks';
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 

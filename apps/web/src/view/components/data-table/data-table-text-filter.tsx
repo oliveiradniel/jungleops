@@ -11,6 +11,7 @@ import {
 import type { Table } from '@tanstack/react-table';
 
 interface DataTableTextFilterProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table?: Table<any>;
   placeholder?: string;
   column?: string;

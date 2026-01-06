@@ -7,7 +7,6 @@ import { Eye, EyeOff } from 'lucide-react';
 
 function InputPassword({
   className,
-  type,
   'aria-invalid': ariaInvalid,
   ...props
 }: React.ComponentProps<'input'>) {
