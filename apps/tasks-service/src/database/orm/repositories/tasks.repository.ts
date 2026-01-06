@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Inject } from '@nestjs/common';
-import { DataSource, ILike, In, Repository } from 'typeorm';
+import { DataSource, ILike, In, ObjectLiteral, Repository } from 'typeorm';
 
 import { TaskEntity } from '../entities/task.entity';
 import { UserTaskEntity } from '../entities/users-tasks.entity';
@@ -79,7 +79,7 @@ export class TasksRepository implements ITasksRepository {
     const skip = (page - 1) * size;
 
     const baseFilters: any = {};
-    let where: any[] = [];
+    const where: any[] = [];
 
     if (parsedStatus?.length) {
       baseFilters.status = In(parsedStatus);
@@ -123,10 +123,10 @@ export class TasksRepository implements ITasksRepository {
       }),
     );
 
-    const statusWhere = { ...baseFilters };
+    const statusWhere = { ...baseFilters } as ObjectLiteral;
     delete statusWhere.status;
 
-    const priorityWhere = { ...baseFilters };
+    const priorityWhere = { ...baseFilters } as ObjectLiteral;
     delete priorityWhere.priority;
 
     const statusFacetsRaw = await this.tasksRepository

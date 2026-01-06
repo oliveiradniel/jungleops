@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import type { IUsersTasksRepository } from 'src/database/contracts/users-tasks.contract';
-import type { CreateUserTaskData, Task, UserTask } from '@challenge/shared';
+import type { CreateUserTaskData, UserTask } from '@challenge/shared';
 
 import { USERS_TASKS_REPOSITORY } from 'src/shared/constants/tokens';
 
