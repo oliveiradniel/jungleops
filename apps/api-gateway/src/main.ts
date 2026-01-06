@@ -46,7 +46,7 @@ async function bootstrap() {
   await app.startAllMicroservices();
 
   const config = new DocumentBuilder()
-    .setTitle('Jungle Gaming Task Manager | API Gateway')
+    .setTitle('Collaborative Task Management System - JungleOps | API Gateway')
     .setDescription(
       'API Gateway central to the collaborative task management system. Manage JWT authentication, routing and integration between NestJS services via RabbitMQ.',
     )
@@ -56,7 +56,6 @@ async function bootstrap() {
       scheme: 'bearer',
       bearerFormat: 'JWT',
     })
-    .addTag('task-manager')
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
