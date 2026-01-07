@@ -13,7 +13,8 @@
     },
     "start:dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "inputs": ["src/**", "package.json", "tsconfig.json"]
     },
     "migration:run": {
       "cache": false,
