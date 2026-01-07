@@ -3,11 +3,12 @@ import tseslint from 'typescript-eslint';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import path from 'node:path';
 
 export default tseslint.config([
   // ignore files
   {
-    ignores: ['dist/**', 'build/**', 'node_modules/**'],
+    ignores: ['dist/**', 'build/**', 'node_modules/**', 'eslint.config.js'],
   },
 
   // base settings (JS + TS)
@@ -16,6 +17,12 @@ export default tseslint.config([
 
   // React settings
   {
+    languageOptions: {
+      parserOptions: {
+        project: path.resolve('./tsconfig.app.json'),
+        tsconfigRootDir: path.resolve('./'),
+      },
+    },
     files: ['**/*.{ts,tsx}'],
     plugins: {
       react: reactPlugin,
