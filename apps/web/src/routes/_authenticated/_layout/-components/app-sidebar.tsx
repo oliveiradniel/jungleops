@@ -30,11 +30,17 @@ export function AppSidebar() {
       title: 'Tarefas',
       url: '/tarefas',
       icon: BookOpenText,
+      matchRoutes: ['/tarefas'],
     },
     {
       title: 'Registro de auditoria',
       url: '/tarefas/auditoria/criacao',
       icon: History,
+      matchRoutes: [
+        '/tarefas/auditoria/criacao',
+        '/tarefas/auditoria/atualizacao',
+        '/tarefas/auditoria/exclusao',
+      ],
     },
   ];
 
@@ -52,7 +58,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarMenu className="p-2">
           {items.map((item) => {
-            const isActive = location.pathname === item.url;
+            const isActive = item.matchRoutes.includes(location.pathname);
             const isChildrenTaskAuditLogsActive =
               location.pathname.startsWith('/tarefas/auditoria');
 
