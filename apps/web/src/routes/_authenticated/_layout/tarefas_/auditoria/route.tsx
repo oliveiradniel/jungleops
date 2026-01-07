@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   createFileRoute,
   useRouter,
@@ -41,26 +42,34 @@ export function TaskAuditLogs() {
     pathname.includes('atualizacao') ||
     pathname.includes('exclusao');
 
+  const isAuditRoute = pathname.startsWith('/tarefas/auditoria');
+
   const optionsTaskAuditLogFilterAction = [
     {
-      id: crypto.randomUUID(),
+      id: 'creation',
       label: 'Criação',
       pathname: '/tarefas/auditoria/criacao',
       icon: PlusSquare,
     },
     {
-      id: crypto.randomUUID(),
+      id: 'update',
       label: 'Atualização',
       pathname: '/tarefas/auditoria/atualizacao',
       icon: FilePen,
     },
     {
-      id: crypto.randomUUID(),
+      id: 'deletion',
       label: 'Exclusão',
       pathname: '/tarefas/auditoria/exclusao',
       icon: Trash2,
     },
   ];
+
+  useEffect(() => {
+    if (isAuditRoute && !hasFilter) {
+      navigate({ to: '/tarefas/auditoria/criacao' });
+    }
+  }, [hasFilter, navigate, isAuditRoute]);
 
   return (
     <div className="flex h-[calc(100%-90px)] w-full flex-col gap-6 p-6">
