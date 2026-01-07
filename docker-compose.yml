@@ -12,6 +12,10 @@ services:
     environment:
       VITE_API_URL: ${VITE_API_URL}
       VITE_NOTIFICATIONS_SERVICE_BASE_URL: ${VITE_NOTIFICATIONS_SERVICE_BASE_URL}
+    volumes:
+      - ./apps/web:/app/apps/web
+      - ./packages:/app/packages
+      - /app/apps/web/node_modules
     working_dir: /app/apps/web
     networks:
       - challenge_public_network
@@ -49,7 +53,7 @@ services:
         condition: service_started
       notifications_service_db:
         condition: service_started
-      tasks_db:
+      tasks_service_db:
         condition: service_started
       rabbitmq:
         condition: service_started
@@ -68,11 +72,11 @@ services:
       PORT: 3002
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_PORT: ${POSTGRES_PORT}
+      DB_AUTH_SERVICE_PASSWORD: ${DB_AUTH_SERVICE_PASSWORD}
+      DB_AUTH_SERVICE_USER: ${DB_AUTH_SERVICE_USER}
+      DB_AUTH_SERVICE_NAME: ${DB_AUTH_SERVICE_NAME}
+      DB_AUTH_SERVICE_HOST: ${DB_AUTH_SERVICE_HOST}
+      DB_AUTH_SERVICE_PORT: ${DB_AUTH_SERVICE_PORT}
     volumes:
       # - .:/app
       # - /app/node_modules
@@ -98,11 +102,11 @@ services:
     restart: always
     environment:
       PORT: 3003
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_PORT: ${POSTGRES_PORT}
+      DB_TASKS_SERVICE_PASSWORD: ${DB_TASKS_SERVICE_PASSWORD}
+      DB_TASKS_SERVICE_USER: ${DB_TASKS_SERVICE_USER}
+      DB_TASKS_SERVICE_NAME: ${DB_TASKS_SERVICE_NAME}
+      DB_TASKS_SERVICE_HOST: ${DB_TASKS_SERVICE_HOST}
+      DB_TASKS_SERVICE_PORT: ${DB_TASKS_SERVICE_PORT}
       BROKER_URL: ${BROKER_URL}
     volumes:
       - ./apps/tasks-service:/app/apps/tasks-service
@@ -127,16 +131,16 @@ services:
     restart: always
     environment:
       PORT: 3004
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_PORT: ${POSTGRES_PORT}
+      DB_NOTIFICATIONS_SERVICE_PASSWORD: ${DB_NOTIFICATIONS_SERVICE_PASSWORD}
+      DB_NOTIFICATIONS_SERVICE_USER: ${DB_NOTIFICATIONS_SERVICE_USER}
+      DB_NOTIFICATIONS_SERVICE_NAME: ${DB_NOTIFICATIONS_SERVICE_NAME}
+      DB_NOTIFICATIONS_SERVICE_HOST: ${DB_NOTIFICATIONS_SERVICE_HOST}
+      DB_NOTIFICATIONS_SERVICE_PORT: ${DB_NOTIFICATIONS_SERVICE_PORT}
       FRONTEND_ORIGIN: ${FRONTEND_ORIGIN}
       BROKER_URL: ${BROKER_URL}
     volumes:
-      - .:/app
-      - /app/node_modules
+      - ./apps/notifications-service:/app/apps/notifications-service
+      - ./packages:/app/packages
       - /app/apps/notifications-service/node_modules
     working_dir: /app/apps/notifications-service
     depends_on:

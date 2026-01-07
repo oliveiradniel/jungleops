@@ -13,7 +13,7 @@ USER root
 
 RUN apk add --no-cache postgresql-client
 
-COPY apps/notifications-service/docker/init.sh /app/init.
+COPY apps/notifications-service/docker/init.sh /app/init.sh
 
 RUN chmod +x /app/init.sh
 
