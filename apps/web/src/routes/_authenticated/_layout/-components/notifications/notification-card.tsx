@@ -111,7 +111,7 @@ export function NotificationCard({
 
   return (
     <Link
-      to={'/tasks/$taskId'}
+      to={'/tarefas/$taskId'}
       params={{ taskId: notification.metadata.task.id }}
       onClick={() => handleReadNotification(notification.id)}
     >

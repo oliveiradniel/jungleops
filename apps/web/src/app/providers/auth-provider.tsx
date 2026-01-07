@@ -142,7 +142,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await queryClient.setQueryData(['session'], user);
 
         await router.invalidate();
-        router.navigate({ to: '/tasks' });
+        router.navigate({ to: '/tarefas' });
       } catch (error) {
         if (error instanceof AxiosError) {
           if (error.response?.data.message === 'Invalid credentials.') {
@@ -180,7 +180,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await queryClient.setQueryData(['session'], user);
 
         await router.invalidate();
-        router.navigate({ to: '/tasks' });
+        router.navigate({ to: '/tarefas' });
       } catch (error) {
         if (error instanceof AxiosError) {
           if (
@@ -226,7 +226,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await queryClient.invalidateQueries({ queryKey: ['session'] });
 
       await router.invalidate();
-      router.navigate({ to: '/login', search: { redirect: '/tasks' } });
+      router.navigate({ to: '/login', search: { redirect: '/tarefas' } });
 
       disconnectNotificationsSocket();
     } catch {

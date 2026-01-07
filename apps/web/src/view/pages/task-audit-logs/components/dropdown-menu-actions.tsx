@@ -44,7 +44,7 @@ export function DropdownMenuActions({
                 variant="ghost"
                 className={cn('w-full font-normal')}
               >
-                <Link to="/tasks/$taskId" params={{ taskId: taskId! }}>
+                <Link to="/tarefas/$taskId" params={{ taskId: taskId! }}>
                   <div className="flex items-center gap-2">
                     <InfoIcon className="size-4 text-blue-400" />
                     Ver tarefa

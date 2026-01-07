@@ -12,7 +12,7 @@ export function useTasksController() {
   const navigate = useNavigate();
 
   const { page, size, orderBy, order, status, priority, q } = useSearch({
-    from: '/_authenticated/_layout/tasks',
+    from: '/_authenticated/_layout/tarefas',
   });
 
   const {
@@ -54,11 +54,11 @@ export function useTasksController() {
   });
 
   function handlePageNavigation(page: number) {
-    navigate({ to: '/tasks', search: (old) => ({ ...old, page }) });
+    navigate({ to: '/tarefas', search: (old) => ({ ...old, page }) });
   }
 
   function handleSizePerPage(size: number) {
-    navigate({ to: '/tasks', search: (old) => ({ ...old, size, page: 1 }) });
+    navigate({ to: '/tarefas', search: (old) => ({ ...old, size, page: 1 }) });
   }
 
   return {

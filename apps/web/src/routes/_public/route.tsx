@@ -5,8 +5,8 @@ import { sessionQuery } from '@/lib/queries/session';
 export const Route = createFileRoute('/_public')({
   validateSearch: (search) => {
     const destination =
-      search.redirect === '/login' || search.redirect === '/register'
-        ? '/tasks'
+      search.redirect === '/login' || search.redirect === '/cadastro'
+        ? '/tarefas'
         : (search.redirect as string);
 
     return {

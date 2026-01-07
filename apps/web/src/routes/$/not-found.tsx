@@ -26,13 +26,13 @@ export function NotFound() {
           {isAuthenticated ? (
             <div className="flex items-center gap-2">
               <Button asChild>
-                <Link to="/tasks" replace>
+                <Link to="/tarefas" replace>
                   Tarefas
                 </Link>
               </Button>
               {/* <Button>Minhas tarefas</Button> */}
               <Button asChild>
-                <Link to="/tasks/audit-logs/creation" replace>
+                <Link to="/tarefas/auditoria/criacao" replace>
                   Histórico de alterações
                 </Link>
               </Button>
@@ -40,12 +40,12 @@ export function NotFound() {
           ) : (
             <div className="flex items-center gap-2">
               <Button asChild>
-                <Link to="/login" search={{ redirect: '/tasks' }} replace>
+                <Link to="/login" search={{ redirect: '/tarefas' }} replace>
                   Fazer login
                 </Link>
               </Button>
               <Button asChild>
-                <Link to="/register" search={{ redirect: '/tasks' }} replace>
+                <Link to="/cadastro" search={{ redirect: '/tarefas' }} replace>
                   Criar conta
                 </Link>
               </Button>

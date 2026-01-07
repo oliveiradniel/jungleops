@@ -1,7 +1,8 @@
 import { cn } from '@/lib/utils';
 
-import type { TaskStatus } from '@/app/enums/TaskStatus';
 import { statusLabels } from '@/config/labels';
+
+import type { TaskStatus } from '@challenge/shared';
 
 export function StatusBadge({
   value,

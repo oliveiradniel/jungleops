@@ -30,7 +30,7 @@ export function Tasks() {
     handleSizePerPage,
   } = useTasksController();
 
-  const { q } = useSearch({ from: '/_authenticated/_layout/tasks' });
+  const { q } = useSearch({ from: '/_authenticated/_layout/tarefas' });
 
   const disabled = totalAll <= 0 || totalFiltered <= 0;
 

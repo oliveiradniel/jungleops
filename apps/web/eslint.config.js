@@ -8,7 +8,13 @@ import path from 'node:path';
 export default tseslint.config([
   // ignore files
   {
-    ignores: ['dist/**', 'build/**', 'node_modules/**', 'eslint.config.js'],
+    ignores: [
+      'dist/**',
+      'build/**',
+      'node_modules/**',
+      'eslint.config.js',
+      'vite.config.ts',
+    ],
   },
 
   // base settings (JS + TS)

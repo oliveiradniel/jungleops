@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 
 import { Register } from '@/view/pages/register';
 
-export const Route = createFileRoute('/_public/_layout/register')({
+export const Route = createFileRoute('/_public/_layout/cadastro')({
   staticData: {
     lead: 'Pronto(a) para entrar na selva?',
     description: 'Cadastre-se e desbloqueie seu território de operações.',

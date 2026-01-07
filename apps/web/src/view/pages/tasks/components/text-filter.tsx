@@ -16,7 +16,7 @@ interface TextFilterProps {
 }
 
 export function TextFilter({ numberOfTasksFound, disabled }: TextFilterProps) {
-  const { q } = useSearch({ from: '/_authenticated/_layout/tasks' });
+  const { q } = useSearch({ from: '/_authenticated/_layout/tarefas' });
   const navigate = useNavigate();
 
   const [search, setSearch] = useState(q);
@@ -24,7 +24,7 @@ export function TextFilter({ numberOfTasksFound, disabled }: TextFilterProps) {
 
   useEffect(() => {
     navigate({
-      to: '/tasks',
+      to: '/tarefas',
       search: (old) => ({
         ...old,
         q: debouncedValue,

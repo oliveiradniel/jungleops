@@ -30,13 +30,13 @@ type Sort = {
 
 export function SortFilter({ placeholder, disabled }: SortFilterProps) {
   const { orderBy, order } = useSearch({
-    from: '/_authenticated/_layout/tasks',
+    from: '/_authenticated/_layout/tarefas',
   });
   const navigate = useNavigate();
 
   function handleSort({ orderBy, order }: Sort) {
     navigate({
-      to: '/tasks',
+      to: '/tarefas',
       search: (old) => ({ ...old, orderBy, order }),
     });
   }

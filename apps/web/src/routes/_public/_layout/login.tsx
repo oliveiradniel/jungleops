@@ -10,7 +10,7 @@ export const Route = createFileRoute('/_public/_layout/login')({
       'Pronto para continuar avançando? Retorne ao JungleOps e continue gerenciando tarefas, prazos e equipes com eficiência.',
     authPrompt: 'Ainda não tem uma conta?',
     authLinkLabel: 'Criar conta',
-    href: '/register',
+    href: '/cadastro',
   },
   component: RouteComponent,
 });

@@ -18,7 +18,7 @@ import {
 } from '@/view/components/ui/select';
 
 export const Route = createFileRoute(
-  '/_authenticated/_layout/tasks_/audit-logs',
+  '/_authenticated/_layout/tarefas_/auditoria',
 )({
   component: TaskAuditLogs,
 });
@@ -28,36 +28,36 @@ export function TaskAuditLogs() {
   const { pathname } = useLocation();
 
   const textLabel =
-    pathname === '/tasks/audit-logs/creation'
+    pathname === '/tarefas/auditoria/criacao'
       ? 'Criações de tarefas'
-      : pathname === '/tasks/audit-logs/update'
+      : pathname === '/tarefas/auditoria/atualizacao'
         ? 'Alteração de tarefas'
-        : pathname === '/tasks/audit-logs/deletion'
+        : pathname === '/tarefas/auditoria/exclusao'
           ? 'Exclusão de tarefas'
           : 'Veja os logs com informações sobre as ações realizadas nas tarefas';
 
   const hasFilter =
-    pathname.includes('creation') ||
-    pathname.includes('update') ||
-    pathname.includes('deletion');
+    pathname.includes('criacao') ||
+    pathname.includes('atualizacao') ||
+    pathname.includes('exclusao');
 
   const optionsTaskAuditLogFilterAction = [
     {
       id: crypto.randomUUID(),
       label: 'Criação',
-      pathname: '/tasks/audit-logs/creation',
+      pathname: '/tarefas/auditoria/criacao',
       icon: PlusSquare,
     },
     {
       id: crypto.randomUUID(),
       label: 'Atualização',
-      pathname: '/tasks/audit-logs/update',
+      pathname: '/tarefas/auditoria/atualizacao',
       icon: FilePen,
     },
     {
       id: crypto.randomUUID(),
       label: 'Exclusão',
-      pathname: '/tasks/audit-logs/deletion',
+      pathname: '/tarefas/auditoria/exclusao',
       icon: Trash2,
     },
   ];

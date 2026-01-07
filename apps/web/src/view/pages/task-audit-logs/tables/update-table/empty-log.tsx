@@ -24,7 +24,7 @@ export function EmptyLog() {
       </p>
 
       <Button onClick={() => {}} className="p-6">
-        <Link to="/tasks" className="flex items-center gap-2">
+        <Link to="/tarefas" className="flex items-center gap-2">
           <BookOpenText className="size-4!" /> Ir até as tarefas
         </Link>
       </Button>

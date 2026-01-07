@@ -19,10 +19,10 @@ import type { CreateCommentWithoutUserIdData } from '@/types/comment-data';
 
 export function useTaskController() {
   const { taskId } = useParams({
-    from: '/_authenticated/_layout/tasks_/$taskId',
+    from: '/_authenticated/_layout/tarefas_/$taskId',
   });
   const { page, size } = useSearch({
-    from: '/_authenticated/_layout/tasks_/$taskId',
+    from: '/_authenticated/_layout/tarefas_/$taskId',
   });
 
   const { navigate } = useRouter();
@@ -103,7 +103,7 @@ export function useTaskController() {
 
   function handlePageNavigation(page: number) {
     navigate({
-      to: '/tasks/$taskId',
+      to: '/tarefas/$taskId',
       params: { taskId },
       search: (old) => ({ ...old, page }),
     });
@@ -111,7 +111,7 @@ export function useTaskController() {
 
   function handleSizePerPage(size: number) {
     navigate({
-      to: '/tasks/$taskId',
+      to: '/tarefas/$taskId',
       params: { taskId },
       search: (old) => ({ ...old, size, page: 1 }),
     });
@@ -119,7 +119,7 @@ export function useTaskController() {
 
   useEffect(() => {
     if (hasError) {
-      navigate({ to: '/tasks' });
+      navigate({ to: '/tarefas' });
 
       toast({
         type: 'error',

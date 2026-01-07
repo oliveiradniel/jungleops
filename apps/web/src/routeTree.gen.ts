@@ -14,14 +14,14 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as SplatRouteRouteImport } from './routes/$/route'
 import { Route as PublicLayoutRouteRouteImport } from './routes/_public/_layout/route'
 import { Route as AuthenticatedLayoutRouteRouteImport } from './routes/_authenticated/_layout/route'
-import { Route as PublicLayoutRegisterRouteImport } from './routes/_public/_layout/register'
 import { Route as PublicLayoutLoginRouteImport } from './routes/_public/_layout/login'
-import { Route as AuthenticatedLayoutTasksRouteImport } from './routes/_authenticated/_layout/tasks'
-import { Route as AuthenticatedLayoutTasksTaskIdRouteImport } from './routes/_authenticated/_layout/tasks_/$taskId'
-import { Route as AuthenticatedLayoutTasksAuditLogsRouteRouteImport } from './routes/_authenticated/_layout/tasks_/audit-logs/route'
-import { Route as AuthenticatedLayoutTasksAuditLogsUpdateRouteImport } from './routes/_authenticated/_layout/tasks_/audit-logs/update'
-import { Route as AuthenticatedLayoutTasksAuditLogsDeletionRouteImport } from './routes/_authenticated/_layout/tasks_/audit-logs/deletion'
-import { Route as AuthenticatedLayoutTasksAuditLogsCreationRouteImport } from './routes/_authenticated/_layout/tasks_/audit-logs/creation'
+import { Route as PublicLayoutCadastroRouteImport } from './routes/_public/_layout/cadastro'
+import { Route as AuthenticatedLayoutTarefasRouteImport } from './routes/_authenticated/_layout/tarefas'
+import { Route as AuthenticatedLayoutTarefasTaskIdRouteImport } from './routes/_authenticated/_layout/tarefas_/$taskId'
+import { Route as AuthenticatedLayoutTarefasAuditoriaRouteRouteImport } from './routes/_authenticated/_layout/tarefas_/auditoria/route'
+import { Route as AuthenticatedLayoutTarefasAuditoriaExclusaoRouteImport } from './routes/_authenticated/_layout/tarefas_/auditoria/exclusao'
+import { Route as AuthenticatedLayoutTarefasAuditoriaCriacaoRouteImport } from './routes/_authenticated/_layout/tarefas_/auditoria/criacao'
+import { Route as AuthenticatedLayoutTarefasAuditoriaAtualizacaoRouteImport } from './routes/_authenticated/_layout/tarefas_/auditoria/atualizacao'
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
@@ -45,74 +45,74 @@ const AuthenticatedLayoutRouteRoute =
     id: '/_layout',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const PublicLayoutRegisterRoute = PublicLayoutRegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
-  getParentRoute: () => PublicLayoutRouteRoute,
-} as any)
 const PublicLayoutLoginRoute = PublicLayoutLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => PublicLayoutRouteRoute,
 } as any)
-const AuthenticatedLayoutTasksRoute =
-  AuthenticatedLayoutTasksRouteImport.update({
-    id: '/tasks',
-    path: '/tasks',
+const PublicLayoutCadastroRoute = PublicLayoutCadastroRouteImport.update({
+  id: '/cadastro',
+  path: '/cadastro',
+  getParentRoute: () => PublicLayoutRouteRoute,
+} as any)
+const AuthenticatedLayoutTarefasRoute =
+  AuthenticatedLayoutTarefasRouteImport.update({
+    id: '/tarefas',
+    path: '/tarefas',
     getParentRoute: () => AuthenticatedLayoutRouteRoute,
   } as any)
-const AuthenticatedLayoutTasksTaskIdRoute =
-  AuthenticatedLayoutTasksTaskIdRouteImport.update({
-    id: '/tasks_/$taskId',
-    path: '/tasks/$taskId',
+const AuthenticatedLayoutTarefasTaskIdRoute =
+  AuthenticatedLayoutTarefasTaskIdRouteImport.update({
+    id: '/tarefas_/$taskId',
+    path: '/tarefas/$taskId',
     getParentRoute: () => AuthenticatedLayoutRouteRoute,
   } as any)
-const AuthenticatedLayoutTasksAuditLogsRouteRoute =
-  AuthenticatedLayoutTasksAuditLogsRouteRouteImport.update({
-    id: '/tasks_/audit-logs',
-    path: '/tasks/audit-logs',
+const AuthenticatedLayoutTarefasAuditoriaRouteRoute =
+  AuthenticatedLayoutTarefasAuditoriaRouteRouteImport.update({
+    id: '/tarefas_/auditoria',
+    path: '/tarefas/auditoria',
     getParentRoute: () => AuthenticatedLayoutRouteRoute,
   } as any)
-const AuthenticatedLayoutTasksAuditLogsUpdateRoute =
-  AuthenticatedLayoutTasksAuditLogsUpdateRouteImport.update({
-    id: '/update',
-    path: '/update',
-    getParentRoute: () => AuthenticatedLayoutTasksAuditLogsRouteRoute,
+const AuthenticatedLayoutTarefasAuditoriaExclusaoRoute =
+  AuthenticatedLayoutTarefasAuditoriaExclusaoRouteImport.update({
+    id: '/exclusao',
+    path: '/exclusao',
+    getParentRoute: () => AuthenticatedLayoutTarefasAuditoriaRouteRoute,
   } as any)
-const AuthenticatedLayoutTasksAuditLogsDeletionRoute =
-  AuthenticatedLayoutTasksAuditLogsDeletionRouteImport.update({
-    id: '/deletion',
-    path: '/deletion',
-    getParentRoute: () => AuthenticatedLayoutTasksAuditLogsRouteRoute,
+const AuthenticatedLayoutTarefasAuditoriaCriacaoRoute =
+  AuthenticatedLayoutTarefasAuditoriaCriacaoRouteImport.update({
+    id: '/criacao',
+    path: '/criacao',
+    getParentRoute: () => AuthenticatedLayoutTarefasAuditoriaRouteRoute,
   } as any)
-const AuthenticatedLayoutTasksAuditLogsCreationRoute =
-  AuthenticatedLayoutTasksAuditLogsCreationRouteImport.update({
-    id: '/creation',
-    path: '/creation',
-    getParentRoute: () => AuthenticatedLayoutTasksAuditLogsRouteRoute,
+const AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute =
+  AuthenticatedLayoutTarefasAuditoriaAtualizacaoRouteImport.update({
+    id: '/atualizacao',
+    path: '/atualizacao',
+    getParentRoute: () => AuthenticatedLayoutTarefasAuditoriaRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/$': typeof SplatRouteRoute
-  '/tasks': typeof AuthenticatedLayoutTasksRoute
+  '/tarefas': typeof AuthenticatedLayoutTarefasRoute
+  '/cadastro': typeof PublicLayoutCadastroRoute
   '/login': typeof PublicLayoutLoginRoute
-  '/register': typeof PublicLayoutRegisterRoute
-  '/tasks/audit-logs': typeof AuthenticatedLayoutTasksAuditLogsRouteRouteWithChildren
-  '/tasks/$taskId': typeof AuthenticatedLayoutTasksTaskIdRoute
-  '/tasks/audit-logs/creation': typeof AuthenticatedLayoutTasksAuditLogsCreationRoute
-  '/tasks/audit-logs/deletion': typeof AuthenticatedLayoutTasksAuditLogsDeletionRoute
-  '/tasks/audit-logs/update': typeof AuthenticatedLayoutTasksAuditLogsUpdateRoute
+  '/tarefas/auditoria': typeof AuthenticatedLayoutTarefasAuditoriaRouteRouteWithChildren
+  '/tarefas/$taskId': typeof AuthenticatedLayoutTarefasTaskIdRoute
+  '/tarefas/auditoria/atualizacao': typeof AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute
+  '/tarefas/auditoria/criacao': typeof AuthenticatedLayoutTarefasAuditoriaCriacaoRoute
+  '/tarefas/auditoria/exclusao': typeof AuthenticatedLayoutTarefasAuditoriaExclusaoRoute
 }
 export interface FileRoutesByTo {
   '/$': typeof SplatRouteRoute
-  '/tasks': typeof AuthenticatedLayoutTasksRoute
+  '/tarefas': typeof AuthenticatedLayoutTarefasRoute
+  '/cadastro': typeof PublicLayoutCadastroRoute
   '/login': typeof PublicLayoutLoginRoute
-  '/register': typeof PublicLayoutRegisterRoute
-  '/tasks/audit-logs': typeof AuthenticatedLayoutTasksAuditLogsRouteRouteWithChildren
-  '/tasks/$taskId': typeof AuthenticatedLayoutTasksTaskIdRoute
-  '/tasks/audit-logs/creation': typeof AuthenticatedLayoutTasksAuditLogsCreationRoute
-  '/tasks/audit-logs/deletion': typeof AuthenticatedLayoutTasksAuditLogsDeletionRoute
-  '/tasks/audit-logs/update': typeof AuthenticatedLayoutTasksAuditLogsUpdateRoute
+  '/tarefas/auditoria': typeof AuthenticatedLayoutTarefasAuditoriaRouteRouteWithChildren
+  '/tarefas/$taskId': typeof AuthenticatedLayoutTarefasTaskIdRoute
+  '/tarefas/auditoria/atualizacao': typeof AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute
+  '/tarefas/auditoria/criacao': typeof AuthenticatedLayoutTarefasAuditoriaCriacaoRoute
+  '/tarefas/auditoria/exclusao': typeof AuthenticatedLayoutTarefasAuditoriaExclusaoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -121,38 +121,38 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteRouteWithChildren
   '/_authenticated/_layout': typeof AuthenticatedLayoutRouteRouteWithChildren
   '/_public/_layout': typeof PublicLayoutRouteRouteWithChildren
-  '/_authenticated/_layout/tasks': typeof AuthenticatedLayoutTasksRoute
+  '/_authenticated/_layout/tarefas': typeof AuthenticatedLayoutTarefasRoute
+  '/_public/_layout/cadastro': typeof PublicLayoutCadastroRoute
   '/_public/_layout/login': typeof PublicLayoutLoginRoute
-  '/_public/_layout/register': typeof PublicLayoutRegisterRoute
-  '/_authenticated/_layout/tasks_/audit-logs': typeof AuthenticatedLayoutTasksAuditLogsRouteRouteWithChildren
-  '/_authenticated/_layout/tasks_/$taskId': typeof AuthenticatedLayoutTasksTaskIdRoute
-  '/_authenticated/_layout/tasks_/audit-logs/creation': typeof AuthenticatedLayoutTasksAuditLogsCreationRoute
-  '/_authenticated/_layout/tasks_/audit-logs/deletion': typeof AuthenticatedLayoutTasksAuditLogsDeletionRoute
-  '/_authenticated/_layout/tasks_/audit-logs/update': typeof AuthenticatedLayoutTasksAuditLogsUpdateRoute
+  '/_authenticated/_layout/tarefas_/auditoria': typeof AuthenticatedLayoutTarefasAuditoriaRouteRouteWithChildren
+  '/_authenticated/_layout/tarefas_/$taskId': typeof AuthenticatedLayoutTarefasTaskIdRoute
+  '/_authenticated/_layout/tarefas_/auditoria/atualizacao': typeof AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute
+  '/_authenticated/_layout/tarefas_/auditoria/criacao': typeof AuthenticatedLayoutTarefasAuditoriaCriacaoRoute
+  '/_authenticated/_layout/tarefas_/auditoria/exclusao': typeof AuthenticatedLayoutTarefasAuditoriaExclusaoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/$'
-    | '/tasks'
+    | '/tarefas'
+    | '/cadastro'
     | '/login'
-    | '/register'
-    | '/tasks/audit-logs'
-    | '/tasks/$taskId'
-    | '/tasks/audit-logs/creation'
-    | '/tasks/audit-logs/deletion'
-    | '/tasks/audit-logs/update'
+    | '/tarefas/auditoria'
+    | '/tarefas/$taskId'
+    | '/tarefas/auditoria/atualizacao'
+    | '/tarefas/auditoria/criacao'
+    | '/tarefas/auditoria/exclusao'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/$'
-    | '/tasks'
+    | '/tarefas'
+    | '/cadastro'
     | '/login'
-    | '/register'
-    | '/tasks/audit-logs'
-    | '/tasks/$taskId'
-    | '/tasks/audit-logs/creation'
-    | '/tasks/audit-logs/deletion'
-    | '/tasks/audit-logs/update'
+    | '/tarefas/auditoria'
+    | '/tarefas/$taskId'
+    | '/tarefas/auditoria/atualizacao'
+    | '/tarefas/auditoria/criacao'
+    | '/tarefas/auditoria/exclusao'
   id:
     | '__root__'
     | '/$'
@@ -160,14 +160,14 @@ export interface FileRouteTypes {
     | '/_public'
     | '/_authenticated/_layout'
     | '/_public/_layout'
-    | '/_authenticated/_layout/tasks'
+    | '/_authenticated/_layout/tarefas'
+    | '/_public/_layout/cadastro'
     | '/_public/_layout/login'
-    | '/_public/_layout/register'
-    | '/_authenticated/_layout/tasks_/audit-logs'
-    | '/_authenticated/_layout/tasks_/$taskId'
-    | '/_authenticated/_layout/tasks_/audit-logs/creation'
-    | '/_authenticated/_layout/tasks_/audit-logs/deletion'
-    | '/_authenticated/_layout/tasks_/audit-logs/update'
+    | '/_authenticated/_layout/tarefas_/auditoria'
+    | '/_authenticated/_layout/tarefas_/$taskId'
+    | '/_authenticated/_layout/tarefas_/auditoria/atualizacao'
+    | '/_authenticated/_layout/tarefas_/auditoria/criacao'
+    | '/_authenticated/_layout/tarefas_/auditoria/exclusao'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -213,13 +213,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedLayoutRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_public/_layout/register': {
-      id: '/_public/_layout/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof PublicLayoutRegisterRouteImport
-      parentRoute: typeof PublicLayoutRouteRoute
-    }
     '/_public/_layout/login': {
       id: '/_public/_layout/login'
       path: '/login'
@@ -227,84 +220,92 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLayoutLoginRouteImport
       parentRoute: typeof PublicLayoutRouteRoute
     }
-    '/_authenticated/_layout/tasks': {
-      id: '/_authenticated/_layout/tasks'
-      path: '/tasks'
-      fullPath: '/tasks'
-      preLoaderRoute: typeof AuthenticatedLayoutTasksRouteImport
+    '/_public/_layout/cadastro': {
+      id: '/_public/_layout/cadastro'
+      path: '/cadastro'
+      fullPath: '/cadastro'
+      preLoaderRoute: typeof PublicLayoutCadastroRouteImport
+      parentRoute: typeof PublicLayoutRouteRoute
+    }
+    '/_authenticated/_layout/tarefas': {
+      id: '/_authenticated/_layout/tarefas'
+      path: '/tarefas'
+      fullPath: '/tarefas'
+      preLoaderRoute: typeof AuthenticatedLayoutTarefasRouteImport
       parentRoute: typeof AuthenticatedLayoutRouteRoute
     }
-    '/_authenticated/_layout/tasks_/$taskId': {
-      id: '/_authenticated/_layout/tasks_/$taskId'
-      path: '/tasks/$taskId'
-      fullPath: '/tasks/$taskId'
-      preLoaderRoute: typeof AuthenticatedLayoutTasksTaskIdRouteImport
+    '/_authenticated/_layout/tarefas_/$taskId': {
+      id: '/_authenticated/_layout/tarefas_/$taskId'
+      path: '/tarefas/$taskId'
+      fullPath: '/tarefas/$taskId'
+      preLoaderRoute: typeof AuthenticatedLayoutTarefasTaskIdRouteImport
       parentRoute: typeof AuthenticatedLayoutRouteRoute
     }
-    '/_authenticated/_layout/tasks_/audit-logs': {
-      id: '/_authenticated/_layout/tasks_/audit-logs'
-      path: '/tasks/audit-logs'
-      fullPath: '/tasks/audit-logs'
-      preLoaderRoute: typeof AuthenticatedLayoutTasksAuditLogsRouteRouteImport
+    '/_authenticated/_layout/tarefas_/auditoria': {
+      id: '/_authenticated/_layout/tarefas_/auditoria'
+      path: '/tarefas/auditoria'
+      fullPath: '/tarefas/auditoria'
+      preLoaderRoute: typeof AuthenticatedLayoutTarefasAuditoriaRouteRouteImport
       parentRoute: typeof AuthenticatedLayoutRouteRoute
     }
-    '/_authenticated/_layout/tasks_/audit-logs/update': {
-      id: '/_authenticated/_layout/tasks_/audit-logs/update'
-      path: '/update'
-      fullPath: '/tasks/audit-logs/update'
-      preLoaderRoute: typeof AuthenticatedLayoutTasksAuditLogsUpdateRouteImport
-      parentRoute: typeof AuthenticatedLayoutTasksAuditLogsRouteRoute
+    '/_authenticated/_layout/tarefas_/auditoria/exclusao': {
+      id: '/_authenticated/_layout/tarefas_/auditoria/exclusao'
+      path: '/exclusao'
+      fullPath: '/tarefas/auditoria/exclusao'
+      preLoaderRoute: typeof AuthenticatedLayoutTarefasAuditoriaExclusaoRouteImport
+      parentRoute: typeof AuthenticatedLayoutTarefasAuditoriaRouteRoute
     }
-    '/_authenticated/_layout/tasks_/audit-logs/deletion': {
-      id: '/_authenticated/_layout/tasks_/audit-logs/deletion'
-      path: '/deletion'
-      fullPath: '/tasks/audit-logs/deletion'
-      preLoaderRoute: typeof AuthenticatedLayoutTasksAuditLogsDeletionRouteImport
-      parentRoute: typeof AuthenticatedLayoutTasksAuditLogsRouteRoute
+    '/_authenticated/_layout/tarefas_/auditoria/criacao': {
+      id: '/_authenticated/_layout/tarefas_/auditoria/criacao'
+      path: '/criacao'
+      fullPath: '/tarefas/auditoria/criacao'
+      preLoaderRoute: typeof AuthenticatedLayoutTarefasAuditoriaCriacaoRouteImport
+      parentRoute: typeof AuthenticatedLayoutTarefasAuditoriaRouteRoute
     }
-    '/_authenticated/_layout/tasks_/audit-logs/creation': {
-      id: '/_authenticated/_layout/tasks_/audit-logs/creation'
-      path: '/creation'
-      fullPath: '/tasks/audit-logs/creation'
-      preLoaderRoute: typeof AuthenticatedLayoutTasksAuditLogsCreationRouteImport
-      parentRoute: typeof AuthenticatedLayoutTasksAuditLogsRouteRoute
+    '/_authenticated/_layout/tarefas_/auditoria/atualizacao': {
+      id: '/_authenticated/_layout/tarefas_/auditoria/atualizacao'
+      path: '/atualizacao'
+      fullPath: '/tarefas/auditoria/atualizacao'
+      preLoaderRoute: typeof AuthenticatedLayoutTarefasAuditoriaAtualizacaoRouteImport
+      parentRoute: typeof AuthenticatedLayoutTarefasAuditoriaRouteRoute
     }
   }
 }
 
-interface AuthenticatedLayoutTasksAuditLogsRouteRouteChildren {
-  AuthenticatedLayoutTasksAuditLogsCreationRoute: typeof AuthenticatedLayoutTasksAuditLogsCreationRoute
-  AuthenticatedLayoutTasksAuditLogsDeletionRoute: typeof AuthenticatedLayoutTasksAuditLogsDeletionRoute
-  AuthenticatedLayoutTasksAuditLogsUpdateRoute: typeof AuthenticatedLayoutTasksAuditLogsUpdateRoute
+interface AuthenticatedLayoutTarefasAuditoriaRouteRouteChildren {
+  AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute: typeof AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute
+  AuthenticatedLayoutTarefasAuditoriaCriacaoRoute: typeof AuthenticatedLayoutTarefasAuditoriaCriacaoRoute
+  AuthenticatedLayoutTarefasAuditoriaExclusaoRoute: typeof AuthenticatedLayoutTarefasAuditoriaExclusaoRoute
 }
 
-const AuthenticatedLayoutTasksAuditLogsRouteRouteChildren: AuthenticatedLayoutTasksAuditLogsRouteRouteChildren =
+const AuthenticatedLayoutTarefasAuditoriaRouteRouteChildren: AuthenticatedLayoutTarefasAuditoriaRouteRouteChildren =
   {
-    AuthenticatedLayoutTasksAuditLogsCreationRoute:
-      AuthenticatedLayoutTasksAuditLogsCreationRoute,
-    AuthenticatedLayoutTasksAuditLogsDeletionRoute:
-      AuthenticatedLayoutTasksAuditLogsDeletionRoute,
-    AuthenticatedLayoutTasksAuditLogsUpdateRoute:
-      AuthenticatedLayoutTasksAuditLogsUpdateRoute,
+    AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute:
+      AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute,
+    AuthenticatedLayoutTarefasAuditoriaCriacaoRoute:
+      AuthenticatedLayoutTarefasAuditoriaCriacaoRoute,
+    AuthenticatedLayoutTarefasAuditoriaExclusaoRoute:
+      AuthenticatedLayoutTarefasAuditoriaExclusaoRoute,
   }
 
-const AuthenticatedLayoutTasksAuditLogsRouteRouteWithChildren =
-  AuthenticatedLayoutTasksAuditLogsRouteRoute._addFileChildren(
-    AuthenticatedLayoutTasksAuditLogsRouteRouteChildren,
+const AuthenticatedLayoutTarefasAuditoriaRouteRouteWithChildren =
+  AuthenticatedLayoutTarefasAuditoriaRouteRoute._addFileChildren(
+    AuthenticatedLayoutTarefasAuditoriaRouteRouteChildren,
   )
 
 interface AuthenticatedLayoutRouteRouteChildren {
-  AuthenticatedLayoutTasksRoute: typeof AuthenticatedLayoutTasksRoute
-  AuthenticatedLayoutTasksAuditLogsRouteRoute: typeof AuthenticatedLayoutTasksAuditLogsRouteRouteWithChildren
-  AuthenticatedLayoutTasksTaskIdRoute: typeof AuthenticatedLayoutTasksTaskIdRoute
+  AuthenticatedLayoutTarefasRoute: typeof AuthenticatedLayoutTarefasRoute
+  AuthenticatedLayoutTarefasAuditoriaRouteRoute: typeof AuthenticatedLayoutTarefasAuditoriaRouteRouteWithChildren
+  AuthenticatedLayoutTarefasTaskIdRoute: typeof AuthenticatedLayoutTarefasTaskIdRoute
 }
 
 const AuthenticatedLayoutRouteRouteChildren: AuthenticatedLayoutRouteRouteChildren =
   {
-    AuthenticatedLayoutTasksRoute: AuthenticatedLayoutTasksRoute,
-    AuthenticatedLayoutTasksAuditLogsRouteRoute:
-      AuthenticatedLayoutTasksAuditLogsRouteRouteWithChildren,
-    AuthenticatedLayoutTasksTaskIdRoute: AuthenticatedLayoutTasksTaskIdRoute,
+    AuthenticatedLayoutTarefasRoute: AuthenticatedLayoutTarefasRoute,
+    AuthenticatedLayoutTarefasAuditoriaRouteRoute:
+      AuthenticatedLayoutTarefasAuditoriaRouteRouteWithChildren,
+    AuthenticatedLayoutTarefasTaskIdRoute:
+      AuthenticatedLayoutTarefasTaskIdRoute,
   }
 
 const AuthenticatedLayoutRouteRouteWithChildren =
@@ -324,13 +325,13 @@ const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface PublicLayoutRouteRouteChildren {
+  PublicLayoutCadastroRoute: typeof PublicLayoutCadastroRoute
   PublicLayoutLoginRoute: typeof PublicLayoutLoginRoute
-  PublicLayoutRegisterRoute: typeof PublicLayoutRegisterRoute
 }
 
 const PublicLayoutRouteRouteChildren: PublicLayoutRouteRouteChildren = {
+  PublicLayoutCadastroRoute: PublicLayoutCadastroRoute,
   PublicLayoutLoginRoute: PublicLayoutLoginRoute,
-  PublicLayoutRegisterRoute: PublicLayoutRegisterRoute,
 }
 
 const PublicLayoutRouteRouteWithChildren =

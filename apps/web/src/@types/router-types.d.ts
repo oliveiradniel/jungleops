@@ -6,7 +6,7 @@ export interface AuthLayoutProps {
   calloutText?: string;
   authPrompt?: string;
   authLinkLabel?: string;
-  href?: '/login' | '/register';
+  href?: '/login' | '/cadastro';
 }
 
 declare module '@tanstack/react-router' {

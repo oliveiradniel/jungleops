@@ -69,7 +69,7 @@ export function Layout() {
                       variant="link"
                       className="p-0"
                     >
-                      <Link to={href!} search={{ redirect: '/tasks' }}>
+                      <Link to={href!} search={{ redirect: '/tarefas' }}>
                         {authLinkLabel}
                       </Link>
                     </Button>

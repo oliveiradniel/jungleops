@@ -28,12 +28,12 @@ export function AppSidebar() {
   const items = [
     {
       title: 'Tarefas',
-      url: '/tasks',
+      url: '/tarefas',
       icon: BookOpenText,
     },
     {
       title: 'Registro de auditoria',
-      url: '/tasks/audit-logs/creation',
+      url: '/tarefas/auditoria/criacao',
       icon: History,
     },
   ];
@@ -54,7 +54,7 @@ export function AppSidebar() {
           {items.map((item) => {
             const isActive = location.pathname === item.url;
             const isChildrenTaskAuditLogsActive =
-              location.pathname.startsWith('/tasks/audit-logs');
+              location.pathname.startsWith('/tarefas/auditoria');
 
             return (
               <SidebarMenuItem key={item.title}>
@@ -62,7 +62,7 @@ export function AppSidebar() {
                   asChild
                   isActive={
                     isActive ||
-                    (item.url === '/tasks/audit-logs' &&
+                    (item.url === '/tarefas/auditoria' &&
                       isChildrenTaskAuditLogsActive)
                   }
                   className="transition-all"

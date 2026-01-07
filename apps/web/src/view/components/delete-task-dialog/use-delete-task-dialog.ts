@@ -69,7 +69,7 @@ export function useDeleteTaskDialog({
 
       setTitleConfirmation('');
 
-      router.navigate({ to: '/tasks' });
+      router.navigate({ to: '/tarefas' });
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.data.message === 'Task not found.') {

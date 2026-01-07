@@ -29,7 +29,7 @@ export function ManyFacetedTasksFilter<T extends string>({
   disabled,
 }: ManyFacetedTasksFilterProps<T>) {
   const navigate = useNavigate();
-  const search = useSearch({ from: '/_authenticated/_layout/tasks' });
+  const search = useSearch({ from: '/_authenticated/_layout/tarefas' });
 
   const [selectedFilters, setSelectedFilters] = useState<T[]>(
     search[param]?.split(',').map((value) => value.toUpperCase() as T) ?? [],
@@ -47,7 +47,7 @@ export function ManyFacetedTasksFilter<T extends string>({
           : undefined;
 
       navigate({
-        to: '/tasks',
+        to: '/tarefas',
         search: (old) => ({
           ...old,
           [param]: search,
@@ -63,7 +63,7 @@ export function ManyFacetedTasksFilter<T extends string>({
     setSelectedFilters([]);
 
     navigate({
-      to: '/tasks',
+      to: '/tarefas',
       search: (old) => ({ ...old, [param]: undefined, page: 1 }),
     });
   }
