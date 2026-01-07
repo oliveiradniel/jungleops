@@ -33,7 +33,7 @@ export function AppSidebar() {
     },
     {
       title: 'Registro de auditoria',
-      url: '/tasks/audit-logs',
+      url: '/tasks/audit-logs/creation',
       icon: History,
     },
   ];
