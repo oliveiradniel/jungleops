@@ -185,12 +185,14 @@ export class EventsService {
     const userIds = await this.usersService.listUserIds();
     const { id, username } = await this.usersService.find(authorId);
 
+    const targetUserIds = userIds.filter((userId) => userId !== authorId);
+
     this.client.emit<string, TaskDeletedNotification>(EVENT_KEYS.TASK_DELETED, {
       author: {
         id,
         username,
       },
-      targetUserIds: userIds,
+      targetUserIds,
       task,
     });
   }
