@@ -66,8 +66,6 @@ export function useUpdateTaskSheetController(taskData: Task | undefined) {
 
   const { participants } = useListUsersByTaskIdQuery({ taskId: id });
 
-  const participantIds = participants?.map((participant) => participant.id);
-
   function handleInvalidateQueries(invalidateQuery: InvalidateQuery[]) {
     invalidateQueries({
       queryClient,
@@ -129,27 +127,17 @@ export function useUpdateTaskSheetController(taskData: Task | undefined) {
     !!usersErrorMessage;
 
   useEffect(() => {
-    if (taskData && isUpdateTaskSheetOpen) {
-      reset({
-        title,
-        description,
-        term,
-        priority,
-        status,
-        userIds: participantIds,
-      });
-    }
-  }, [
-    taskData,
-    isUpdateTaskSheetOpen,
-    reset,
-    description,
-    priority,
-    status,
-    term,
-    title,
-    participantIds,
-  ]);
+    if (!taskData || !isUpdateTaskSheetOpen) return;
+
+    reset({
+      title: taskData.title,
+      description: taskData.description,
+      term: parseDate(taskData.term),
+      priority: taskData.priority.value,
+      status: taskData.status.value,
+      userIds: participants?.map((p) => p.id),
+    });
+  }, [taskData, isUpdateTaskSheetOpen, reset, participants]);
 
   return {
     control,
