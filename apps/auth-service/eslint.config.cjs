@@ -1,13 +1,9 @@
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+const path = require('node:path');
 
-import { config } from '@challenge/eslint-config/nest';
+const nestConfig = require('@challenge/eslint-config/nest');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-export default [
-  ...config,
+module.exports = [
+  ...nestConfig,
 
   {
     files: ['src/**/*.{ts,tsx}'],

@@ -1,14 +1,13 @@
 {
   "name": "@challenge/eslint-config",
   "version": "0.0.0",
-  "type": "module",
   "private": true,
+  "main": "./nest.cjs",
   "exports": {
-    ".": "./index.js",
-    "./nest": "./nest.js"
+    "./nest": "./nest.cjs"
   },
   "files": [
-    "nest.js"
+    "nest.cjs"
   ],
   "devDependencies": {
     "@challenge/prettier-config": "0.0.0",
