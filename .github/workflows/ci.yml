@@ -1,0 +1,123 @@
+name: JungleOps CI
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  linting-and-cheking-types:
+    name: Run CI Pipeline
+    runs-on: ubuntu-latest
+
+    env:
+      DB_AUTH_SERVICE_PASSWORD: ${{ secrets.DB_AUTH_SERVICE_PASSWORD }}
+      DB_AUTH_SERVICE_USER: ${{ secrets.DB_AUTH_SERVICE_USER }}
+      DB_AUTH_SERVICE_NAME: ${{ secrets.DB_AUTH_SERVICE_NAME }}
+      DB_AUTH_SERVICE_HOST: ${{ secrets.DB_AUTH_SERVICE_HOST }}
+      DB_AUTH_SERVICE_PORT: 5432
+
+      DB_NOTIFICATIONS_SERVICE_PASSWORD: ${{ secrets.DB_NOTIFICATIONS_SERVICE_PASSWORD }}
+      DB_NOTIFICATIONS_SERVICE_USER: ${{ secrets.DB_NOTIFICATIONS_SERVICE_USER }}
+      DB_NOTIFICATIONS_SERVICE_NAME: ${{ secrets.DB_NOTIFICATIONS_SERVICE_NAME }}
+      DB_NOTIFICATIONS_SERVICE_HOST: ${{ secrets.DB_NOTIFICATIONS_SERVICE_HOST }}
+      DB_NOTIFICATIONS_SERVICE_PORT: 5432
+
+      DB_TASKS_SERVICE_PASSWORD: ${{ secrets.DB_TASKS_SERVICE_PASSWORD }}
+      DB_TASKS_SERVICE_USER: ${{ secrets.DB_TASKS_SERVICE_USER }}
+      DB_TASKS_SERVICE_NAME: ${{ secrets.DB_TASKS_SERVICE_NAME }}
+      DB_TASKS_SERVICE_HOST: ${{ secrets.DB_TASKS_SERVICE_HOST }}
+      DB_TASKS_SERVICE_PORT: 5432
+
+      RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
+      RABBITMQ_PASS: ${{ secrets.RABBITMQ_PASS }}
+
+      BROKER_URL: amqp://${{ secrets.RABBITMQ_USER }}:${{ secrets.RABBITMQ_PASS }}@rabbitmq:5672
+
+      JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+      JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+
+      FRONTEND_ORIGIN: http://${{ secrets.FRONTEND_ORIGIN }}
+      AUTH_SERVICE_BASE_URL: http://${{ secrets.AUTH_SERVICE_BASE_URL }}
+      USERS_SERVICE_BASE_URL: http://${{ secrets.USERS_SERVICE_BASE_URL }}
+      TASKS_SERVICE_BASE_URL: http://${{ secrets.TASKS_SERVICE_BASE_URL }}
+      USERS_TASKS_SERVICE_BASE_URL: http://${{ secrets.USERS_TASKS_SERVICE_BASE_URL }}
+      TASK_AUDIT_LOGS_SERVICE_BASE_URL: http://${{ secrets.TASK_AUDIT_LOGS_SERVICE_BASE_URL }}
+      NOTIFICATIONS_SERVICE_BASE_URL: http://${{ secrets.NOTIFICATIONS_SERVICE_BASE_URL }}
+
+      VITE_API_URL: http://${{ secrets.VITE_API_URL }}
+      VITE_NOTIFICATIONS_SERVICE_BASE_URL: http://${{ secrets.VITE_NOTIFICATIONS_SERVICE_BASE_URL }}
+
+    # services:
+    #   auth_service_db:
+    #     image: postgres:17-alpine
+    #     env:
+    #       POSTGRES_USER: ${{ secrets.DB_AUTH_SERVICE_USER }}
+    #       POSTGRES_PASSWORD: ${{ secrets.DB_AUTH_SERVICE_PASSWORD }}
+    #       POSTGRES_DB: ${{ secrets.DB_AUTH_SERVICE_NAME }}
+    #     ports:
+    #       - '5432'
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 5s
+    #       --health-timeout 5s
+    #       --health-retries 10
+
+    #   notifications_service_db:
+    #     image: postgres:17-alpine
+    #     env:
+    #       POSTGRES_USER: ${{ secrets.DB_NOTIFICATIONS_SERVICE_USER }}
+    #       POSTGRES_PASSWORD: ${{ secrets.DB_NOTIFICATIONS_SERVICE_PASSWORD }}
+    #       POSTGRES_DB: ${{ secrets.DB_NOTIFICATIONS_SERVICE_NAME }}
+    #     ports:
+    #       - '5433'
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 5s
+    #       --health-timeout 5s
+    #       --health-retries 10
+
+    #   tasks_service_db:
+    #     image: postgres:17-alpine
+    #     env:
+    #       POSTGRES_USER: ${{ secrets.DB_TASKS_SERVICE_USER }}
+    #       POSTGRES_PASSWORD: ${{ secrets.DB_TASKS_SERVICE_PASSWORD }}
+    #       POSTGRES_DB: ${{ secrets.DB_TASKS_SERVICE_NAME }}
+    #     ports:
+    #       - '5434'
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 5s
+    #       --health-timeout 5s
+    #       --health-retries 10
+
+    #   rabbitmq:
+    #     image: rabbitmq:3.13-management-alpine
+    #     env:
+    #       RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
+    #       RABBITMQ_PASS: ${{ secrets.RABBITMQ_PASS }}
+    #     ports:
+    #       - 5672:5672
+    #     options: >-
+    #       --health-cmd "rabbitmq-diagnostics check_running"
+    #       --health-interval 5s
+    #       --health-timeout 5s
+    #       --health-retries 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Turbo Lint & Type Check
+        run: npx turbo run lint check-types --filter=...[origin/main]
