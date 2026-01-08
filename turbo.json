@@ -3,22 +3,55 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "env": [
+        "DB_AUTH_SERVICE_PASSWORD",
+        "DB_AUTH_SERVICE_USER",
+        "DB_AUTH_SERVICE_NAME",
+        "DB_AUTH_SERVICE_HOST",
+        "DB_AUTH_SERVICE_PORT",
+
+        "DB_NOTIFICATIONS_SERVICE_PASSWORD",
+        "DB_NOTIFICATIONS_SERVICE_USER",
+        "DB_NOTIFICATIONS_SERVICE_NAME",
+        "DB_NOTIFICATIONS_SERVICE_HOST",
+        "DB_NOTIFICATIONS_SERVICE_PORT",
+
+        "DB_TASKS_SERVICE_PASSWORD",
+        "DB_TASKS_SERVICE_USER",
+        "DB_TASKS_SERVICE_NAME",
+        "DB_TASKS_SERVICE_HOST",
+        "DB_TASKS_SERVICE_PORT",
+
+        "RABBITMQ_USER",
+        "RABBITMQ_PASS",
+        "BROKER_URL",
+
+        "JWT_ACCESS_SECRET",
+        "JWT_REFRESH_SECRET",
+
+        "FRONTEND_ORIGIN",
+        "AUTH_SERVICE_BASE_URL",
+        "USERS_SERVICE_BASE_URL",
+        "TASKS_SERVICE_BASE_URL",
+        "USERS_TASKS_SERVICE_BASE_URL",
+        "TASK_AUDIT_LOGS_SERVICE_BASE_URL",
+        "NOTIFICATIONS_SERVICE_BASE_URL",
+        "VITE_API_URL",
+        "VITE_NOTIFICATIONS_SERVICE_BASE_URL"
+      ]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "cache": true
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "cache": true,
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tsconfig.json"]
     },
     "start:dev": {
       "cache": false,
       "persistent": true,
       "inputs": ["src/**", "package.json", "tsconfig.json"]
-    },
-    "migration:run": {
-      "cache": false,
-      "persistent": true
     }
   }
 }
