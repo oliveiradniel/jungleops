@@ -11,15 +11,15 @@ import { StatusBadge } from '@/view/components/ui/status-badge';
 import { TextCellTooltip } from './text-cell-tooltip';
 
 import type {
-  FieldName,
   TaskPriority,
   TaskStatus,
+  TFieldName,
   UserWithoutPassword,
 } from '@challenge/shared';
 
 interface TaskUpdateValueCellProps {
   value: string | UserWithoutPassword[];
-  fieldName: { value: FieldName; label: string };
+  fieldName: { value: TFieldName; label: string };
 }
 
 export function TaskUpdateValueCell({

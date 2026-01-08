@@ -9,10 +9,10 @@ import type {
   AuditLogOfTaskUpdate,
 } from '../entities/task-audit-log';
 import type {
-  FieldName,
   ListCreationTaskAuditLogWithAuthor,
   ListDeletionTaskAuditLogWithAuthor,
   ListUpdateTaskAuditLogWithAuthor,
+  TFieldName,
 } from '@challenge/shared';
 
 export class TaskAuditLogMapper {
@@ -53,7 +53,7 @@ export class TaskAuditLogMapper {
         author,
         fieldName: {
           value: fieldName,
-          label: fieldLabels[fieldName as FieldName],
+          label: fieldLabels[fieldName as TFieldName],
         },
         newValue,
         oldValue,
