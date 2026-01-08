@@ -25,5 +25,8 @@ export function getConfig(configService: ConfigService): IConfig {
     JWT_ACCESS_SECRET: configService.get<string>('JWT_ACCESS_SECRET')!,
     JWT_REFRESH_SECRET: configService.get<string>('JWT_REFRESH_SECRET')!,
     BROKER_URL: configService.get<string>('BROKER_URL')!,
+    NODE_ENV: configService.get<'development' | 'production' | 'test'>(
+      'NODE_ENV',
+    )!,
   };
 }

@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsIn, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class EnvironmentVariablesDTO {
   @IsNumber()
@@ -48,4 +48,8 @@ export class EnvironmentVariablesDTO {
   @IsString()
   @IsNotEmpty()
   BROKER_URL: string;
+
+  @IsIn(['development', 'production', 'test'])
+  @IsNotEmpty()
+  NODE_ENV: 'development' | 'production' | 'test';
 }

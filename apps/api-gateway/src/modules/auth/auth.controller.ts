@@ -9,6 +9,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import {
   ApiBadGatewayResponse,
@@ -24,6 +25,8 @@ import { AuthGuard } from '@nestjs/passport';
 
 import type { Request, Response } from 'express';
 
+import { getConfig } from 'src/shared/config/config.helper';
+
 import { AuthService } from './auth.service';
 
 import { SignInDTO } from './dtos/sign-in.dto';
@@ -37,6 +40,8 @@ import { ConflictAuthResponse } from './responses/conflict-auth-response';
 import { UnauthorizedResponse } from 'src/shared/responses/unauthorized.response';
 import { ThrottlerResponse } from 'src/shared/responses/throttler.response';
 import { TokensWithUserResponse } from './responses/tokens-with-user.response';
+import { AccessTokenWithUserResponse } from './responses/access-token-with-user.response';
+import { UserResponse } from './responses/user.response';
 
 import { IsPublic } from 'src/shared/decorators/is-public-decorator.decorator';
 
@@ -46,8 +51,6 @@ import {
 } from 'src/shared/constants';
 
 import type { SessionPayload, UserWithoutPassword } from '@challenge/shared';
-import { AccessTokenWithUserResponse } from './responses/access-token-with-user.response';
-import { UserResponse } from './responses/user.response';
 
 @ApiBadGatewayResponse({
   description:
@@ -62,7 +65,10 @@ import { UserResponse } from './responses/user.response';
 })
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @ApiOkResponse({
     description: 'Returns access and refresh tokens with user data.',
@@ -87,9 +93,11 @@ export class AuthController {
 
     const data = await this.authService.signIn({ email, password });
 
+    const { NODE_ENV } = getConfig(this.configService);
+
     response.cookie(REFRESH_TOKEN_COOKIE_KEY, data.refreshToken, {
       httpOnly: true,
-      secure: false,
+      secure: NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
@@ -121,9 +129,11 @@ export class AuthController {
 
     const data = await this.authService.signUp({ email, username, password });
 
+    const { NODE_ENV } = getConfig(this.configService);
+
     response.cookie(REFRESH_TOKEN_COOKIE_KEY, data.refreshToken, {
       httpOnly: true,
-      secure: false,
+      secure: NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
@@ -169,9 +179,11 @@ export class AuthController {
   @IsPublic()
   @Post('logout')
   logout(@Res({ passthrough: true }) response: Response): { message: string } {
+    const { NODE_ENV } = getConfig(this.configService);
+
     response.cookie(REFRESH_TOKEN_COOKIE_KEY, '', {
       httpOnly: true,
-      secure: false,
+      secure: NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 0,
       expires: new Date(0),

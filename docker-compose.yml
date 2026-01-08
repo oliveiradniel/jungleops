@@ -9,6 +9,7 @@ services:
       dockerfile: apps/web/docker/Dockerfile
     ports:
       - '3000:3000'
+    restart: always
     environment:
       VITE_API_URL: ${VITE_API_URL}
       VITE_NOTIFICATIONS_SERVICE_BASE_URL: ${VITE_NOTIFICATIONS_SERVICE_BASE_URL}
@@ -41,6 +42,7 @@ services:
       BROKER_URL: ${BROKER_URL}
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      NODE_ENV: ${NODE_ENV}
     volumes:
       # - .:/app
       # - /app/node_modules

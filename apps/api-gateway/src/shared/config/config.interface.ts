@@ -10,4 +10,5 @@ export interface IConfig {
   BROKER_URL: string;
   JWT_ACCESS_SECRET: string;
   JWT_REFRESH_SECRET: string;
+  NODE_ENV: 'development' | 'production' | 'test';
 }
