@@ -7,7 +7,7 @@ on:
 
 jobs:
   linting-and-cheking-types:
-    name: Run CI Pipeline
+    name: Run CI Pipelinea
     runs-on: ubuntu-latest
 
     # env:
