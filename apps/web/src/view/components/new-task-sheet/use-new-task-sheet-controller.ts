@@ -1,21 +1,22 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useCreateTaskMutation } from '@/app/hooks/mutations/use-create-task-mutation';
-import { useTasksController } from '@/view/pages/tasks/use-tasks-controller';
 import { useTasks } from '@/app/hooks/use-tasks';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateTaskSchema } from '@/app/schemas/create-task-schema';
 
-import {
-  optionsTaskPriority,
-  optionsTaskStatus,
-} from '@/app/constants/options';
+import { optionsTaskPriority, optionsTaskStatus } from '@/config/options';
 
 import { toast } from '@/app/utils/toast';
+import {
+  invalidateQueries,
+  type InvalidateQuery,
+} from '@/app/utils/invalidate-queries';
 import { AxiosError } from 'axios';
 
 import type { CreateTaskData } from '@/types/task-data';
+import { TaskPriority, TaskStatus } from '@challenge/shared';
 
 export function useNewTaskSheetController() {
   const { isNewTaskSheetOpen, handleCloseNewTaskSheet } = useTasks();
@@ -29,25 +30,32 @@ export function useNewTaskSheetController() {
   } = useForm<CreateTaskData>({
     resolver: zodResolver(CreateTaskSchema),
     defaultValues: {
-      priority: 'LOW',
-      status: 'TODO',
+      priority: TaskPriority.LOW,
+      status: TaskStatus.TODO,
     },
   });
 
   const queryClient = useQueryClient();
 
-  const { page } = useTasksController();
-
   const { createTask, isCreateTaskLoading } = useCreateTaskMutation();
+
+  function handleInvalidateQueries(invalidateQuery: InvalidateQuery[]) {
+    invalidateQueries({
+      queryClient,
+      invalidateQuery,
+    });
+  }
 
   const handleSubmit = reactHookHandleSubmit(async (data: CreateTaskData) => {
     try {
       await createTask(data);
 
       reset();
-      queryClient.invalidateQueries({
-        queryKey: ['tasks', { page }],
-      });
+
+      handleInvalidateQueries([
+        { queryKey: ['tasks'], exact: false },
+        { queryKey: ['task-creation-audit-logs'] },
+      ]);
 
       toast({
         type: 'success',
@@ -55,21 +63,14 @@ export function useNewTaskSheetController() {
       });
     } catch (error) {
       if (error instanceof AxiosError) {
-        if (error.response?.data.message === 'Title is already in use.')
+        if (error.response?.data.message === 'Title is already in use.') {
           toast({
             type: 'error',
             description: 'Este título já está em uso!',
           });
 
-        queryClient.invalidateQueries({
-          queryKey: ['tasks', { page }],
-        });
-        queryClient.invalidateQueries({
-          queryKey: ['task'],
-          exact: false,
-        });
-
-        return;
+          return;
+        }
       }
 
       toast({

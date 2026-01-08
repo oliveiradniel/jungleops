@@ -11,13 +11,16 @@ import { JWTAuthGuard } from './modules/auth/jwt-auth.guard';
 import { HttpProxyErrorFilter } from './filters/http-proxy-error.filter';
 
 import { getConfig } from './shared/config/config.helper';
+import { microserviceOptions } from './shared/modules-config/microservice.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
 
-  const { PORT, FRONTEND_ORIGIN } = getConfig(app.get(ConfigService));
+  const { PORT, FRONTEND_ORIGIN, BROKER_URL } = getConfig(
+    app.get(ConfigService),
+  );
 
   const reflector = app.get(Reflector);
 
@@ -36,8 +39,14 @@ async function bootstrap() {
     credentials: true,
   });
 
+  app.connectMicroservice(
+    microserviceOptions({ brokerURL: BROKER_URL, queue: 'tasks-queue' }),
+  );
+
+  await app.startAllMicroservices();
+
   const config = new DocumentBuilder()
-    .setTitle('Jungle Gaming Task Manager | API Gateway')
+    .setTitle('Collaborative Task Management System - JungleOps | API Gateway')
     .setDescription(
       'API Gateway central to the collaborative task management system. Manage JWT authentication, routing and integration between NestJS services via RabbitMQ.',
     )
@@ -47,7 +56,6 @@ async function bootstrap() {
       scheme: 'bearer',
       bearerFormat: 'JWT',
     })
-    .addTag('task-manager')
     .build();
 
   const documentFactory = () => SwaggerModule.createDocument(app, config);
@@ -58,4 +66,4 @@ async function bootstrap() {
   await app.listen(PORT);
 }
 
-bootstrap();
+void bootstrap();

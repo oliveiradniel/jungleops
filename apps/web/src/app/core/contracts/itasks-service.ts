@@ -1,29 +1,22 @@
+import type { Task } from '@/app/entities/task';
 import type { HttpRequestConfig } from './ihttp-client';
 
-import type {
-  CreateTaskData,
-  ListTasksPagination,
-  Pagination,
-  TaskWithCommentCount,
-  UpdateTaskData,
-} from '@challenge/shared';
+import type { CreateTaskData, UpdateTaskData } from '@/types/task-data';
+import type { TaskFilters, TasksList } from '@challenge/shared';
 
 export abstract class ITasksService {
-  abstract get(
-    taskId: string,
-    config?: HttpRequestConfig,
-  ): Promise<TaskWithCommentCount>;
+  abstract get(taskId: string, config?: HttpRequestConfig): Promise<Task>;
   abstract list(
-    data: Pagination,
+    filters: TaskFilters,
     config?: HttpRequestConfig,
-  ): Promise<ListTasksPagination>;
+  ): Promise<Omit<TasksList, 'tasks'> & { tasks: Task[] }>;
   abstract create(
-    data: CreateTaskData & { authorId: string },
+    data: CreateTaskData,
     config?: HttpRequestConfig,
-  ): Promise<TaskWithCommentCount>;
+  ): Promise<Task>;
   abstract update(
     taskId: string,
-    data: UpdateTaskData & { lastEditedBy: string },
+    data: UpdateTaskData,
     config?: HttpRequestConfig,
   ): Promise<void>;
   abstract delete(taskId: string, config?: HttpRequestConfig): Promise<void>;

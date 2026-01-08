@@ -27,6 +27,7 @@
     "@nestjs/axios": "^4.0.1",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/throttler": "^6.4.0",
+    "@tanstack/react-table": "^8.21.3",
     "cookie-parser": "^1.4.7",
     "passport-jwt": "^4.0.1"
   }

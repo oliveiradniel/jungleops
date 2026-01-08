@@ -1,18 +1,18 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Inject } from '@nestjs/common';
-import { DataSource, ILike, In, Repository } from 'typeorm';
+import { DataSource, ILike, In, ObjectLiteral, Repository } from 'typeorm';
 
 import { TaskEntity } from '../entities/task.entity';
 import { UserTaskEntity } from '../entities/users-tasks.entity';
 import { TaskMapper } from 'src/modules/tasks/mappers/task.mapper';
 
 import type {
-  Pagination,
   CreateTaskData,
   UpdateTaskData,
   Task,
   TaskWithCommentCount,
-  ListTasksPagination,
+  TaskFilters,
+  TasksList,
 } from '@challenge/shared';
 
 import type { ITasksRepository } from 'src/database/contracts/tasks-repository.contract';
@@ -38,6 +38,23 @@ export class TasksRepository implements ITasksRepository {
     return taskEntity ? TaskMapper.toDomain(taskEntity) : null;
   }
 
+  async getByIdWithCommentsCount(
+    id: string,
+  ): Promise<TaskWithCommentCount | null> {
+    const taskEntity = await this.tasksRepository.findOne({
+      where: { id },
+    });
+
+    if (!taskEntity) return null;
+
+    const taskWithCommentCount: TaskWithCommentCount = {
+      ...TaskMapper.toDomainWithoutComments(taskEntity),
+      commentsCount: await this.commentsRepository.countByTaskId(taskEntity.id),
+    };
+
+    return taskWithCommentCount;
+  }
+
   async getByTitle(title: string): Promise<Task | null> {
     const taskEntity = await this.tasksRepository.findOne({
       where: { title: ILike(title) },
@@ -46,20 +63,59 @@ export class TasksRepository implements ITasksRepository {
     return taskEntity ? TaskMapper.toDomain(taskEntity) : null;
   }
 
-  async list(pagination: Pagination): Promise<ListTasksPagination> {
-    const { page, size } = pagination;
+  async list(filters: TaskFilters): Promise<TasksList> {
+    const { page, size, orderBy, order, status, priority, search } = filters;
+
+    const parsedStatus =
+      typeof status === 'string'
+        ? status.split(',').map((value) => value.toUpperCase())
+        : undefined;
+
+    const parsedPriority =
+      typeof priority === 'string'
+        ? priority.split(',').map((value) => value.toUpperCase())
+        : undefined;
 
     const skip = (page - 1) * size;
 
-    const allTasksCount = await this.tasksRepository.count();
+    const baseFilters: any = {};
+    const where: any[] = [];
 
-    const listTasks = await this.tasksRepository.find({
+    if (parsedStatus?.length) {
+      baseFilters.status = In(parsedStatus);
+    }
+
+    if (parsedPriority?.length) {
+      baseFilters.priority = In(parsedPriority);
+    }
+
+    if (typeof search === 'string' && search.trim()) {
+      where.push(
+        { ...baseFilters, title: ILike(`%${search}%`) },
+        { ...baseFilters, description: ILike(`%${search}%`) },
+      );
+    } else {
+      where.push(baseFilters);
+    }
+
+    const dateLabels = {
+      'created-at': 'createdAt',
+      term: 'term',
+    };
+
+    const totalAll = await this.tasksRepository.count();
+
+    const [tasks, totalFiltered] = await this.tasksRepository.findAndCount({
       take: size,
       skip,
+      where,
+      order: {
+        [dateLabels[orderBy ?? 'term']]: order ?? 'asc',
+      },
     });
 
-    const listTasksWithCommentCount: TaskWithCommentCount[] = await Promise.all(
-      listTasks.map(async (task) => {
+    const tasksWithCommentCount: TaskWithCommentCount[] = await Promise.all(
+      tasks.map(async (task) => {
         return {
           ...TaskMapper.toDomainWithoutComments(task),
           commentsCount: await this.commentsRepository.countByTaskId(task.id),
@@ -67,17 +123,53 @@ export class TasksRepository implements ITasksRepository {
       }),
     );
 
-    const total = allTasksCount;
-    const totalPages = Math.ceil(allTasksCount / size);
-    const hasNext = page < totalPages;
-    const hasPrevious = page > 1;
+    const statusWhere = { ...baseFilters } as ObjectLiteral;
+    delete statusWhere.status;
+
+    const priorityWhere = { ...baseFilters } as ObjectLiteral;
+    delete priorityWhere.priority;
+
+    const statusFacetsRaw = await this.tasksRepository
+      .createQueryBuilder('task')
+      .select('task.status', 'status')
+      .addSelect('COUNT(*)', 'count')
+      .where(statusWhere)
+      .groupBy('task.status')
+      .getRawMany();
+
+    const priorityFacetsRaw = await this.tasksRepository
+      .createQueryBuilder('task')
+      .select('task.priority', 'priority')
+      .addSelect('COUNT(*)', 'count')
+      .where(priorityWhere)
+      .groupBy('task.priority')
+      .getRawMany();
+
+    const statusFacets = statusFacetsRaw.map((facet) => ({
+      value: facet.status,
+      count: Number(facet.count),
+    }));
+
+    const priorityFacets = priorityFacetsRaw.map((facet) => ({
+      value: facet.priority,
+      count: Number(facet.count),
+    }));
+
+    const totalPages = Math.ceil(totalFiltered / size);
 
     return {
-      tasks: listTasksWithCommentCount,
-      total,
-      totalPages,
-      hasNext,
-      hasPrevious,
+      tasks: tasksWithCommentCount,
+      totalAll,
+      totalFiltered,
+      pagination: {
+        totalPages,
+        hasNext: page < totalPages,
+        hasPrevious: page > 1,
+      },
+      facets: {
+        status: statusFacets,
+        priority: priorityFacets,
+      },
     };
   }
 

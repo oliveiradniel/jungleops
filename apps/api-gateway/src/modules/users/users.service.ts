@@ -17,6 +17,15 @@ export class UsersService {
   ) {
     this.baseURL = getConfig(this.configService).USERS_SERVICE_BASE_URL;
   }
+
+  async find(userId: string): Promise<UserWithoutPassword> {
+    const { data } = await firstValueFrom(
+      this.httpService.get<UserWithoutPassword>(`${this.baseURL}/${userId}`),
+    );
+
+    return data;
+  }
+
   async findUsers(userIds: string[]): Promise<UserWithoutPassword[]> {
     const { data } = await firstValueFrom(
       this.httpService.post<UserWithoutPassword[], { ids: string[] }>(
@@ -32,7 +41,15 @@ export class UsersService {
 
   async listUsers(): Promise<UserWithoutPassword[]> {
     const { data } = await firstValueFrom(
-      this.httpService.get<UserWithoutPassword[]>(this.baseURL),
+      this.httpService.get<UserWithoutPassword[]>(`${this.baseURL}/list`),
+    );
+
+    return data;
+  }
+
+  async listUserIds(): Promise<string[]> {
+    const { data } = await firstValueFrom(
+      this.httpService.get<string[]>(`${this.baseURL}/ids`),
     );
 
     return data;

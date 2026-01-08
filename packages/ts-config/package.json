@@ -8,14 +8,10 @@
   },
   "exports": {
     "./base": "./base.json",
-    "./nest": "./nest.json",
-    "./react": "./react.json",
-    "./build": "./build.json"
+    "./nest": "./nest.json"
   },
   "files": [
     "base.json",
-    "nest.json",
-    "react.json",
-    "build.json"
+    "nest.json"
   ]
 }

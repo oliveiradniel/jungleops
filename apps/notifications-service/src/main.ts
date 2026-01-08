@@ -14,11 +14,23 @@ async function bootstrap() {
   const { BROKER_URL, FRONTEND_ORIGIN, PORT } = getConfig(configService);
   app.enableCors({ origin: FRONTEND_ORIGIN, credentials: true });
 
-  app.connectMicroservice(microserviceOptions({ brokerURL: BROKER_URL }));
+  app.connectMicroservice(
+    microserviceOptions({
+      brokerURL: BROKER_URL,
+      queue: 'notifications.events.queue',
+    }),
+  );
+
+  app.connectMicroservice(
+    microserviceOptions({
+      brokerURL: BROKER_URL,
+      queue: 'notifications.signals.queue',
+    }),
+  );
 
   await app.startAllMicroservices();
 
   await app.listen(PORT);
 }
 
-bootstrap();
+void bootstrap();

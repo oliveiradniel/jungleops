@@ -7,17 +7,23 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "check-types": "tsc --noEmit",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "typeorm": "ts-node -P tsconfig.json -r reflect-metadata -r tsconfig-paths/register ../../node_modules/typeorm/cli",
+    "migration:generate": "npm run typeorm -- migration:generate -d ./src/database/orm/data-source.ts",
+    "migration:create": "npm run typeorm -- migration:create",
+    "migration:run": "npm run typeorm -- migration:run -d ./src/database/orm/data-source.ts",
+    "migration:revert": "npm run typeorm -- migration:revert -d ./src/database/orm/data-source.ts"
   },
   "dependencies": {
     "@challenge/shared": "0.0.0",
@@ -35,9 +41,11 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "dotenv": "^17.2.3",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "typeorm": "^0.3.28"
   },
   "devDependencies": {
     "@challenge/eslint-config": "0.0.0",

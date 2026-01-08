@@ -28,7 +28,6 @@ import { BadGatewayResponse } from 'src/shared/responses/bad-gateway.responde';
 import { UnauthorizedResponse } from 'src/shared/responses/unauthorized.response';
 import { NotFoundTaskResponse } from 'src/shared/responses/not-found-task.response';
 import { ListCommentsOkResponse } from './responses/list-comments-ok.response';
-import { CommentResponse } from './responses/comment.response';
 import { BadRequestCreateCommentResponse } from './responses/bad-request-create-commentresponse';
 import { ThrottlerResponse } from 'src/shared/responses/throttler.response';
 

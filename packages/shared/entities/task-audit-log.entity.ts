@@ -7,19 +7,23 @@ export enum FieldName {
   USER_IDS = 'userIds',
 }
 
+export type TFieldName = 'title' | 'description' | 'term' | 'priority' | 'status' | 'userIds';
+
 export enum AuditAction {
   CREATE = 'CREATE',
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
 }
+export type TAuditAction = 'CREATE' | 'UPDATE' | 'DELETE';
+
 
 export interface TaskAuditLog {
   id: string;
   taskId: string;
-  userId: string;
+  authorId: string;
   taskTitle: string;
   fieldName: FieldName | null;
-  action: AuditAction;
+  action: TAuditAction;
   oldValue: string | null;
   newValue: string | null;
   changedAt: Date;

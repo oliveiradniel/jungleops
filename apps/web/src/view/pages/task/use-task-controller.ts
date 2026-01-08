@@ -1,17 +1,16 @@
 import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useParams, useRouter } from '@tanstack/react-router';
+import { useParams, useRouter, useSearch } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { useGetTaskQuery } from '@/app/hooks/queries/use-get-task-query';
 import { useListCommentsQuery } from '@/app/hooks/queries/use-list-comments-query';
 import { useCreateCommentMutation } from '@/app/hooks/mutations/use-create-comment-mutation';
 import { useAuth } from '@/app/hooks/use-auth';
-import { usePagination } from '@/app/hooks/use-pagination';
 import { useTasks } from '@/app/hooks/use-tasks';
 import { useListUsersByTaskIdQuery } from '@/app/hooks/queries/use-list-users-by-task-id-query';
-import { useNotificationsSocket } from '@/app/hooks/use-notifications-socket';
 
 import { toast } from '@/app/utils/toast';
+import { invalidateQueries } from '@/app/utils/invalidate-queries';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateCommentWithoutUserIdSchema } from '@/app/schemas/create-comment-schema';
@@ -19,29 +18,27 @@ import { CreateCommentWithoutUserIdSchema } from '@/app/schemas/create-comment-s
 import type { CreateCommentWithoutUserIdData } from '@/types/comment-data';
 
 export function useTaskController() {
-  const { taskId } = useParams({ from: '/_authenticated/tasks_/$taskId' });
+  const { taskId } = useParams({
+    from: '/_authenticated/_layout/tarefas_/$taskId',
+  });
+  const { page, size } = useSearch({
+    from: '/_authenticated/_layout/tarefas_/$taskId',
+  });
 
   const { navigate } = useRouter();
 
   const queryClient = useQueryClient();
 
   const { user } = useAuth();
-  const { isDeleteTaskDialogOpen, handleOpenDeleteTaskDialog } = useTasks();
+  const { handleOpenUpdateTaskSheet, handleOpenDeleteTaskDialog } = useTasks();
 
-  const { task, isTaskLoading, hasError } = useGetTaskQuery(taskId);
+  const { task, isTaskLoading, isTasksFetching, hasError } =
+    useGetTaskQuery(taskId);
   const { createComment, isCreateCommentLoading } = useCreateCommentMutation();
 
   const { participants, isParticipantsLoading } = useListUsersByTaskIdQuery({
     taskId,
   });
-
-  const { page, size, goToPage, handlePreviousTasksPage, handleNextTasksPage } =
-    usePagination({
-      from: '/_authenticated/tasks_/$taskId',
-      to: '/tasks/$taskId',
-    });
-
-  useNotificationsSocket({ userId: user?.id, taskId, page });
 
   const {
     commentsList,
@@ -80,13 +77,15 @@ export function useTaskController() {
       try {
         await createComment({
           taskId,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
           data: { userId: user?.id!, comment: data.comment },
         });
 
         reset();
 
-        queryClient.invalidateQueries({
-          queryKey: ['comments', { taskId, page }],
+        invalidateQueries({
+          queryClient,
+          invalidateQuery: [{ queryKey: ['comments', taskId], exact: false }],
         });
 
         toast({
@@ -102,16 +101,32 @@ export function useTaskController() {
     },
   );
 
+  function handlePageNavigation(page: number) {
+    navigate({
+      to: '/tarefas/$taskId',
+      params: { taskId },
+      search: (old) => ({ ...old, page }),
+    });
+  }
+
+  function handleSizePerPage(size: number) {
+    navigate({
+      to: '/tarefas/$taskId',
+      params: { taskId },
+      search: (old) => ({ ...old, size, page: 1 }),
+    });
+  }
+
   useEffect(() => {
     if (hasError) {
-      navigate({ to: '/tasks' });
+      navigate({ to: '/tarefas' });
 
       toast({
         type: 'error',
         description: 'Houve um erro ao encontrar a tarefa.',
       });
     }
-  }, [hasError]);
+  }, [hasError, navigate]);
 
   return {
     task,
@@ -123,19 +138,17 @@ export function useTaskController() {
     hasPrevious,
     isCommentsLoading,
     isTaskLoading,
+    isTasksFetching,
     currentPage,
-    startPage,
-    pagesToShow,
-    endPage,
     totalPages,
+    page,
+    size,
     isCreateCommentLoading,
-    isDeleteTaskDialogOpen,
+    handleOpenUpdateTaskSheet,
     handleOpenDeleteTaskDialog,
     register,
-    navigate,
-    goToPage,
-    handlePreviousTasksPage,
-    handleNextTasksPage,
     handleSubmitCreateComment,
+    handlePageNavigation,
+    handleSizePerPage,
   };
 }

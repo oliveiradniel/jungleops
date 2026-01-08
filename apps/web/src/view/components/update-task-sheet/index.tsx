@@ -2,6 +2,8 @@ import { useUpdateTaskSheetController } from './use-update-task-sheet-controller
 
 import { Controller } from 'react-hook-form';
 
+import { truncateString } from '@/app/utils/truncate-string';
+
 import { SheetTemplate } from '../sheet-template';
 import { FormGroup } from '../ui/form-group';
 import { Label } from '../ui/label';
@@ -11,13 +13,10 @@ import { DatePicker } from '../ui/date-picker';
 import { TaskRadioGroup } from '../task-radio-group';
 import { CheckboxIndicator, CheckboxItem } from '../ui/checkbox';
 
-import type { TaskWithCommentCount } from '@challenge/shared';
+import type { Task } from '@/app/entities/task';
+import type { TaskPriority, TaskStatus } from '@challenge/shared';
 
-export function UpdateTaskSheet({
-  taskData,
-}: {
-  taskData: TaskWithCommentCount | undefined;
-}) {
+export function UpdateTaskSheet({ taskData }: { taskData: Task | undefined }) {
   const {
     control,
     register,
@@ -96,7 +95,7 @@ export function UpdateTaskSheet({
             name="priority"
             control={control}
             render={({ field: { value, onChange } }) => (
-              <TaskRadioGroup
+              <TaskRadioGroup<TaskPriority>
                 options={optionsTaskPriority}
                 value={value}
                 onValueChange={onChange}
@@ -111,7 +110,7 @@ export function UpdateTaskSheet({
             name="status"
             control={control}
             render={({ field: { value, onChange } }) => (
-              <TaskRadioGroup
+              <TaskRadioGroup<TaskStatus>
                 options={optionsTaskStatus}
                 value={value}
                 onValueChange={onChange}
@@ -147,7 +146,7 @@ export function UpdateTaskSheet({
                           <CheckboxIndicator />
 
                           <Label htmlFor="" className="font-normal">
-                            {username}
+                            {truncateString(username, 30)}
                           </Label>
                         </CheckboxItem>
                       </div>

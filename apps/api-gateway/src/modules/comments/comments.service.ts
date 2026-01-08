@@ -56,7 +56,7 @@ export class CommentsService {
     const enrichedComments: CommentWithUserData[] =
       comments.map<CommentWithUserData>((comment) => ({
         ...comment,
-        user: usersMap.get(comment.userId) || null,
+        user: usersMap.get(comment.userId)!,
       }));
 
     return {

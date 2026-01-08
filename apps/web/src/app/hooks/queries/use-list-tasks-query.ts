@@ -2,26 +2,41 @@ import { useQuery } from '@tanstack/react-query';
 
 import { makeTasksService } from '@/app/factories/make-tasks-service';
 
-export interface UseListsTasksQueryParams {
-  page: number;
-  size: number;
-}
+import type { TaskFilters } from '@challenge/shared';
 
-export function useListTasksQuery({ page, size }: UseListsTasksQueryParams) {
+export function useListTasksQuery({
+  page,
+  size,
+  orderBy,
+  order,
+  status,
+  priority,
+  search,
+}: TaskFilters) {
   const tasksService = makeTasksService();
 
-  const { data, isLoading, isPending } = useQuery({
-    queryKey: ['tasks', { page }],
-    queryFn: () => tasksService.list({ page, size }),
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ['tasks', page, size, orderBy, order, status, priority, search],
+    queryFn: () =>
+      tasksService.list({
+        page,
+        size,
+        orderBy,
+        order,
+        status,
+        priority,
+        search,
+      }),
+    placeholderData: (previousData) => previousData,
   });
 
   return {
-    tasksList: data?.tasks ?? [],
-    totalTasksCount: data?.total ?? 0,
-    totalPages: data?.totalPages ?? 0,
-    hasNext: data?.hasNext ?? false,
-    hasPrevious: data?.hasPrevious ?? false,
+    tasks: data?.tasks ?? [],
+    totalAll: data?.totalAll ?? 0,
+    totalFiltered: data?.totalFiltered ?? 0,
+    pagination: data?.pagination,
+    facets: data?.facets,
     isTasksLoading: isLoading,
-    isTasksPending: isPending,
+    isTasksFetching: isFetching,
   };
 }

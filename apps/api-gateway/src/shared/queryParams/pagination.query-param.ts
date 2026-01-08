@@ -1,14 +1,14 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
-import { Transform } from "class-transformer";
-import { IsNumber, IsOptional, Min } from "class-validator";
+import { Transform } from 'class-transformer';
+import { IsNumber, IsOptional, Min } from 'class-validator';
 
-import { Pagination } from "@challenge/shared";
+import { Pagination } from '@challenge/shared';
 
 export class PaginationQueryParam implements Pagination {
   @ApiProperty({
     example: 1,
-    description: "Page number (starts from 1).",
+    description: 'Page number (starts from 1).',
     default: 1,
     required: false,
   })
@@ -24,7 +24,7 @@ export class PaginationQueryParam implements Pagination {
 
   @ApiProperty({
     example: 10,
-    description: "Number of items per page.",
+    description: 'Number of items per page.',
     default: 10,
     required: false,
   })

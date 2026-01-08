@@ -2,9 +2,9 @@ export interface IConfig {
   PORT: number;
   JWT_ACCESS_SECRET: string;
   JWT_REFRESH_SECRET: string;
-  POSTGRES_PASSWORD: string;
-  POSTGRES_USER: string;
-  POSTGRES_DB: string;
-  POSTGRES_HOST: string;
-  POSTGRES_PORT: number;
+  DB_AUTH_SERVICE_PASSWORD: string;
+  DB_AUTH_SERVICE_USER: string;
+  DB_AUTH_SERVICE_NAME: string;
+  DB_AUTH_SERVICE_HOST: string;
+  DB_AUTH_SERVICE_PORT: number;
 }

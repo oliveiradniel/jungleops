@@ -9,72 +9,171 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PublicRouteImport } from './routes/_public'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as PublicAuthRouteImport } from './routes/_public/auth'
-import { Route as AuthenticatedTasksRouteImport } from './routes/_authenticated/tasks'
-import { Route as AuthenticatedTasksTaskIdRouteImport } from './routes/_authenticated/tasks_/$taskId'
+import { Route as PublicRouteRouteImport } from './routes/_public/route'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as SplatRouteRouteImport } from './routes/$/route'
+import { Route as PublicLayoutRouteRouteImport } from './routes/_public/_layout/route'
+import { Route as AuthenticatedLayoutRouteRouteImport } from './routes/_authenticated/_layout/route'
+import { Route as PublicLayoutLoginRouteImport } from './routes/_public/_layout/login'
+import { Route as PublicLayoutCadastroRouteImport } from './routes/_public/_layout/cadastro'
+import { Route as AuthenticatedLayoutTarefasRouteImport } from './routes/_authenticated/_layout/tarefas'
+import { Route as AuthenticatedLayoutTarefasTaskIdRouteImport } from './routes/_authenticated/_layout/tarefas_/$taskId'
+import { Route as AuthenticatedLayoutTarefasAuditoriaRouteRouteImport } from './routes/_authenticated/_layout/tarefas_/auditoria/route'
+import { Route as AuthenticatedLayoutTarefasAuditoriaExclusaoRouteImport } from './routes/_authenticated/_layout/tarefas_/auditoria/exclusao'
+import { Route as AuthenticatedLayoutTarefasAuditoriaCriacaoRouteImport } from './routes/_authenticated/_layout/tarefas_/auditoria/criacao'
+import { Route as AuthenticatedLayoutTarefasAuditoriaAtualizacaoRouteImport } from './routes/_authenticated/_layout/tarefas_/auditoria/atualizacao'
 
-const PublicRoute = PublicRouteImport.update({
+const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PublicAuthRoute = PublicAuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => PublicRoute,
+const SplatRouteRoute = SplatRouteRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedTasksRoute = AuthenticatedTasksRouteImport.update({
-  id: '/tasks',
-  path: '/tasks',
-  getParentRoute: () => AuthenticatedRoute,
+const PublicLayoutRouteRoute = PublicLayoutRouteRouteImport.update({
+  id: '/_layout',
+  getParentRoute: () => PublicRouteRoute,
 } as any)
-const AuthenticatedTasksTaskIdRoute =
-  AuthenticatedTasksTaskIdRouteImport.update({
-    id: '/tasks_/$taskId',
-    path: '/tasks/$taskId',
-    getParentRoute: () => AuthenticatedRoute,
+const AuthenticatedLayoutRouteRoute =
+  AuthenticatedLayoutRouteRouteImport.update({
+    id: '/_layout',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const PublicLayoutLoginRoute = PublicLayoutLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => PublicLayoutRouteRoute,
+} as any)
+const PublicLayoutCadastroRoute = PublicLayoutCadastroRouteImport.update({
+  id: '/cadastro',
+  path: '/cadastro',
+  getParentRoute: () => PublicLayoutRouteRoute,
+} as any)
+const AuthenticatedLayoutTarefasRoute =
+  AuthenticatedLayoutTarefasRouteImport.update({
+    id: '/tarefas',
+    path: '/tarefas',
+    getParentRoute: () => AuthenticatedLayoutRouteRoute,
+  } as any)
+const AuthenticatedLayoutTarefasTaskIdRoute =
+  AuthenticatedLayoutTarefasTaskIdRouteImport.update({
+    id: '/tarefas_/$taskId',
+    path: '/tarefas/$taskId',
+    getParentRoute: () => AuthenticatedLayoutRouteRoute,
+  } as any)
+const AuthenticatedLayoutTarefasAuditoriaRouteRoute =
+  AuthenticatedLayoutTarefasAuditoriaRouteRouteImport.update({
+    id: '/tarefas_/auditoria',
+    path: '/tarefas/auditoria',
+    getParentRoute: () => AuthenticatedLayoutRouteRoute,
+  } as any)
+const AuthenticatedLayoutTarefasAuditoriaExclusaoRoute =
+  AuthenticatedLayoutTarefasAuditoriaExclusaoRouteImport.update({
+    id: '/exclusao',
+    path: '/exclusao',
+    getParentRoute: () => AuthenticatedLayoutTarefasAuditoriaRouteRoute,
+  } as any)
+const AuthenticatedLayoutTarefasAuditoriaCriacaoRoute =
+  AuthenticatedLayoutTarefasAuditoriaCriacaoRouteImport.update({
+    id: '/criacao',
+    path: '/criacao',
+    getParentRoute: () => AuthenticatedLayoutTarefasAuditoriaRouteRoute,
+  } as any)
+const AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute =
+  AuthenticatedLayoutTarefasAuditoriaAtualizacaoRouteImport.update({
+    id: '/atualizacao',
+    path: '/atualizacao',
+    getParentRoute: () => AuthenticatedLayoutTarefasAuditoriaRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/tasks': typeof AuthenticatedTasksRoute
-  '/auth': typeof PublicAuthRoute
-  '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
+  '/$': typeof SplatRouteRoute
+  '/tarefas': typeof AuthenticatedLayoutTarefasRoute
+  '/cadastro': typeof PublicLayoutCadastroRoute
+  '/login': typeof PublicLayoutLoginRoute
+  '/tarefas/auditoria': typeof AuthenticatedLayoutTarefasAuditoriaRouteRouteWithChildren
+  '/tarefas/$taskId': typeof AuthenticatedLayoutTarefasTaskIdRoute
+  '/tarefas/auditoria/atualizacao': typeof AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute
+  '/tarefas/auditoria/criacao': typeof AuthenticatedLayoutTarefasAuditoriaCriacaoRoute
+  '/tarefas/auditoria/exclusao': typeof AuthenticatedLayoutTarefasAuditoriaExclusaoRoute
 }
 export interface FileRoutesByTo {
-  '/tasks': typeof AuthenticatedTasksRoute
-  '/auth': typeof PublicAuthRoute
-  '/tasks/$taskId': typeof AuthenticatedTasksTaskIdRoute
+  '/$': typeof SplatRouteRoute
+  '/tarefas': typeof AuthenticatedLayoutTarefasRoute
+  '/cadastro': typeof PublicLayoutCadastroRoute
+  '/login': typeof PublicLayoutLoginRoute
+  '/tarefas/auditoria': typeof AuthenticatedLayoutTarefasAuditoriaRouteRouteWithChildren
+  '/tarefas/$taskId': typeof AuthenticatedLayoutTarefasTaskIdRoute
+  '/tarefas/auditoria/atualizacao': typeof AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute
+  '/tarefas/auditoria/criacao': typeof AuthenticatedLayoutTarefasAuditoriaCriacaoRoute
+  '/tarefas/auditoria/exclusao': typeof AuthenticatedLayoutTarefasAuditoriaExclusaoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/_public': typeof PublicRouteWithChildren
-  '/_authenticated/tasks': typeof AuthenticatedTasksRoute
-  '/_public/auth': typeof PublicAuthRoute
-  '/_authenticated/tasks_/$taskId': typeof AuthenticatedTasksTaskIdRoute
+  '/$': typeof SplatRouteRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_public': typeof PublicRouteRouteWithChildren
+  '/_authenticated/_layout': typeof AuthenticatedLayoutRouteRouteWithChildren
+  '/_public/_layout': typeof PublicLayoutRouteRouteWithChildren
+  '/_authenticated/_layout/tarefas': typeof AuthenticatedLayoutTarefasRoute
+  '/_public/_layout/cadastro': typeof PublicLayoutCadastroRoute
+  '/_public/_layout/login': typeof PublicLayoutLoginRoute
+  '/_authenticated/_layout/tarefas_/auditoria': typeof AuthenticatedLayoutTarefasAuditoriaRouteRouteWithChildren
+  '/_authenticated/_layout/tarefas_/$taskId': typeof AuthenticatedLayoutTarefasTaskIdRoute
+  '/_authenticated/_layout/tarefas_/auditoria/atualizacao': typeof AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute
+  '/_authenticated/_layout/tarefas_/auditoria/criacao': typeof AuthenticatedLayoutTarefasAuditoriaCriacaoRoute
+  '/_authenticated/_layout/tarefas_/auditoria/exclusao': typeof AuthenticatedLayoutTarefasAuditoriaExclusaoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/tasks' | '/auth' | '/tasks/$taskId'
+  fullPaths:
+    | '/$'
+    | '/tarefas'
+    | '/cadastro'
+    | '/login'
+    | '/tarefas/auditoria'
+    | '/tarefas/$taskId'
+    | '/tarefas/auditoria/atualizacao'
+    | '/tarefas/auditoria/criacao'
+    | '/tarefas/auditoria/exclusao'
   fileRoutesByTo: FileRoutesByTo
-  to: '/tasks' | '/auth' | '/tasks/$taskId'
+  to:
+    | '/$'
+    | '/tarefas'
+    | '/cadastro'
+    | '/login'
+    | '/tarefas/auditoria'
+    | '/tarefas/$taskId'
+    | '/tarefas/auditoria/atualizacao'
+    | '/tarefas/auditoria/criacao'
+    | '/tarefas/auditoria/exclusao'
   id:
     | '__root__'
+    | '/$'
     | '/_authenticated'
     | '/_public'
-    | '/_authenticated/tasks'
-    | '/_public/auth'
-    | '/_authenticated/tasks_/$taskId'
+    | '/_authenticated/_layout'
+    | '/_public/_layout'
+    | '/_authenticated/_layout/tarefas'
+    | '/_public/_layout/cadastro'
+    | '/_public/_layout/login'
+    | '/_authenticated/_layout/tarefas_/auditoria'
+    | '/_authenticated/_layout/tarefas_/$taskId'
+    | '/_authenticated/_layout/tarefas_/auditoria/atualizacao'
+    | '/_authenticated/_layout/tarefas_/auditoria/criacao'
+    | '/_authenticated/_layout/tarefas_/auditoria/exclusao'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  PublicRoute: typeof PublicRouteWithChildren
+  SplatRouteRoute: typeof SplatRouteRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  PublicRouteRoute: typeof PublicRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -83,68 +182,177 @@ declare module '@tanstack/react-router' {
       id: '/_public'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof PublicRouteImport
+      preLoaderRoute: typeof PublicRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof AuthenticatedRouteImport
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_public/auth': {
-      id: '/_public/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof PublicAuthRouteImport
-      parentRoute: typeof PublicRoute
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/tasks': {
-      id: '/_authenticated/tasks'
-      path: '/tasks'
-      fullPath: '/tasks'
-      preLoaderRoute: typeof AuthenticatedTasksRouteImport
-      parentRoute: typeof AuthenticatedRoute
+    '/_public/_layout': {
+      id: '/_public/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PublicLayoutRouteRouteImport
+      parentRoute: typeof PublicRouteRoute
     }
-    '/_authenticated/tasks_/$taskId': {
-      id: '/_authenticated/tasks_/$taskId'
-      path: '/tasks/$taskId'
-      fullPath: '/tasks/$taskId'
-      preLoaderRoute: typeof AuthenticatedTasksTaskIdRouteImport
-      parentRoute: typeof AuthenticatedRoute
+    '/_authenticated/_layout': {
+      id: '/_authenticated/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedLayoutRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_public/_layout/login': {
+      id: '/_public/_layout/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicLayoutLoginRouteImport
+      parentRoute: typeof PublicLayoutRouteRoute
+    }
+    '/_public/_layout/cadastro': {
+      id: '/_public/_layout/cadastro'
+      path: '/cadastro'
+      fullPath: '/cadastro'
+      preLoaderRoute: typeof PublicLayoutCadastroRouteImport
+      parentRoute: typeof PublicLayoutRouteRoute
+    }
+    '/_authenticated/_layout/tarefas': {
+      id: '/_authenticated/_layout/tarefas'
+      path: '/tarefas'
+      fullPath: '/tarefas'
+      preLoaderRoute: typeof AuthenticatedLayoutTarefasRouteImport
+      parentRoute: typeof AuthenticatedLayoutRouteRoute
+    }
+    '/_authenticated/_layout/tarefas_/$taskId': {
+      id: '/_authenticated/_layout/tarefas_/$taskId'
+      path: '/tarefas/$taskId'
+      fullPath: '/tarefas/$taskId'
+      preLoaderRoute: typeof AuthenticatedLayoutTarefasTaskIdRouteImport
+      parentRoute: typeof AuthenticatedLayoutRouteRoute
+    }
+    '/_authenticated/_layout/tarefas_/auditoria': {
+      id: '/_authenticated/_layout/tarefas_/auditoria'
+      path: '/tarefas/auditoria'
+      fullPath: '/tarefas/auditoria'
+      preLoaderRoute: typeof AuthenticatedLayoutTarefasAuditoriaRouteRouteImport
+      parentRoute: typeof AuthenticatedLayoutRouteRoute
+    }
+    '/_authenticated/_layout/tarefas_/auditoria/exclusao': {
+      id: '/_authenticated/_layout/tarefas_/auditoria/exclusao'
+      path: '/exclusao'
+      fullPath: '/tarefas/auditoria/exclusao'
+      preLoaderRoute: typeof AuthenticatedLayoutTarefasAuditoriaExclusaoRouteImport
+      parentRoute: typeof AuthenticatedLayoutTarefasAuditoriaRouteRoute
+    }
+    '/_authenticated/_layout/tarefas_/auditoria/criacao': {
+      id: '/_authenticated/_layout/tarefas_/auditoria/criacao'
+      path: '/criacao'
+      fullPath: '/tarefas/auditoria/criacao'
+      preLoaderRoute: typeof AuthenticatedLayoutTarefasAuditoriaCriacaoRouteImport
+      parentRoute: typeof AuthenticatedLayoutTarefasAuditoriaRouteRoute
+    }
+    '/_authenticated/_layout/tarefas_/auditoria/atualizacao': {
+      id: '/_authenticated/_layout/tarefas_/auditoria/atualizacao'
+      path: '/atualizacao'
+      fullPath: '/tarefas/auditoria/atualizacao'
+      preLoaderRoute: typeof AuthenticatedLayoutTarefasAuditoriaAtualizacaoRouteImport
+      parentRoute: typeof AuthenticatedLayoutTarefasAuditoriaRouteRoute
     }
   }
 }
 
-interface AuthenticatedRouteChildren {
-  AuthenticatedTasksRoute: typeof AuthenticatedTasksRoute
-  AuthenticatedTasksTaskIdRoute: typeof AuthenticatedTasksTaskIdRoute
+interface AuthenticatedLayoutTarefasAuditoriaRouteRouteChildren {
+  AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute: typeof AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute
+  AuthenticatedLayoutTarefasAuditoriaCriacaoRoute: typeof AuthenticatedLayoutTarefasAuditoriaCriacaoRoute
+  AuthenticatedLayoutTarefasAuditoriaExclusaoRoute: typeof AuthenticatedLayoutTarefasAuditoriaExclusaoRoute
 }
 
-const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedTasksRoute: AuthenticatedTasksRoute,
-  AuthenticatedTasksTaskIdRoute: AuthenticatedTasksTaskIdRoute,
+const AuthenticatedLayoutTarefasAuditoriaRouteRouteChildren: AuthenticatedLayoutTarefasAuditoriaRouteRouteChildren =
+  {
+    AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute:
+      AuthenticatedLayoutTarefasAuditoriaAtualizacaoRoute,
+    AuthenticatedLayoutTarefasAuditoriaCriacaoRoute:
+      AuthenticatedLayoutTarefasAuditoriaCriacaoRoute,
+    AuthenticatedLayoutTarefasAuditoriaExclusaoRoute:
+      AuthenticatedLayoutTarefasAuditoriaExclusaoRoute,
+  }
+
+const AuthenticatedLayoutTarefasAuditoriaRouteRouteWithChildren =
+  AuthenticatedLayoutTarefasAuditoriaRouteRoute._addFileChildren(
+    AuthenticatedLayoutTarefasAuditoriaRouteRouteChildren,
+  )
+
+interface AuthenticatedLayoutRouteRouteChildren {
+  AuthenticatedLayoutTarefasRoute: typeof AuthenticatedLayoutTarefasRoute
+  AuthenticatedLayoutTarefasAuditoriaRouteRoute: typeof AuthenticatedLayoutTarefasAuditoriaRouteRouteWithChildren
+  AuthenticatedLayoutTarefasTaskIdRoute: typeof AuthenticatedLayoutTarefasTaskIdRoute
 }
 
-const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
-  AuthenticatedRouteChildren,
+const AuthenticatedLayoutRouteRouteChildren: AuthenticatedLayoutRouteRouteChildren =
+  {
+    AuthenticatedLayoutTarefasRoute: AuthenticatedLayoutTarefasRoute,
+    AuthenticatedLayoutTarefasAuditoriaRouteRoute:
+      AuthenticatedLayoutTarefasAuditoriaRouteRouteWithChildren,
+    AuthenticatedLayoutTarefasTaskIdRoute:
+      AuthenticatedLayoutTarefasTaskIdRoute,
+  }
+
+const AuthenticatedLayoutRouteRouteWithChildren =
+  AuthenticatedLayoutRouteRoute._addFileChildren(
+    AuthenticatedLayoutRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedLayoutRouteRoute: typeof AuthenticatedLayoutRouteRouteWithChildren
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedLayoutRouteRoute: AuthenticatedLayoutRouteRouteWithChildren,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+interface PublicLayoutRouteRouteChildren {
+  PublicLayoutCadastroRoute: typeof PublicLayoutCadastroRoute
+  PublicLayoutLoginRoute: typeof PublicLayoutLoginRoute
+}
+
+const PublicLayoutRouteRouteChildren: PublicLayoutRouteRouteChildren = {
+  PublicLayoutCadastroRoute: PublicLayoutCadastroRoute,
+  PublicLayoutLoginRoute: PublicLayoutLoginRoute,
+}
+
+const PublicLayoutRouteRouteWithChildren =
+  PublicLayoutRouteRoute._addFileChildren(PublicLayoutRouteRouteChildren)
+
+interface PublicRouteRouteChildren {
+  PublicLayoutRouteRoute: typeof PublicLayoutRouteRouteWithChildren
+}
+
+const PublicRouteRouteChildren: PublicRouteRouteChildren = {
+  PublicLayoutRouteRoute: PublicLayoutRouteRouteWithChildren,
+}
+
+const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(
+  PublicRouteRouteChildren,
 )
 
-interface PublicRouteChildren {
-  PublicAuthRoute: typeof PublicAuthRoute
-}
-
-const PublicRouteChildren: PublicRouteChildren = {
-  PublicAuthRoute: PublicAuthRoute,
-}
-
-const PublicRouteWithChildren =
-  PublicRoute._addFileChildren(PublicRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
-  AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  PublicRoute: PublicRouteWithChildren,
+  SplatRouteRoute: SplatRouteRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  PublicRouteRoute: PublicRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

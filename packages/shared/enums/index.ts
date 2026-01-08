@@ -1,2 +1,2 @@
-export * from './TaskPriority';
-export * from './TaskStatus';
+export * from './task-priority';
+export * from './task-status';

@@ -1,10 +1,10 @@
-import type { LoginData, RegisterData } from '@/types/auth-data';
+import { getAccessToken } from '@/app/utils/access-token';
 
 import type { IAuthService } from '../contracts/iauth-service';
 import type { HttpRequestConfig, IHttpClient } from '../contracts/ihttp-client';
 
+import type { LoginData, RegisterData } from '@/types/auth-data';
 import type { SessionPayload } from '@challenge/shared';
-import { getAccessToken } from '@/app/utils/access-token';
 
 export class AuthService implements IAuthService {
   private readonly httpClient: IHttpClient;
@@ -37,13 +37,17 @@ export class AuthService implements IAuthService {
     });
   }
 
-  session(config?: HttpRequestConfig): Promise<SessionPayload> {
-    const accessToken = getAccessToken();
+  session(
+    accessToken?: string,
+    config?: HttpRequestConfig,
+  ): Promise<SessionPayload> {
+    const token = accessToken ?? getAccessToken();
 
     return this.httpClient.get<SessionPayload>('/auth/get-active-user', {
       ...config,
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        ...config?.headers,
+        Authorization: `Bearer ${token}`,
       },
     });
   }

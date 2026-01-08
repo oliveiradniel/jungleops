@@ -9,7 +9,7 @@ import { getConfig } from './shared/config/config.helper';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const PORT = getConfig(app.get(ConfigService)).PORT;
+  const { PORT } = getConfig(app.get(ConfigService));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -21,4 +21,4 @@ async function bootstrap() {
   await app.listen(PORT);
 }
 
-bootstrap();
+void bootstrap();

@@ -1,6 +1,4 @@
-import { TaskComment, User } from 'entities';
-
-import { TaskWithCommentCount } from './task-with-comment-count.entity';
+import { TaskComment, TaskWithCommentCount, UserWithoutPassword } from '../entities';
 
 export interface Pagination {
   page: number;
@@ -29,7 +27,7 @@ export type CommentWithUserData = {
   userId: string;
   comment: string;
   createdAt: Date;
-  user: User;
+  user: UserWithoutPassword;
 };
 
 export type ListCommentsWithUserDataPagination = {

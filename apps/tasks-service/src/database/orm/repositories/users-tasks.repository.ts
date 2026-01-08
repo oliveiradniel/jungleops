@@ -24,7 +24,15 @@ export class UsersTasksRepository implements IUsersTasksRepository {
     return usersTasks.map((usersTask) => usersTask.userId);
   }
 
-  async getUsersByTaskId(taskId: string): Promise<UserTask[]> {
+  async getTaskIdsByUserId(userId: string): Promise<string[]> {
+    const usersTasks = await this.usersTasksRepository.find({
+      where: { userId },
+    });
+
+    return usersTasks.map((userTask) => userTask.taskId);
+  }
+
+  async getUsersTasksByTaskId(taskId: string): Promise<UserTask[]> {
     const usersTasks = await this.usersTasksRepository.find({
       where: { taskId },
     });

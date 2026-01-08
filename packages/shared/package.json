@@ -1,42 +1,20 @@
 {
   "name": "@challenge/shared",
   "version": "0.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "types": "dist/esm/index.d.ts",
   "private": true,
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./entities": {
-      "import": "./dist/entities/index.js",
-      "require": "./dist/entities/index.js",
-      "types": "./dist/entities/index.d.ts"
-    },
-    "./types": {
-      "import": "./dist/types/index.js",
-      "require": "./dist/types/index.js",
-      "types": "./dist/types/index.d.ts"
-    },
-    "./enums": {
-      "import": "./dist/enums/index.js",
-      "require": "./dist/enums/index.js",
-      "types": "./dist/enums/index.d.ts"
-    },
-    "./config": {
-      "import": "./dist/config/index.js",
-      "require": "./dist/config/index.js",
-      "types": "./dist/config/index.d.ts"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/esm/index.d.ts"
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json"
-  },
-  "dependencies": {
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.2"
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json"
   },
   "devDependencies": {
     "@challenge/eslint-config": "0.0.0",

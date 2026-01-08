@@ -7,9 +7,9 @@ import { firstValueFrom } from 'rxjs';
 
 import {
   CreateTaskData,
-  ListTasksPagination,
-  Pagination,
   Task,
+  TaskFilters,
+  TasksList,
   UpdateTaskData,
 } from '@challenge/shared';
 
@@ -19,7 +19,7 @@ export class TasksService {
 
   constructor(
     private readonly httpService: HttpService,
-    configService: ConfigService,
+    private readonly configService: ConfigService,
   ) {
     this.baseURL = getConfig(configService).TASKS_SERVICE_BASE_URL;
   }
@@ -32,19 +32,32 @@ export class TasksService {
     return data;
   }
 
-  async list(dataToPagination: Pagination): Promise<ListTasksPagination> {
-    const { page, size } = dataToPagination;
+  async list(filters: TaskFilters): Promise<TasksList> {
+    const { page, size, orderBy, order, status, priority, search } = filters;
 
     const { data } = await firstValueFrom(
-      this.httpService.get<ListTasksPagination, { params: Pagination }>(
+      this.httpService.get<TasksList, { params: TaskFilters }>(
         `${this.baseURL}`,
         {
           params: {
             page,
             size,
+            orderBy,
+            order,
+            status,
+            priority,
+            search,
           },
         },
       ),
+    );
+
+    return data;
+  }
+
+  async listTasksByUserId(userId: string): Promise<Task[]> {
+    const { data } = await firstValueFrom(
+      this.httpService.get<Task[]>(`${this.baseURL}/user/${userId}`),
     );
 
     return data;

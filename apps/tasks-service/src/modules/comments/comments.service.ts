@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
 
 import { TasksService } from '../tasks/tasks.service';
 import { UsersTasksService } from '../users-tasks/users-tasks.service';
+import { EventsPublisherService } from 'src/messaging/events-publisher.service';
+import { SignalsPublisherService } from 'src/messaging/signals-publisher.service';
 
 import type { ICommentsRepository } from 'src/database/contracts/comments-repository.contract';
 
@@ -10,14 +11,10 @@ import type {
   CreateCommentData,
   Pagination,
   TaskComment,
-  NewCommentNotificationPayload,
   ListCommentsPagination,
 } from '@challenge/shared';
 
-import {
-  COMMENTS_REPOSITORY,
-  NOTIFICATIONS_SERVICE_RMQ,
-} from 'src/shared/constants/tokens';
+import { COMMENTS_REPOSITORY } from 'src/shared/constants/tokens';
 
 @Injectable()
 export class CommentsService {
@@ -26,8 +23,8 @@ export class CommentsService {
     private readonly commentsRepository: ICommentsRepository,
     private readonly usersTasksService: UsersTasksService,
     private readonly tasksService: TasksService,
-    @Inject(NOTIFICATIONS_SERVICE_RMQ)
-    private readonly notificationsService: ClientProxy,
+    private readonly eventsPublisherService: EventsPublisherService,
+    private readonly signalsPublisherService: SignalsPublisherService,
   ) {}
 
   async list(
@@ -52,19 +49,23 @@ export class CommentsService {
       comment,
     });
 
-    const newCommentPayload: NewCommentNotificationPayload = {
-      taskId,
-      taskTitle: title,
-      comment: {
-        id: createdComment.id,
-        text: createdComment.comment,
-        authorId: createdComment.userId,
-        createdAt: createdComment.createdAt,
+    this.eventsPublisherService.taskCommentCreated({
+      authorId: userId,
+      task: {
+        id: taskId,
+        title: title,
+        participantIds: assignedUserIds,
+        comment: comment,
       },
-      participantIds: assignedUserIds,
-    };
+    });
 
-    this.notificationsService.emit('task.comment.created', newCommentPayload);
+    this.signalsPublisherService.taskCommentCreated({
+      authorId: userId,
+      task: {
+        id: taskId,
+        participantIds: assignedUserIds,
+      },
+    });
 
     return createdComment;
   }

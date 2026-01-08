@@ -1,6 +1,7 @@
+import type { CreateCommentData } from '@/types/comment-data';
+
 import type { ICommentsService } from '../contracts/icomments-service';
 import type { HttpRequestConfig, IHttpClient } from '../contracts/ihttp-client';
-import type { CreateCommentData } from '@/types/comment-data';
 
 import type {
   Pagination,

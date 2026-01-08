@@ -6,6 +6,8 @@ export interface IConfig {
   TASKS_SERVICE_BASE_URL: string;
   TASK_AUDIT_LOGS_SERVICE_BASE_URL: string;
   USERS_TASKS_SERVICE_BASE_URL: string;
+  NOTIFICATIONS_SERVICE_BASE_URL: string;
+  BROKER_URL: string;
   JWT_ACCESS_SECRET: string;
   JWT_REFRESH_SECRET: string;
 }

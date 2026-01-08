@@ -1,88 +1,78 @@
-import { useMemo, useState } from 'react';
-import { useAuth } from '@/app/hooks/use-auth';
+import { useMemo } from 'react';
+import { useNavigate, useSearch } from '@tanstack/react-router';
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useTasks } from '@/app/hooks/use-tasks';
 import { useListTasksQuery } from '@/app/hooks/queries/use-list-tasks-query';
-import { usePagination } from '@/app/hooks/use-pagination';
-import { useNotificationsSocket } from '@/app/hooks/use-notifications-socket';
 
-export interface FilterParams {
-  type: 'priority' | 'status';
-  value: string;
-}
+import { taskColumns } from './task-columns';
 
 export function useTasksController() {
-  const { selectedPriority, selectedStatus, handleOpenNewTaskSheet } =
-    useTasks();
+  const { handleOpenNewTaskSheet } = useTasks();
 
-  const { page, size, goToPage, handlePreviousTasksPage, handleNextTasksPage } =
-    usePagination({ from: '/_authenticated/tasks', to: '/tasks' });
+  const navigate = useNavigate();
 
-  const { user } = useAuth();
-
-  useNotificationsSocket({ userId: user?.id, page });
+  const { page, size, orderBy, order, status, priority, q } = useSearch({
+    from: '/_authenticated/_layout/tarefas',
+  });
 
   const {
-    tasksList,
-    totalTasksCount,
-    totalPages,
-    hasNext,
-    hasPrevious,
+    tasks,
+    totalAll,
+    totalFiltered,
+    pagination,
+    facets,
     isTasksLoading,
-    isTasksPending,
-  } = useListTasksQuery({ page, size });
+    isTasksFetching,
+  } = useListTasksQuery({
+    page,
+    size,
+    orderBy,
+    order,
+    status,
+    priority,
+    search: q,
+  });
 
-  const maxVisiblePages = 3;
+  const paginationTST = useMemo(
+    () => ({
+      pageIndex: page - 1,
+      pageSize: size,
+    }),
+    [page, size],
+  );
 
-  const startPage = Math.max(1, page - 1);
-  const endPage = Math.min(totalPages!, startPage + maxVisiblePages - 1);
+  const table = useReactTable({
+    data: tasks,
+    columns: taskColumns,
+    state: {
+      pagination: paginationTST,
+    },
+    manualPagination: true,
+    manualFiltering: true,
+    manualSorting: true,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
-  const pagesToShow: number[] = [];
-  for (let i = startPage; i <= endPage; i++) {
-    pagesToShow.push(i);
+  function handlePageNavigation(page: number) {
+    navigate({ to: '/tarefas', search: (old) => ({ ...old, page }) });
   }
 
-  const [searchInput, setSearchInput] = useState('');
-
-  const filteredTasksList = useMemo(() => {
-    if (!tasksList.length) return [];
-
-    return tasksList.filter((task) => {
-      const matchesSearch =
-        !searchInput ||
-        task.title.toLowerCase().includes(searchInput.toLowerCase());
-
-      const matchesPriority =
-        selectedPriority.length === 0 ||
-        selectedPriority.includes(task.priority);
-
-      const matchesStatus =
-        selectedStatus.length === 0 || selectedStatus.includes(task.status);
-
-      return matchesSearch && matchesPriority && matchesStatus;
-    });
-  }, [searchInput, tasksList, selectedPriority, selectedStatus]);
-
-  function handleChangeSearchInput(value: string) {
-    setSearchInput(value);
+  function handleSizePerPage(size: number) {
+    navigate({ to: '/tarefas', search: (old) => ({ ...old, size, page: 1 }) });
   }
 
   return {
-    filteredTasksList,
-    totalTasksCount,
-    isTasksLoading,
-    isTasksPending,
-    hasPrevious: hasPrevious!,
-    hasNext: hasNext!,
-    startPage,
-    endPage,
-    pagesToShow,
+    table,
+    totalAll,
+    totalFiltered,
+    pagination,
+    facets,
     page,
-    totalPages: totalPages!,
-    searchInput,
-    goToPage,
-    handlePreviousTasksPage,
-    handleNextTasksPage,
+    size,
+    isTasksLoading,
+    isTasksFetching,
     handleOpenNewTaskSheet,
-    handleChangeSearchInput,
+    handlePageNavigation,
+    handleSizePerPage,
   };
 }

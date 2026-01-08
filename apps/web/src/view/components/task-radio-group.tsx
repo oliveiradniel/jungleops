@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { Label } from './ui/label';
 import {
   RadioGroup,
@@ -5,23 +6,23 @@ import {
   RadioGroupItem,
 } from './ui/radio-group';
 
-interface Options {
+interface Options<TValue> {
   id: string;
-  value: string;
+  value: TValue;
   label: string;
 }
 
-interface TaskTadioGroupProps {
-  options: Options[];
-  value: string;
+interface TaskTadioGroupProps<TValue> {
+  options: Options<TValue>[];
+  value?: TValue;
   onValueChange: (value: string) => void;
 }
 
-export function TaskRadioGroup({
+export function TaskRadioGroup<TValue extends string>({
   options,
   value,
   onValueChange,
-}: TaskTadioGroupProps) {
+}: TaskTadioGroupProps<TValue>) {
   return (
     <RadioGroup
       defaultValue={options[0].value}
@@ -34,7 +35,7 @@ export function TaskRadioGroup({
             <RadioGroupIndicator />
             <Label
               htmlFor={option.id}
-              className="font-normal hover:cursor-pointer"
+              className={cn('font-normal hover:cursor-pointer')}
             >
               {option.label}
             </Label>

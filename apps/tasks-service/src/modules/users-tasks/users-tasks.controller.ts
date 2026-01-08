@@ -9,8 +9,8 @@ export class UsersTasksController {
   constructor(private readonly usersTasksService: UsersTasksService) {}
 
   @Get('list-users/:taskId')
-  listUsersByTaskId(@Param('taskId') taskId: string): Promise<UserTask[]> {
-    return this.usersTasksService.listUsersByTaskId(taskId);
+  listUsersTasksByTaskId(@Param('taskId') taskId: string): Promise<UserTask[]> {
+    return this.usersTasksService.listUsersTasksByTaskId(taskId);
   }
 
   @Post()

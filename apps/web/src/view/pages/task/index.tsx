@@ -1,5 +1,5 @@
 import { useTaskController } from './use-task-controller';
-import { useTasks } from '@/app/hooks/use-tasks';
+import { router } from '@/router';
 
 import {
   ArrowLeft,
@@ -12,20 +12,9 @@ import {
   formatDateToBR,
   formatDateToBRWithHour,
 } from '@/app/utils/format-date-br';
-import { priorityLabels, statusLabels } from '../tasks/labels';
-import { cn } from '@/lib/utils';
 
 import { Button } from '../../components/ui/button';
 import { Separator } from '../../components/ui/separator';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '../../components/ui/pagination';
 import { Skeleton } from '../../components/ui/skeleton';
 import {
   InputGroup,
@@ -33,19 +22,17 @@ import {
   InputGroupTextarea,
 } from '@/view/components/ui/input-group';
 import { UpdateTaskSheet } from '@/view/components/update-task-sheet';
-
-import type { TaskStatus } from '@/app/enums/TaskStatus';
-import type { TaskPriority } from '@/app/enums/TaskPriority';
+import { PriorityBadge } from '@/view/components/ui/priority-badge';
+import { StatusBadge } from '@/view/components/ui/status-badge';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from '@/view/components/ui/tabs';
+import { PaginationControls } from '@/view/components/pagination-controls';
 
 export function Task() {
-  const { handleOpenUpdateTaskSheet } = useTasks();
-
   const {
     task,
     commentsList,
@@ -56,19 +43,18 @@ export function Task() {
     hasPrevious,
     isCommentsLoading,
     isTaskLoading,
+    isTasksFetching,
     currentPage,
-    startPage,
-    pagesToShow,
-    endPage,
     totalPages,
+    page,
+    size,
     isCreateCommentLoading,
+    handleOpenUpdateTaskSheet,
     handleOpenDeleteTaskDialog,
     register,
-    navigate,
-    goToPage,
-    handlePreviousTasksPage,
-    handleNextTasksPage,
     handleSubmitCreateComment,
+    handlePageNavigation,
+    handleSizePerPage,
   } = useTaskController();
 
   return (
@@ -76,16 +62,16 @@ export function Task() {
       <UpdateTaskSheet key={task?.id} taskData={task} />
 
       <div className="px-10">
-        <header className="mt-20 flex items-center justify-between gap-4">
+        <header className="mt-6 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Button
-              onClick={() => navigate({ to: '/tasks' })}
+              onClick={() => router.history.back()}
               className="text-primary-foreground"
             >
               <ArrowLeft className="size-6" />
             </Button>
 
-            <h1 className="text-4xl leading-none">
+            <h1 className="text-4xl break-all">
               {isTaskLoading ? 'Carregando...' : task?.title}
             </h1>
           </div>
@@ -129,7 +115,7 @@ export function Task() {
                   <span>
                     Criado em:{' '}
                     <span className="text-primary font-medium">
-                      {formatDateToBR(task?.createdAt!)}
+                      {task?.createdAt}
                     </span>
                   </span>
                 </div>
@@ -141,7 +127,7 @@ export function Task() {
                   <span>
                     Prazo para término:{' '}
                     <span className="text-primary font-medium">
-                      {formatDateToBR(task?.term!)}
+                      {task?.term}
                     </span>
                   </span>
                 </div>
@@ -160,20 +146,10 @@ export function Task() {
                 <div className="flex flex-col gap-2">
                   <span className="text-muted-foreground text-xs">Status</span>
 
-                  <div
-                    className={cn(
-                      'flex items-center gap-2 rounded-md px-4 py-2 text-white',
-                      task?.status === 'TODO' && 'bg-yellow-400',
-                      task?.status === 'IN_PROGRESS' && 'bg-blue-400',
-                      task?.status === 'REVIEW' && 'bg-purple-400',
-                      task?.status === 'DONE' && 'bg-green-400',
-                    )}
-                  >
-                    {task?.status === 'LOW' && ''}
-                    <span className="font-medium">
-                      {statusLabels[task?.status as TaskStatus]}
-                    </span>
-                  </div>
+                  <StatusBadge
+                    value={task?.status.value}
+                    label={task?.status.label}
+                  />
                 </div>
               )}
 
@@ -183,19 +159,10 @@ export function Task() {
                     Prioridade
                   </span>
 
-                  <div
-                    className={cn(
-                      'flex items-center gap-2 rounded-md px-4 py-2 text-white',
-                      task?.priority === 'LOW' && 'bg-green-400',
-                      task?.priority === 'MEDIUM' && 'bg-blue-400',
-                      task?.priority === 'HIGH' && 'bg-yellow-400',
-                      task?.priority === 'URGENT' && 'bg-red-400',
-                    )}
-                  >
-                    <span className="font-medium">
-                      {priorityLabels[task?.priority as TaskPriority]}
-                    </span>
-                  </div>
+                  <PriorityBadge
+                    value={task?.priority.value}
+                    label={task?.priority.label}
+                  />
                 </div>
               )}
             </div>
@@ -211,82 +178,22 @@ export function Task() {
 
             <TabsContent value="comments">
               <div className="space-y-6">
-                <div className="flex items-center gap-4">
+                <div className="flex flex-wrap items-center gap-2">
                   <h2 className="text-3xl">
                     Comentários ({isTaskLoading ? '...' : totalCommentsCount})
                   </h2>
 
-                  <div>
-                    <Pagination>
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious
-                            aria-disabled={!hasPrevious || isTaskLoading}
-                            onClick={() => {
-                              if (isTaskLoading) return;
-
-                              handlePreviousTasksPage();
-                            }}
-                          />
-                        </PaginationItem>
-
-                        {startPage > 1 && (
-                          <>
-                            <PaginationItem>
-                              <PaginationLink onClick={() => goToPage(1)}>
-                                1
-                              </PaginationLink>
-                            </PaginationItem>
-                            {startPage > 2 && (
-                              <PaginationItem>
-                                <PaginationEllipsis />
-                              </PaginationItem>
-                            )}
-                          </>
-                        )}
-
-                        {pagesToShow.map((page) => (
-                          <PaginationItem key={page}>
-                            <PaginationLink
-                              aria-disabled={isTaskLoading}
-                              onClick={() => goToPage(page)}
-                              isActive={page === currentPage}
-                            >
-                              {page}
-                            </PaginationLink>
-                          </PaginationItem>
-                        ))}
-
-                        {endPage < totalPages! && (
-                          <>
-                            {endPage < totalPages! - 1 && (
-                              <PaginationItem>
-                                <PaginationEllipsis />
-                              </PaginationItem>
-                            )}
-                            <PaginationItem>
-                              <PaginationLink
-                                onClick={() => goToPage(totalPages!)}
-                              >
-                                {totalPages!}
-                              </PaginationLink>
-                            </PaginationItem>
-                          </>
-                        )}
-
-                        <PaginationItem>
-                          <PaginationNext
-                            aria-disabled={!hasNext || isTaskLoading}
-                            onClick={() => {
-                              if (isTaskLoading) return;
-
-                              handleNextTasksPage();
-                            }}
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
-                  </div>
+                  <PaginationControls
+                    hasPrevious={hasPrevious ?? false}
+                    hasNext={hasNext ?? false}
+                    totalPages={totalPages ?? 0}
+                    isLoading={isTasksFetching}
+                    disabled={totalCommentsCount <= 0}
+                    page={page}
+                    size={size}
+                    onPageNavigation={handlePageNavigation}
+                    onSizePerPage={handleSizePerPage}
+                  />
                 </div>
 
                 <Separator />

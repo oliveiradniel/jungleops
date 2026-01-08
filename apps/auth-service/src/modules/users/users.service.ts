@@ -15,7 +15,7 @@ export class UsersService {
     private readonly usersRepository: IUsersRepository,
   ) {}
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<UserWithoutPassword> {
     const user = await this.usersRepository.getById(id);
 
     if (!user) {
@@ -29,7 +29,7 @@ export class UsersService {
     return this.usersRepository.getByEmail(email);
   }
 
-  findByUsername(username: string): Promise<User | null> {
+  findByUsername(username: string): Promise<UserWithoutPassword | null> {
     return this.usersRepository.getByUsername(username);
   }
 
@@ -39,6 +39,10 @@ export class UsersService {
 
   listUsers(): Promise<UserWithoutPassword[]> {
     return this.usersRepository.listUsers();
+  }
+
+  listUserIds(): Promise<string[]> {
+    return this.usersRepository.listUserIds();
   }
 
   async create(data: CreateUserData): Promise<User> {

@@ -1,24 +1,10 @@
-import {
-  IsDate,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-
-import { CreateTaskData, TaskPriority, TaskStatus } from '@challenge/shared';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateTaskDTO implements CreateTaskData {
-  @ApiProperty({
-    example: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
-    description: 'User who created the task.',
-  })
-  @IsString()
-  @IsNotEmpty()
-  authorId: string;
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
+import { TaskPriority, TaskStatus } from '@challenge/shared';
+
+export class CreateTaskDTO {
   @ApiProperty({
     example: 'Desenvolver interface de login',
     description: 'Title of the task.',
@@ -39,17 +25,17 @@ export class CreateTaskDTO implements CreateTaskData {
     example: '2025-11-28',
     description: 'Deadline for task completion (ISO 8601 format).',
   })
-  @Type(() => Date)
-  @IsDate()
-  term: Date;
+  @IsString()
+  @IsNotEmpty()
+  term: string;
 
   @ApiProperty({
     example: 'LOW',
     description: 'Priority level of the task. Defaults to LOW if not provided.',
   })
   @IsEnum(TaskPriority)
-  @IsOptional()
-  priority?: TaskPriority;
+  @IsNotEmpty()
+  priority: TaskPriority;
 
   @ApiProperty({
     example: 'TODO',
@@ -57,6 +43,6 @@ export class CreateTaskDTO implements CreateTaskData {
       'Current status of the task. Defaults to TODO if not provided.',
   })
   @IsEnum(TaskStatus)
-  @IsOptional()
-  status?: TaskStatus;
+  @IsNotEmpty()
+  status: TaskStatus;
 }

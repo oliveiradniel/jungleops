@@ -57,7 +57,7 @@ export class HttpProxyErrorFilter implements ExceptionFilter {
               error: response.error || response.data.error || 'GatewayError',
             };
 
-      return res.status(finalResponse.statusCode).json(finalResponse);
+      return res.status(finalResponse.statusCode as number).json(finalResponse);
     }
 
     // Fallback

@@ -1,11 +1,7 @@
-import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsString, NotEquals } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class EnvironmentVariablesDTO {
   @IsNumber()
-  @Transform(({ value: port }: { value: string }) => {
-    return port ? Number(port) : 3002;
-  })
   PORT: number;
 
   @IsString()
@@ -18,24 +14,21 @@ export class EnvironmentVariablesDTO {
 
   @IsString()
   @IsNotEmpty()
-  POSTGRES_PASSWORD: string;
+  DB_AUTH_SERVICE_PASSWORD: string;
 
   @IsString()
   @IsNotEmpty()
-  POSTGRES_USER: string;
+  DB_AUTH_SERVICE_USER: string;
 
   @IsString()
   @IsNotEmpty()
-  POSTGRES_DB: string;
+  DB_AUTH_SERVICE_NAME: string;
 
   @IsString()
   @IsNotEmpty()
-  POSTGRES_HOST: string;
+  DB_AUTH_SERVICE_HOST: string;
 
   @IsNumber()
   @IsNotEmpty()
-  @Transform(({ value: port }: { value: string }) => {
-    return port ? Number(port) : 5432;
-  })
-  POSTGRES_PORT: number;
+  DB_AUTH_SERVICE_PORT: number;
 }

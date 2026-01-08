@@ -1,7 +1,6 @@
 import { useDeleteTaskDialog } from './use-delete-task-dialog';
 
-import { formatDateToBR } from '@/app/utils/format-date-br';
-import { statusLabels } from '@/view/pages/tasks/labels';
+import { truncateString } from '@/app/utils/truncate-string';
 
 import {
   Dialog,
@@ -17,15 +16,10 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Label } from '../ui/label';
 
-import type { TaskStatus } from '@/app/enums/TaskStatus';
+import type { Task } from '@/app/entities/task';
 
 interface DeleteTaskDialogProps {
-  task: {
-    id: string;
-    title: string;
-    status: TaskStatus;
-    createdAt: Date;
-  };
+  task: Pick<Task, 'id' | 'title' | 'status' | 'createdAt'>;
   page: number;
   onClosePopover?: () => void;
 }
@@ -71,17 +65,15 @@ export function DeleteTaskDialog({
         <div className="flex flex-col">
           <div>
             <span className="text-muted-foreground">Título:</span>{' '}
-            <span className="text-sm">{task.title}</span>
+            <span className="text-sm">{truncateString(task.title, 40)}</span>
           </div>
           <div>
             <span className="text-muted-foreground">Status:</span>{' '}
-            <span className="text-sm">
-              {statusLabels[task.status as TaskStatus]}
-            </span>
+            <span className="text-sm">{task.status?.label}</span>
           </div>
           <div>
             <span className="text-muted-foreground">Criado em:</span>{' '}
-            <span className="text-sm">{formatDateToBR(task.createdAt)}</span>
+            <span className="text-sm">{task.createdAt}</span>
           </div>
         </div>
 
@@ -93,9 +85,9 @@ export function DeleteTaskDialog({
               Digite o título da tarefa para continuar.
             </Label>
             <Input
-              aria-invalid={true}
+              aria-invalid="true"
               id="task-name-for-delete"
-              placeholder={task.title}
+              placeholder={truncateString(task.title, 40)}
               value={titleConfirmation}
               onChange={handleChangeTitleConfirmation}
             />

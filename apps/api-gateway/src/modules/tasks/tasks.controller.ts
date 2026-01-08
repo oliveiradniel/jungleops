@@ -29,7 +29,6 @@ import type { Request } from 'express';
 import { TasksService } from './tasks.service';
 
 import { TaskIdParam } from 'src/shared/params/task-id.param';
-import { PaginationQueryParam } from 'src/shared/queryParams/pagination.query-param';
 
 import { UpdateTaskDTO } from './dtos/update-task.dto';
 import { CreateTaskDTO } from './dtos/create-task.dto';
@@ -43,7 +42,8 @@ import { ConflictTaskResponse } from './responses/conflict-task-response copy';
 import { ThrottlerResponse } from 'src/shared/responses/throttler.response';
 import { BadRequestCreateTaskResponse } from './responses/bad-request-create-task.response';
 
-import { ListTasksPagination, Task } from '@challenge/shared';
+import { TasksList, Task } from '@challenge/shared';
+import { TaskFiltersQueryParam } from 'src/shared/queryParams/task-filters.query-param';
 
 @ApiBearerAuth()
 @ApiBadGatewayResponse({
@@ -87,12 +87,26 @@ export class TasksController {
   })
   @HttpCode(HttpStatus.OK)
   @Get()
-  async list(
-    @Query() queryParams: PaginationQueryParam,
-  ): Promise<ListTasksPagination> {
-    const { page, size } = queryParams;
+  async list(@Query() queryParams: TaskFiltersQueryParam): Promise<TasksList> {
+    const { page, size, orderBy, order, status, priority, search } =
+      queryParams;
 
-    return this.tasksService.list({ page, size });
+    return this.tasksService.list({
+      page,
+      size,
+      orderBy,
+      order,
+      status,
+      priority,
+      search,
+    });
+  }
+
+  @Get('list/user')
+  async listTasksByUserId(@Req() request: Request) {
+    const userId = request.user?.userId as string;
+
+    return this.tasksService.listTasksByUserId(userId);
   }
 
   @ApiCreatedResponse({
@@ -119,12 +133,16 @@ export class TasksController {
   })
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  async create(@Body() createTaskDTO: CreateTaskDTO): Promise<Task> {
-    const { authorId, title, description, term, priority, status } =
-      createTaskDTO;
+  async create(
+    @Body() createTaskDTO: CreateTaskDTO,
+    @Req() request: Request,
+  ): Promise<Task> {
+    const userId = request.user?.userId;
+
+    const { title, description, term, priority, status } = createTaskDTO;
 
     return this.tasksService.create({
-      authorId,
+      authorId: userId!,
       title,
       description,
       term,
@@ -149,20 +167,15 @@ export class TasksController {
   async update(
     @Param() params: TaskIdParam,
     @Body() updateTaskDTO: UpdateTaskDTO,
+    @Req() request: Request,
   ): Promise<void> {
+    const userId = request.user?.userId;
     const { taskId } = params;
-    const {
-      lastEditedBy,
-      userIds,
-      title,
-      description,
-      term,
-      priority,
-      status,
-    } = updateTaskDTO;
+    const { userIds, title, description, term, priority, status } =
+      updateTaskDTO;
 
     await this.tasksService.update(taskId, {
-      lastEditedBy,
+      lastEditedBy: userId!,
       userIds,
       title,
       description,
@@ -173,7 +186,7 @@ export class TasksController {
   }
 
   @ApiNoContentResponse({
-    description: 'Task successfully updated. No content is returned.',
+    description: 'Task successfully deleted. No content is returned.',
   })
   @ApiNotFoundResponse({
     description: 'No task found with the provided ID.',

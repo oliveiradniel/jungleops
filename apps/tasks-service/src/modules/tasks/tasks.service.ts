@@ -4,34 +4,29 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
 
 import { UsersTasksService } from '../users-tasks/users-tasks.service';
 import { TaskAuditLogsService } from '../task-audit-logs/task-audit-logs.service';
+import { EventsPublisherService } from 'src/messaging/events-publisher.service';
+import { SignalsPublisherService } from 'src/messaging/signals-publisher.service';
 
 import { CreateTaskAuditLogData } from '../task-audit-logs/types/create-task-audit-log-data.type';
 
 import type { ITasksRepository } from 'src/database/contracts/tasks-repository.contract';
-import type { ITaskAuditLogsRepository } from 'src/database/contracts/task-audit-logs.contract';
 
 import {
   type CreateTaskData,
-  type Pagination,
   type Task,
   type UpdateTaskData,
-  type UpdatedTaskNotificationPayload,
-  type AssignedToTaskNotificationPayload,
-  type ListTasksPagination,
-  type ChangedField,
   type TaskAuditLog,
+  type TaskWithCommentCount,
+  type TasksList,
+  type TaskFilters,
   AuditAction,
   FieldName,
 } from '@challenge/shared';
 
-import {
-  NOTIFICATIONS_SERVICE_RMQ,
-  TASKS_REPOSITORY,
-} from 'src/shared/constants/tokens';
+import { TASKS_REPOSITORY } from 'src/shared/constants/tokens';
 
 @Injectable()
 export class TasksService {
@@ -40,18 +35,38 @@ export class TasksService {
     private readonly tasksRepository: ITasksRepository,
     private readonly taskAuditLogsService: TaskAuditLogsService,
     private readonly usersTasksService: UsersTasksService,
-    @Inject(NOTIFICATIONS_SERVICE_RMQ)
-    private readonly notificationsClient: ClientProxy,
+    private readonly eventsPublisherService: EventsPublisherService,
+    private readonly signalsPublisherService: SignalsPublisherService,
   ) {}
 
   async findById(id: string): Promise<Task> {
     return this.verifyTaskExists(id);
   }
 
-  async list(pagination: Pagination): Promise<ListTasksPagination> {
-    const { page, size } = pagination;
+  async list(pagination: TaskFilters): Promise<TasksList> {
+    const { page, size, orderBy, order, status, priority, search } = pagination;
 
-    return this.tasksRepository.list({ page, size });
+    return this.tasksRepository.list({
+      page,
+      size,
+      orderBy,
+      order,
+      status,
+      priority,
+      search,
+    });
+  }
+
+  async listTasksByUserId(userId: string): Promise<TaskWithCommentCount[]> {
+    const taskIds = await this.usersTasksService.listTaskIdsByUserId(userId);
+
+    const tasks = await Promise.all(
+      taskIds.map((taskId) =>
+        this.tasksRepository.getByIdWithCommentsCount(taskId),
+      ),
+    );
+
+    return tasks.flatMap((task) => (task ? [task] : []));
   }
 
   async create(data: CreateTaskData): Promise<Task> {
@@ -81,7 +96,14 @@ export class TasksService {
       fieldName: null,
     });
 
-    this.notificationsClient.emit('task.created', task);
+    this.eventsPublisherService.taskCreated({
+      authorId,
+      task: {
+        id: task.id,
+        title,
+        priority,
+      },
+    });
 
     return task;
   }
@@ -89,7 +111,7 @@ export class TasksService {
   async update(id: string, data: UpdateTaskData): Promise<void> {
     const {
       lastEditedBy,
-      userIds,
+      userIds = [],
       title,
       description,
       term,
@@ -113,54 +135,61 @@ export class TasksService {
       priority: priority ?? task.priority,
       status: status ?? task.status,
     };
-    const existingUserIds = await this.usersTasksService.listUserIdsByTaskId(
+
+    const participantIds = await this.usersTasksService.listUserIdsByTaskId(
       task.id,
     );
 
-    const newUserIds = userIds
-      ? userIds.filter((id) => !existingUserIds.includes(id))
-      : [];
+    const removedParticipantIds = participantIds.filter(
+      (id) => !userIds.includes(id),
+    );
 
-    const newUserIdsCount = newUserIds.length;
+    const hasAnyUsersForDeletion = removedParticipantIds.length > 0;
+
+    const addedParticipantIds = userIds.filter(
+      (id) => !participantIds.includes(id),
+    );
+
+    const addedParticipantIdsCount = addedParticipantIds.length;
 
     await this.tasksRepository.update(id, { ...parsedTask, userIds });
 
-    const changedFields: ChangedField[] = [
+    const changedFields = [
       {
         fieldName: FieldName.TITLE,
-        dirty: title !== task.title,
+        dirty: parsedTask.title !== task.title,
         newValue: title,
         oldValue: task.title,
       },
       {
         fieldName: FieldName.DESCRIPTION,
-        dirty: description !== task.description,
+        dirty: parsedTask.description !== task.description,
         newValue: description,
         oldValue: task.description,
       },
       {
         fieldName: FieldName.TERM,
-        dirty: term !== task.term,
-        newValue: term,
+        dirty: parsedTask.term !== task.term,
+        newValue: parsedTask.term,
         oldValue: task.term,
       },
       {
         fieldName: FieldName.PRIORITY,
-        dirty: priority !== task.priority,
+        dirty: parsedTask.priority !== task.priority,
         newValue: priority,
         oldValue: task.priority,
       },
       {
         fieldName: FieldName.STATUS,
-        dirty: status !== task.status,
+        dirty: parsedTask.status !== task.status,
         newValue: status,
         oldValue: task.status,
       },
       {
         fieldName: FieldName.USER_IDS,
-        dirty: newUserIdsCount > 0,
-        newValue: JSON.stringify(existingUserIds),
-        oldValue: JSON.stringify({ ...existingUserIds, newUserIds }),
+        dirty: addedParticipantIdsCount > 0 || hasAnyUsersForDeletion,
+        newValue: JSON.stringify([...addedParticipantIds, ...participantIds]),
+        oldValue: JSON.stringify(participantIds),
       },
     ].filter((field) => field.dirty);
 
@@ -173,73 +202,45 @@ export class TasksService {
           taskTitle: task.title,
           fieldName: field.fieldName,
           oldValue: field.oldValue,
-          newValue: field.newValue,
+          newValue: field.newValue!,
         }),
       ),
     );
 
-    const fullTask = {
-      id: task.id,
-      authorId: task.authorId,
-      lastEditedBy: task.lastEditedBy,
-      title: parsedTask.title,
-      description: parsedTask.description,
-      term: parsedTask.term,
-      priority: parsedTask.priority,
-      status: parsedTask.status,
-      userIds: [...existingUserIds, ...newUserIds],
-    };
+    this.eventsPublisherService.taskUpdated({
+      authorId: lastEditedBy,
+      task: {
+        id,
+        removedParticipantIds,
+        addedParticipantIds,
+        participantIds,
+      },
+      oldData: {
+        title: task.title,
+        status: task.status,
+        priority: task.priority,
+        term: task.term,
+      },
+      newData: {
+        title,
+        status,
+        priority,
+        term,
+      },
+    });
 
-    const upadteTaskPayload: UpdatedTaskNotificationPayload = {
-      taskId: task.id,
-      changedFields,
-      participantIds: userIds ?? [],
-      newUserIds: newUserIds.length,
-      updatedBy: task.lastEditedBy,
-      updatedAt: new Date(),
-      fullTask,
-    };
-
-    const assignedIdsTaskPayload: AssignedToTaskNotificationPayload = {
-      newUserIds,
-      fullTask,
-    };
-
-    if (
-      newUserIdsCount > 0 ||
-      status !== task.status ||
-      priority !== task.priority
-    ) {
-      if (newUserIdsCount > 0) {
-        this.notificationsClient.emit('task.assigned', assignedIdsTaskPayload);
-      }
-
-      if (status !== task.status) {
-        this.notificationsClient.emit('task.status', {
-          participantIds: upadteTaskPayload.participantIds,
-          lastEditedBy: lastEditedBy,
-          title,
-          status,
-        });
-      }
-
-      if (priority !== task.priority) {
-        this.notificationsClient.emit('task.priority', {
-          participantIds: upadteTaskPayload.participantIds,
-          lastEditedBy: lastEditedBy,
-          title,
-          priority,
-        });
-      }
-
-      return;
-    }
-
-    this.notificationsClient.emit('task.updated', upadteTaskPayload);
+    this.signalsPublisherService.taskUpdated({
+      authorId: lastEditedBy,
+      task: {
+        id,
+        participantIds,
+      },
+    });
   }
 
   async delete(id: string, deletedBy: string): Promise<void> {
     const task = await this.verifyTaskExists(id);
+    const participantIds = await this.usersTasksService.listUserIdsByTaskId(id);
 
     await this.tasksRepository.delete(id);
 
@@ -253,9 +254,13 @@ export class TasksService {
       fieldName: null,
     });
 
-    this.notificationsClient.emit('task.deleted', {
-      title: task.title,
-      deletedBy,
+    this.eventsPublisherService.taskDeleted({
+      authorId: deletedBy,
+      task: {
+        id: task.id,
+        title: task.title,
+        participantIds,
+      },
     });
   }
 

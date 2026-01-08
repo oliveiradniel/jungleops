@@ -21,13 +21,16 @@ import {
 } from '@/view/components/ui/popover';
 import { Textarea } from '@/view/components/ui/textarea';
 
-import type { TaskStatus } from '@/app/enums/TaskStatus';
+import type { TaskStatus } from '@challenge/shared';
 
 interface TaskActionsPopover {
   taskId: string;
   title: string;
-  status: TaskStatus;
-  createdAt: Date;
+  status: {
+    value: TaskStatus;
+    label: string;
+  };
+  createdAt: string;
 }
 
 export function TaskActionsPopover({
@@ -59,7 +62,7 @@ export function TaskActionsPopover({
       <PopoverContent>
         <div className="space-y-2">
           <Link
-            to={'/tasks/$taskId'}
+            to={'/tarefas/$taskId'}
             params={{ taskId }}
             className="focus-visible:border-ring bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border-input focus-visible:ring-ring/50 flex w-full items-center justify-start gap-4 rounded-md border px-3 py-2 text-sm font-normal shadow-xs transition-all outline-none focus-visible:ring-[3px]"
           >

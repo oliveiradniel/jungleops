@@ -5,7 +5,7 @@ export function useListUsersByTaskIdQuery({ taskId }: { taskId: string }) {
   const usersTasksService = makeUsersTasksService();
 
   const { data, isPending } = useQuery({
-    queryKey: ['users-tasks', { taskId }],
+    queryKey: ['users-tasks', taskId],
     queryFn: () => usersTasksService.listUsersByTaskId(taskId),
     enabled: !!taskId,
   });

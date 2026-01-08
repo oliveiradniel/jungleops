@@ -27,7 +27,7 @@ export class TaskEntity {
   description: string;
 
   @Column({ type: 'date' })
-  term: Date;
+  term: string;
 
   @Column({
     type: 'enum',

@@ -1,12 +1,14 @@
+import { TaskMapper } from '@/app/mappers/task-mapper';
+
+import type { Task } from '@/app/entities/task';
 import type { ITasksService } from '../contracts/itasks-service';
 import type { HttpRequestConfig, IHttpClient } from '../contracts/ihttp-client';
 
+import type { CreateTaskData, UpdateTaskData } from '@/types/task-data';
 import type {
-  CreateTaskData,
-  ListTasksPagination,
-  Pagination,
+  TaskFilters,
+  TasksList,
   TaskWithCommentCount,
-  UpdateTaskData,
 } from '@challenge/shared';
 
 export class TasksService implements ITasksService {
@@ -16,46 +18,59 @@ export class TasksService implements ITasksService {
     this.httpClient = httpClient;
   }
 
-  get(
-    taskId: string,
-    config?: HttpRequestConfig,
-  ): Promise<TaskWithCommentCount> {
-    return this.httpClient.get<TaskWithCommentCount>(
+  async get(taskId: string, config?: HttpRequestConfig): Promise<Task> {
+    const task = await this.httpClient.get<TaskWithCommentCount>(
       `/tasks/${taskId}`,
       config,
     );
+
+    return TaskMapper.toDomain(task);
   }
 
-  list(
-    data: Pagination,
+  async list(
+    filters: TaskFilters,
     config?: HttpRequestConfig,
-  ): Promise<ListTasksPagination> {
-    const { page, size } = data;
+  ): Promise<Omit<TasksList, 'tasks'> & { tasks: Task[] }> {
+    const { page, size, orderBy, order, status, priority, search } = filters;
 
-    return this.httpClient.get<ListTasksPagination>('/tasks', {
-      params: { page, size },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const facetedFilters: any = {};
+
+    if (typeof status === 'string') {
+      facetedFilters.status = status;
+    }
+
+    if (typeof priority === 'string') {
+      facetedFilters.priority = priority;
+    }
+
+    const tasks = await this.httpClient.get<TasksList>('/tasks', {
+      params: { page, size, orderBy, order, search, ...facetedFilters },
       ...config,
     });
+
+    return TaskMapper.toDomainList(tasks);
   }
 
-  create(
+  async create(
     data: CreateTaskData,
     config?: HttpRequestConfig,
-  ): Promise<TaskWithCommentCount> {
-    const { authorId, title, description, term, priority, status } = data;
+  ): Promise<Task> {
+    const { title, description, term, priority, status } = data;
 
-    return this.httpClient.post<TaskWithCommentCount>(
+    const task = await this.httpClient.post<TaskWithCommentCount>(
       '/tasks',
-      {
-        authorId,
+      TaskMapper.toCreatePersistence({
         title,
         description,
         term,
         priority,
         status,
-      },
+      }),
       config,
     );
+
+    return TaskMapper.toDomain(task);
   }
 
   async update(
@@ -63,27 +78,18 @@ export class TasksService implements ITasksService {
     data: UpdateTaskData,
     config?: HttpRequestConfig,
   ): Promise<void> {
-    const {
-      lastEditedBy,
-      userIds,
-      title,
-      description,
-      term,
-      priority,
-      status,
-    } = data;
+    const { userIds, title, description, term, priority, status } = data;
 
     await this.httpClient.put(
       `/tasks/${taskId}`,
-      {
-        lastEditedBy,
+      TaskMapper.toUpdatePersistence({
         userIds,
         title,
         description,
         term,
         priority,
         status,
-      },
+      }),
       config,
     );
   }

@@ -1,5 +1,5 @@
-import { Transform } from "class-transformer";
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Transform } from 'class-transformer';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class EnvironmentVariablesDTO {
   @IsNumber()
@@ -35,9 +35,17 @@ export class EnvironmentVariablesDTO {
 
   @IsString()
   @IsNotEmpty()
+  NOTIFICATIONS_SERVICE_BASE_URL: string;
+
+  @IsString()
+  @IsNotEmpty()
   JWT_ACCESS_SECRET: string;
 
   @IsString()
   @IsNotEmpty()
   JWT_REFRESH_SECRET: string;
+
+  @IsString()
+  @IsNotEmpty()
+  BROKER_URL: string;
 }

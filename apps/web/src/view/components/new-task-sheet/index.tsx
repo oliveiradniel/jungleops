@@ -1,14 +1,16 @@
 import { useNewTaskSheetController } from './use-new-task-sheet-controller';
 
+import { Controller } from 'react-hook-form';
+
 import { SheetTemplate } from '../sheet-template';
 import { FormGroup } from '../ui/form-group';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { DatePicker } from '../ui/date-picker';
-
 import { TaskRadioGroup } from '../task-radio-group';
-import { Controller } from 'react-hook-form';
+
+import type { TaskPriority, TaskStatus } from '@challenge/shared';
 
 export function NewTaskSheet() {
   const {
@@ -88,7 +90,7 @@ export function NewTaskSheet() {
             name="priority"
             control={control}
             render={({ field: { value, onChange } }) => (
-              <TaskRadioGroup
+              <TaskRadioGroup<TaskPriority>
                 options={optionsTaskPriority}
                 value={value}
                 onValueChange={onChange}
@@ -103,7 +105,7 @@ export function NewTaskSheet() {
             name="status"
             control={control}
             render={({ field: { value, onChange } }) => (
-              <TaskRadioGroup
+              <TaskRadioGroup<TaskStatus>
                 options={optionsTaskStatus}
                 value={value}
                 onValueChange={onChange}

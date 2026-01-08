@@ -1,6 +1,7 @@
-import { TaskPriority, TaskStatus } from 'enums';
-import { TaskComment } from './comment.entity';
-import { UserWithoutPassword } from './user.entity';
+import { TaskPriority } from '../enums/task-priority.js';
+import { TaskStatus } from '../enums/task-status.js';
+import { TaskComment } from './comment.entity.js';
+import { UserWithoutPassword } from './user.entity.js';
 
 export interface Task {
   id: string;
@@ -8,7 +9,7 @@ export interface Task {
   lastEditedBy: string;
   title: string;
   description: string;
-  term: Date;
+  term: string;
   priority: TaskPriority;
   status: TaskStatus;
   comments: TaskComment[];
@@ -21,10 +22,21 @@ export interface TaskWithParticipants {
   lastEditedBy: string;
   title: string;
   description: string;
-  term: Date;
+  term: string;
   priority: TaskPriority;
   status: TaskStatus;
   comments: TaskComment[];
   createdAt: Date;
   participants: UserWithoutPassword[];
+}
+
+export interface TaskWithCommentCount {
+  id: string;
+  title: string;
+  description: string;
+  term: string;
+  priority: TaskPriority;
+  status: TaskStatus;
+  createdAt: Date;
+  commentsCount: number;
 }
