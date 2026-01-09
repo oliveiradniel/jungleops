@@ -10,7 +10,7 @@ done
 
 echo "Database ready! Running migrations..."
 
-npm run migration:run -w @challenge/auth-service
+node node_modules/typeorm/cli.js migration:run -d dist/database/orm/data-source.prod.js
 
 echo "Starting application..."
 
