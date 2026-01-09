@@ -17,7 +17,7 @@ COPY apps/tasks-service/docker/init.sh /app/init.sh
 
 RUN chmod +x /app/init.sh
 
-EXPOSE 3002
+EXPOSE 3003
 
 ENTRYPOINT ["sh", "/app/init.sh"]
 

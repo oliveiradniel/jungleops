@@ -19,7 +19,7 @@ services:
       - /app/apps/web/node_modules
     working_dir: /app/apps/web
     networks:
-      - challenge_public_network
+      - challenge-public-network
     command: npm run dev -- --host 0.0.0.0
 
   api-gateway:
@@ -51,16 +51,16 @@ services:
       - /app/apps/api-gateway/node_modules
     working_dir: /app/apps/api-gateway
     depends_on:
-      auth_service_db:
+      auth-service-db:
         condition: service_started
-      notifications_service_db:
+      notifications-service-db:
         condition: service_started
-      tasks_service_db:
+      tasks-service-db:
         condition: service_started
       rabbitmq:
         condition: service_started
     networks:
-      - challenge_public_network
+      - challenge-public-network
 
   auth-service:
     container_name: auth-service
@@ -87,12 +87,12 @@ services:
       - /app/apps/auth-service/node_modules
     working_dir: /app/apps/auth-service
     depends_on:
-      auth_service_db:
+      auth-service-db:
         condition: service_started
       rabbitmq:
         condition: service_started
     networks:
-      - challenge_public_network
+      - challenge-public-network
 
   tasks-service:
     container_name: tasks-service
@@ -116,12 +116,12 @@ services:
       - /app/node_modules
     working_dir: /app/apps/tasks-service
     depends_on:
-      tasks_service_db:
+      tasks-service-db:
         condition: service_started
       rabbitmq:
         condition: service_started
     networks:
-      - challenge_public_network
+      - challenge-public-network
 
   notifications-service:
     container_name: notifications-service
@@ -146,57 +146,57 @@ services:
       - /app/apps/notifications-service/node_modules
     working_dir: /app/apps/notifications-service
     depends_on:
-      notifications_service_db:
+      notifications-service-db:
         condition: service_started
       rabbitmq:
         condition: service_started
     networks:
-      - challenge_public_network
+      - challenge-public-network
 
-  auth_service_db:
+  auth-service-db:
     image: postgres:17-alpine
-    container_name: auth_service_db
+    container_name: auth-service-db
     ports:
       - "5433:5432"
     restart: always
     volumes:
-      - auth_pg_data:/var/lib/postgresql/data
+      - auth-pg-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: ${DB_AUTH_SERVICE_PASSWORD}
       POSTGRES_USER: ${DB_AUTH_SERVICE_USER}
       POSTGRES_DB: ${DB_AUTH_SERVICE_NAME}
     networks:
-      - challenge_public_network
+      - challenge-public-network
 
-  notifications_service_db:
+  notifications-service-db:
     image: postgres:17-alpine
-    container_name: notifications_service_db
+    container_name: notifications-service-db
     ports:
       - "5434:5432"
     restart: always
     volumes:
-      - notifications_pg_data:/var/lib/postgresql/data
+      - notifications-pg-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: ${DB_NOTIFICATIONS_SERVICE_PASSWORD}
       POSTGRES_USER: ${DB_NOTIFICATIONS_SERVICE_USER}
       POSTGRES_DB: ${DB_NOTIFICATIONS_SERVICE_NAME}
     networks:
-      - challenge_public_network
+      - challenge-public-network
 
-  tasks_service_db:
+  tasks-service-db:
     image: postgres:17-alpine
-    container_name: tasks_service_db
+    container_name: tasks-service-db
     ports:
       - "5435:5432"
     restart: always
     volumes:
-      - tasks_pg_data:/var/lib/postgresql/data
+      - tasks-pg-data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: ${DB_TASKS_SERVICE_PASSWORD}
       POSTGRES_USER: ${DB_TASKS_SERVICE_USER}
       POSTGRES_DB: ${DB_TASKS_SERVICE_NAME}
     networks:
-      - challenge_public_network
+      - challenge-public-network
 
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
@@ -209,25 +209,23 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
     volumes:
-      - rabbitmq_data:/var/lib/rabbitmqa
-      - rabbitmq_logs:/var/logs/rabbitmq
+      - rabbitmq-data:/var/lib/rabbitmqa
+      - rabbitmq-logs:/var/logs/rabbitmq
     networks:
-      - challenge_public_network
+      - challenge-public-network
 
 volumes:
-  pg_data:
+  auth-pg-data:
     driver: local
-  auth_pg_data:
+  notifications-pg-data:
     driver: local
-  notifications_pg_data:
+  tasks-pg-data:
     driver: local
-  tasks_pg_data:
+  rabbitmq-data:
     driver: local
-  rabbitmq_data:
-    driver: local
-  rabbitmq_logs:
+  rabbitmq-logs:
     driver: local
 
 networks:
-  challenge_public_network:
+  challenge-public-network:
     driver: bridge
