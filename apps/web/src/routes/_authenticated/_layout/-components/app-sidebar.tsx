@@ -4,7 +4,7 @@ import { useTasks } from '@/app/hooks/use-tasks';
 import { useAuth } from '@/app/hooks/use-auth';
 
 import { BookOpenText, History, Plus } from 'lucide-react';
-import jungleGamingLogo from '@/assets/images/logo.svg';
+import jungleOpsLogo from '@/assets/images/logo.svg';
 
 import { cn } from '@/lib/utils';
 
@@ -48,7 +48,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center gap-2">
-          <img src={jungleGamingLogo} alt="" className="h-10 w-10" />
+          <img src={jungleOpsLogo} alt="" className="size-8" />
           <span className="text-card-foreground text-lg font-medium">
             JungleOps
           </span>

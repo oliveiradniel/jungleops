@@ -5,7 +5,7 @@ import {
   useMatches,
 } from '@tanstack/react-router';
 
-import jungleGamingLogo from '@/assets/images/logo.svg';
+import junagleOpsLogo from '@/assets/images/logo.svg';
 
 import {
   Card,
@@ -36,7 +36,7 @@ export function Layout() {
               <div className={'w-full max-w-lg transition-all'}>
                 <CardHeader className="mb-6 space-y-2">
                   <div className="flex items-center gap-2">
-                    <img src={jungleGamingLogo} alt="" className="h-10 w-10" />
+                    <img src={junagleOpsLogo} alt="" className="h-10 w-10" />
                     <CardTitle className="text-card-foreground text-lg font-medium transition-all lg:text-xl xl:text-2xl">
                       JungleOps
                     </CardTitle>
