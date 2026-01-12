@@ -1,0 +1,47 @@
+FROM dkadadev/shared:1.0 AS base
+
+FROM node:22-alpine AS builder
+
+USER node
+
+WORKDIR /app
+
+COPY --chown=node:node package*.json  ./
+COPY --chown=node:node apps/notifications-service/package.json ./apps/notifications-service/package.json
+
+COPY --chown=node:node --from=base /app/packages/shared ./packages/shared
+COPY --chown=node:node --from=base /app/packages/ts-config ./packages/ts-config
+
+RUN npm ci
+
+COPY --chown=node:node apps/notifications-service ./apps/notifications-service
+
+RUN npm run build --workspace=apps/notifications-service
+
+FROM node:22-alpine AS production
+
+USER node
+
+WORKDIR /app
+
+COPY --chown=node:node --from=builder /app/apps/notifications-service/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+
+COPY --chown=node:node --from=builder /app/packages/shared ./packages/shared
+COPY --chown=node:node --from=builder /app/packages/ts-config ./packages/ts-config
+
+USER root
+
+RUN apk add --no-cache postgresql-client
+
+USER node
+
+COPY --chown=node:node apps/notifications-service/docker/init.sh ./init.sh
+
+RUN chmod +x /app/init.sh
+
+EXPOSE 3004
+
+ENTRYPOINT ["sh", "/app/init.sh"]
+
+CMD ["node", "dist/main.js"]
