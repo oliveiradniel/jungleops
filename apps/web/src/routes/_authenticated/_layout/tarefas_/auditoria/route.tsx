@@ -21,6 +21,18 @@ import {
 export const Route = createFileRoute(
   '/_authenticated/_layout/tarefas_/auditoria',
 )({
+  head: () => ({
+    meta: [
+      {
+        title: 'Auditoria - JungleOps',
+      },
+      {
+        name: 'description',
+        content:
+          'Acompanhe todas as ações de criação, atualização e exclusão que foram feitas nas tarefas da JungleOps.',
+      },
+    ],
+  }),
   component: TaskAuditLogs,
 });
 

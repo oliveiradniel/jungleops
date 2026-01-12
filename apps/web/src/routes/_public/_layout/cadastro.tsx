@@ -12,6 +12,18 @@ export const Route = createFileRoute('/_public/_layout/cadastro')({
     authLinkLabel: 'Entrar aqui',
     href: '/login',
   },
+  head: () => ({
+    meta: [
+      {
+        title: 'Cadastrar - JungleOps',
+      },
+      {
+        name: 'description',
+        content:
+          'Gerencie suas tarefas, acompanhe prazos, envolva sua equipe e mantenha o fluxo de trabalho sob controle com o JungleOps.',
+      },
+    ],
+  }),
   component: RouteComponent,
 });
 
