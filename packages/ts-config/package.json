@@ -7,7 +7,6 @@
     "access": "public"
   },
   "exports": {
-    "./base": "./base.json",
     "./nest": "./nest.json"
   },
   "files": [
