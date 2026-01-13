@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "docker:build": "docker build -t dkadadev/jungleops-api-gateway:latest -f apps/api-gateway/docker/Dockerfile.prod .",
+    "docker:build": "docker build -t dkadadev/jungleops-api-gateway:latest -f apps/api-gateway/docker/Dockerfile.prod ../..",
     "format": "prettier --write \"src/**/*.ts\"",
     "check-types": "tsc -b --noEmit",
     "start": "nest start",
