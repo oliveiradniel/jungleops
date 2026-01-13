@@ -58,8 +58,7 @@ export function NotificationsList({ notifications }: NotificationsListProps) {
         const newTerm = formatDateToBR(metadata.task?.newTerm);
         const comment = metadata.task?.comment;
 
-        const createdMessage = `adicionou uma
-                    nova tarefa com prioridade ${priority}`;
+        const createdMessage = `adicionou a tarefa "${taskTitle}" com prioridade ${priority}`;
         const updatedTitleMessage = `renomeou a tarefa "${oldTitle}" para "${newTitle}"`;
         const updatedStatusMessage = `alterou o status da tarefa "${taskTitle}" de ${oldStatus} para ${newStatus}`;
         const updatedPriorityMessage = `alterou a prioridade da tarefa "${taskTitle}" de ${oldPriority} para ${newPriority}`;
