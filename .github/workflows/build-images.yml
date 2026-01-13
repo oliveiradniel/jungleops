@@ -32,7 +32,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build affected images
-        run: npx turbo run docker:build --filter=...[origin/main]
+        run: npx turbo run docker:build
 
       - name: Push images
         run: |
