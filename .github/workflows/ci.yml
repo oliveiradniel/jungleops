@@ -46,7 +46,7 @@ jobs:
     #   NOTIFICATIONS_SERVICE_BASE_URL: http://${{ secrets.NOTIFICATIONS_SERVICE_BASE_URL }}
 
     #   VITE_API_URL: http://${{ secrets.VITE_API_URL }}
-    #   VITE_NOTIFICATIONS_SERVICE_BASE_URL: http://${{ secrets.VITE_NOTIFICATIONS_SERVICE_BASE_URL }}
+    #   VITE_NOTIFICATIONS_WS_URL: http://${{ secrets.VITE_NOTIFICATIONS_WS_URL }}
 
     # services:
     #   auth_service_db:

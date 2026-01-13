@@ -12,7 +12,7 @@ services:
     restart: always
     environment:
       VITE_API_URL: ${VITE_API_URL}
-      VITE_NOTIFICATIONS_SERVICE_BASE_URL: ${VITE_NOTIFICATIONS_SERVICE_BASE_URL}
+      VITE_NOTIFICATIONS_WS_URL: ${VITE_NOTIFICATIONS_WS_URL}
     volumes:
       - ./apps/web:/app/apps/web
       - ./packages:/app/packages

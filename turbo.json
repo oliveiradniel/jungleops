@@ -38,7 +38,7 @@
         "TASK_AUDIT_LOGS_SERVICE_BASE_URL",
         "NOTIFICATIONS_SERVICE_BASE_URL",
         "VITE_API_URL",
-        "VITE_NOTIFICATIONS_SERVICE_BASE_URL"
+        "VITE_NOTIFICATIONS_WS_URL"
       ]
     },
     "lint": {
@@ -52,6 +52,10 @@
       "cache": false,
       "persistent": true,
       "inputs": ["src/**", "package.json", "tsconfig.json"]
+    },
+    "docker:build": {
+     "dependsOn": ["^docker:build"],
+     "outputs": []
     }
   }
 }

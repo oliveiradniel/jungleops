@@ -189,7 +189,7 @@ O projeto utiliza um arquivo `.env` com as seguintes variáveis:
 | `TASKS_SERVICE_BASE_URL` | URL base do serviço de tarefas | `http://tasks-service:3003/tasks` |
 | `TASK_AUDIT_LOGS_SERVICE_BASE_URL` | URL base do serviço de audit logs | `http://tasks-service:3003/task-audit-logs` |
 | `VITE_API_URL` | URL base da API | `http://localhost:3001/api` |
-| `VITE_NOTIFICATIONS_SERVICE_BASE_URL` | URL base do serviço de notificações | `http://localhost:3004` |
+| `VITE_NOTIFICATIONS_WS_URL` | URL base do serviço de notificações | `http://localhost:3004` |
 **Banco de Usuários**
 | `DB_AUTH_SERVICE_PASSWORD` | Senha do usuário do banco de dados PostgreSQL | `authserviceroot` |
 | `DB_AUTH_SERVICE_USER` | Nome do usuário do banco de dados PostgreSQL | `authserviceroot` |

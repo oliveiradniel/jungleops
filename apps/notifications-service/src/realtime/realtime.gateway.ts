@@ -24,7 +24,7 @@ import {
   SOCKET_SIGNAL_KEYS,
 } from '@challenge/shared';
 
-@WebSocketGateway({ cors: { origin: '*' } })
+@WebSocketGateway({ path: '/ws/notifications', cors: { origin: '*' } })
 export class RealTimeGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {

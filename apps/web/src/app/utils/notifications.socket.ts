@@ -5,7 +5,8 @@ let socket: Socket | null = null;
 
 export function getNotificationsSocket(userId: string): Socket {
   if (!socket) {
-    socket = io(env.NOTIFICATIONS_SERVICE_BASE_URL, {
+    socket = io('/', {
+      path: env.NOTIFICATIONS_WS_URL,
       auth: { userId },
       transports: ['websocket'],
     });
