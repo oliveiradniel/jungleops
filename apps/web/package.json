@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "docker:build": "docker build --build-arg VITE_API_URL=/api --build-arg VITE_NOTIFICATIONS_WS_URL=/ws/notifications -t dkadadev/jungleops-web:latest -f docker/Dockerfile.prod .",
+    "docker:build": "docker build --build-arg VITE_API_URL=/api --build-arg VITE_NOTIFICATIONS_WS_URL=/ws/notifications -t dkadadev/jungleops-web:latest -f apps/web/docker/Dockerfile.prod .",
     "check-types": "tsc -b --noEmit",
     "lint": "eslint .",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,md}'",
