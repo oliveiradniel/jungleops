@@ -209,7 +209,7 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
     volumes:
-      - rabbitmq-data:/var/lib/rabbitmqa
+      - rabbitmq-data:/var/lib/rabbitmq
       - rabbitmq-logs:/var/logs/rabbitmq
     networks:
       - challenge-public-network
