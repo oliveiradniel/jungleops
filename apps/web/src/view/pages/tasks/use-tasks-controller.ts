@@ -62,6 +62,7 @@ export function useTasksController() {
   }
 
   return {
+    tasks,
     table,
     totalAll,
     totalFiltered,

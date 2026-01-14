@@ -17,6 +17,7 @@ import { TextFilter } from './components/text-filter';
 
 export function Tasks() {
   const {
+    tasks,
     table,
     totalAll,
     totalFiltered,
@@ -41,49 +42,53 @@ export function Tasks() {
         totalAll === 0 && !isTasksLoading && 'h-[calc(100%-90px)]',
       )}
     >
-      <div className="flex h-full w-full flex-col gap-6 p-6">
-        <header className="flex flex-col items-start justify-between gap-2">
-          <div className="flex w-full items-start gap-2">
-            <TextFilter
-              disabled={totalAll <= 0}
-              numberOfTasksFound={totalFiltered}
-            />
+      <div className="flex h-screen w-full flex-col gap-6 p-6">
+        {tasks.length > 0 && (
+          <>
+            <header className="flex flex-col items-start justify-between gap-2">
+              <div className="flex w-full items-start gap-2">
+                <TextFilter
+                  disabled={totalAll <= 0}
+                  numberOfTasksFound={totalFiltered}
+                />
 
-            <SortFilter disabled={disabled} placeholder="Ordenar por" />
+                <SortFilter disabled={disabled} placeholder="Ordenar por" />
 
-            <ManyFacetedTasksFilter
-              param="status"
-              facets={facets?.status}
-              labels={statusLabels}
-              placeholder="Status"
-              disabled={disabled}
-            />
+                <ManyFacetedTasksFilter
+                  param="status"
+                  facets={facets?.status}
+                  labels={statusLabels}
+                  placeholder="Status"
+                  disabled={disabled}
+                />
 
-            <ManyFacetedTasksFilter
-              param="priority"
-              facets={facets?.priority}
-              labels={priorityLabels}
-              placeholder="Prioridade"
-              disabled={disabled}
-            />
-          </div>
+                <ManyFacetedTasksFilter
+                  param="priority"
+                  facets={facets?.priority}
+                  labels={priorityLabels}
+                  placeholder="Prioridade"
+                  disabled={disabled}
+                />
+              </div>
 
-          <PaginationControls
-            hasPrevious={pagination?.hasPrevious ?? false}
-            hasNext={pagination?.hasNext ?? false}
-            totalPages={pagination?.totalPages ?? 0}
-            isLoading={isTasksFetching}
-            disabled={disabled}
-            page={page}
-            size={size}
-            onPageNavigation={handlePageNavigation}
-            onSizePerPage={handleSizePerPage}
-          />
-        </header>
+              <PaginationControls
+                hasPrevious={pagination?.hasPrevious ?? false}
+                hasNext={pagination?.hasNext ?? false}
+                totalPages={pagination?.totalPages ?? 0}
+                isLoading={isTasksFetching}
+                disabled={disabled}
+                page={page}
+                size={size}
+                onPageNavigation={handlePageNavigation}
+                onSizePerPage={handleSizePerPage}
+              />
+            </header>
 
-        <Separator />
+            <Separator />
+          </>
+        )}
 
-        {totalAll > 0 && (
+        {totalAll > 0 && tasks.length > 0 && (
           <div className="flex gap-2">
             <h1 className="flex items-baseline gap-2 text-2xl font-medium">
               Todas as tarefas
@@ -113,7 +118,9 @@ export function Tasks() {
           <TasksCard table={table} />
         )}
 
-        {!isTasksLoading && totalAll === 0 && <EmptyTasks />}
+        {!isTasksLoading && (totalAll === 0 || tasks.length === 0) && (
+          <EmptyTasks />
+        )}
 
         {!isTasksLoading && totalAll > 0 && totalFiltered === 0 && (
           <EmptyFilteredTasks searchInput={q ?? ''} />
