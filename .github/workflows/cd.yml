@@ -1,0 +1,33 @@
+name: JungleOps CD
+
+on:
+  workflow_run:
+    workflows: ['Build Docker Images']
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: Deploy to Vultr
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Connect with SSH and deploy
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VULTR_IP }}
+          username: dockeruser
+          key: ${{ secrets.VULTR_SSH_SECRET_KEY }}
+          script: |
+            cd /home/dockeruser/apps/jungleops
+
+            docker pull dkadadev/jungleops-api-gateway:latest
+            docker pull dkadadev/jungleops-auth-service:latest
+            docker pull dkadadev/jungleops-notifications-service:latest
+            docker pull dkadadev/jungleops-tasks-service:latest
+            docker pull dkadadev/jungleops-web:latest
+
+            docker compose up -d --force-recreate
+            docker image prune -f
