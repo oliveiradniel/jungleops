@@ -45,8 +45,8 @@ export function Tasks() {
       <div className="flex h-screen w-full flex-col gap-6 p-6">
         {tasks.length > 0 && (
           <>
-            <header className="flex flex-col items-start justify-between gap-2">
-              <div className="flex w-full items-start gap-2">
+            <header className="flex flex-wrap items-start justify-between gap-2">
+              <div className="flex flex-1 flex-wrap gap-2">
                 <TextFilter
                   disabled={totalAll <= 0}
                   numberOfTasksFound={totalFiltered}

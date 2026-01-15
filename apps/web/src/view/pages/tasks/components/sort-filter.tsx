@@ -41,6 +41,8 @@ export function SortFilter({ placeholder, disabled }: SortFilterProps) {
     });
   }
 
+  const buttonText = `${placeholder}: ${orderBy === 'created-at' ? 'data de criação' : 'data de entrega'}`;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild disabled={disabled}>
@@ -56,10 +58,7 @@ export function SortFilter({ placeholder, disabled }: SortFilterProps) {
             <CalendarArrowDownIcon className="text-muted-foreground size-3" />
           )}
 
-          <span>
-            {placeholder}
-            {`: ${orderBy === 'created-at' ? 'data de criação' : 'data de entrega'}`}
-          </span>
+          <span className="hidden sm:inline-flex">{buttonText}</span>
         </Button>
       </DropdownMenuTrigger>
 

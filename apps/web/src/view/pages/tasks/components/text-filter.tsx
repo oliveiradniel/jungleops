@@ -33,7 +33,7 @@ export function TextFilter({ numberOfTasksFound, disabled }: TextFilterProps) {
   }, [debouncedValue, navigate]);
 
   return (
-    <InputGroup>
+    <InputGroup className="max-w-[400px] min-w-[250px] sm:min-w-[350px]">
       <InputGroupInput
         disabled={disabled}
         placeholder="Digite o título ou descrição de uma tarefa"
