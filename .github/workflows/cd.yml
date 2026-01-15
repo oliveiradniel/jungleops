@@ -29,5 +29,5 @@ jobs:
             docker pull dkadadev/jungleops-tasks-service:latest
             docker pull dkadadev/jungleops-web:latest
 
-            docker compose up -d --force-recreate
+            docker compose up -d
             docker image prune -f
