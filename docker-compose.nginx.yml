@@ -1,0 +1,212 @@
+version: '3.8'
+
+services:
+
+  # shared:
+  #   image: dkadadev/shared:1.0
+  #   container_name: shared-builder
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.shared
+
+  nginx:
+    container_name: nginx
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      web:
+        condition: service_started
+      api-gateway:
+        condition: service_started
+    networks:
+      - public-network
+
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: apps/web/docker/Dockerfile.prod
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_NOTIFICATIONS_WS_URL: ${VITE_NOTIFICATIONS_WS_URL}
+    restart: always
+    networks:
+      - public-network
+      - private-network
+
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: .
+      dockerfile: apps/api-gateway/docker/Dockerfile.prod
+    restart: always
+    environment:
+      PORT: 3001
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN}
+      AUTH_SERVICE_BASE_URL: ${AUTH_SERVICE_BASE_URL}
+      TASKS_SERVICE_BASE_URL: ${TASKS_SERVICE_BASE_URL}
+      USERS_TASKS_SERVICE_BASE_URL: ${USERS_TASKS_SERVICE_BASE_URL}
+      USERS_SERVICE_BASE_URL: ${USERS_SERVICE_BASE_URL}
+      TASK_AUDIT_LOGS_SERVICE_BASE_URL: ${TASK_AUDIT_LOGS_SERVICE_BASE_URL}
+      NOTIFICATIONS_SERVICE_BASE_URL: ${NOTIFICATIONS_SERVICE_BASE_URL}
+      BROKER_URL: ${BROKER_URL}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      NODE_ENV: ${NODE_ENV}
+    depends_on:
+      auth-service-db:
+        condition: service_started
+      notifications-service-db:
+        condition: service_started
+      tasks-service-db:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - public-network
+      - private-network
+
+  auth-service:
+    container_name: auth-service
+    build:
+      context: .
+      dockerfile: apps/auth-service/docker/Dockerfile.prod
+    restart: always
+    environment:
+      PORT: 3002
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      DB_AUTH_SERVICE_PASSWORD: ${DB_AUTH_SERVICE_PASSWORD}
+      DB_AUTH_SERVICE_USER: ${DB_AUTH_SERVICE_USER}
+      DB_AUTH_SERVICE_NAME: ${DB_AUTH_SERVICE_NAME}
+      DB_AUTH_SERVICE_HOST: ${DB_AUTH_SERVICE_HOST}
+      DB_AUTH_SERVICE_PORT: ${DB_AUTH_SERVICE_PORT}
+    depends_on:
+      auth-service-db:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - private-network
+
+  tasks-service:
+    container_name: tasks-service
+    build:
+      context: .
+      dockerfile: apps/tasks-service/docker/Dockerfile.prod
+    restart: always
+    environment:
+      PORT: 3003
+      DB_TASKS_SERVICE_PASSWORD: ${DB_TASKS_SERVICE_PASSWORD}
+      DB_TASKS_SERVICE_USER: ${DB_TASKS_SERVICE_USER}
+      DB_TASKS_SERVICE_NAME: ${DB_TASKS_SERVICE_NAME}
+      DB_TASKS_SERVICE_HOST: ${DB_TASKS_SERVICE_HOST}
+      DB_TASKS_SERVICE_PORT: ${DB_TASKS_SERVICE_PORT}
+      BROKER_URL: ${BROKER_URL}
+    depends_on:
+      tasks-service-db:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - private-network
+
+  notifications-service:
+    container_name: notifications-service
+    build:
+      context: .
+      dockerfile: apps/notifications-service/docker/Dockerfile.prod
+    restart: always
+    environment:
+      PORT: 3004
+      DB_NOTIFICATIONS_SERVICE_PASSWORD: ${DB_NOTIFICATIONS_SERVICE_PASSWORD}
+      DB_NOTIFICATIONS_SERVICE_USER: ${DB_NOTIFICATIONS_SERVICE_USER}
+      DB_NOTIFICATIONS_SERVICE_NAME: ${DB_NOTIFICATIONS_SERVICE_NAME}
+      DB_NOTIFICATIONS_SERVICE_HOST: ${DB_NOTIFICATIONS_SERVICE_HOST}
+      DB_NOTIFICATIONS_SERVICE_PORT: ${DB_NOTIFICATIONS_SERVICE_PORT}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN}
+      BROKER_URL: ${BROKER_URL}
+    depends_on:
+      notifications-service-db:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - public-network
+      - private-network
+
+  auth-service-db:
+    image: postgres:17-alpine
+    container_name: auth-service-db
+    restart: always
+    volumes:
+      - auth-pg-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${DB_AUTH_SERVICE_PASSWORD}
+      POSTGRES_USER: ${DB_AUTH_SERVICE_USER}
+      POSTGRES_DB: ${DB_AUTH_SERVICE_NAME}
+    networks:
+      - private-network
+
+  notifications-service-db:
+    image: postgres:17-alpine
+    container_name: notifications-service-db
+    restart: always
+    volumes:
+      - notifications-pg-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${DB_NOTIFICATIONS_SERVICE_PASSWORD}
+      POSTGRES_USER: ${DB_NOTIFICATIONS_SERVICE_USER}
+      POSTGRES_DB: ${DB_NOTIFICATIONS_SERVICE_NAME}
+    networks:
+      - private-network
+
+  tasks-service-db:
+    image: postgres:17-alpine
+    container_name: tasks-service-db
+    restart: always
+    volumes:
+      - tasks-pg-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${DB_TASKS_SERVICE_PASSWORD}
+      POSTGRES_USER: ${DB_TASKS_SERVICE_USER}
+      POSTGRES_DB: ${DB_TASKS_SERVICE_NAME}
+    networks:
+      - private-network
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+      - rabbitmq-logs:/var/logs/rabbitmq
+    networks:
+      - private-network
+
+volumes:
+  auth-pg-data:
+    driver: local
+  notifications-pg-data:
+    driver: local
+  tasks-pg-data:
+    driver: local
+  rabbitmq-data:
+    driver: local
+  rabbitmq-logs:
+    driver: local
+
+networks:
+  public-network:
+    driver: bridge
+  private-network:
+    driver: bridge
+
+
