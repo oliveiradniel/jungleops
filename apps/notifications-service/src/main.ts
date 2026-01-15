@@ -14,6 +14,8 @@ async function bootstrap() {
   const { BROKER_URL, FRONTEND_ORIGIN, PORT } = getConfig(configService);
   app.enableCors({ origin: FRONTEND_ORIGIN, credentials: true });
 
+  await app.listen(PORT);
+
   app.connectMicroservice(
     microserviceOptions({
       brokerURL: BROKER_URL,
@@ -28,9 +30,9 @@ async function bootstrap() {
     }),
   );
 
-  await app.startAllMicroservices();
-
-  await app.listen(PORT);
+  app.startAllMicroservices().catch((err) => {
+    console.error('RabbitMQ offline, continuing HTTP', err);
+  });
 }
 
 void bootstrap();

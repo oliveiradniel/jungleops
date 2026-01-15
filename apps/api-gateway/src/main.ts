@@ -39,11 +39,15 @@ async function bootstrap() {
     credentials: true,
   });
 
+  await app.listen(PORT);
+
   app.connectMicroservice(
     microserviceOptions({ brokerURL: BROKER_URL, queue: 'tasks-queue' }),
   );
 
-  await app.startAllMicroservices();
+  app.startAllMicroservices().catch((err) => {
+    console.error('RabbitMQ offline, continuing HTTP', err);
+  });
 
   const config = new DocumentBuilder()
     .setTitle('Collaborative Task Management System - JungleOps | API Gateway')
@@ -62,8 +66,6 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, documentFactory, {
     jsonDocumentUrl: 'api/swagger/json',
   });
-
-  await app.listen(PORT);
 }
 
 void bootstrap();
