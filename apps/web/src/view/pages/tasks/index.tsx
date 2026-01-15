@@ -17,7 +17,6 @@ import { TextFilter } from './components/text-filter';
 
 export function Tasks() {
   const {
-    tasks,
     table,
     totalAll,
     totalFiltered,
@@ -35,6 +34,10 @@ export function Tasks() {
 
   const disabled = totalAll <= 0 || totalFiltered <= 0;
 
+  console.log(table.getRowCount());
+  console.log({ totalAll });
+  console.log({ totalFiltered });
+
   return (
     <div
       className={cn(
@@ -43,7 +46,7 @@ export function Tasks() {
       )}
     >
       <div className="flex h-screen w-full flex-col gap-6 p-6">
-        {tasks.length > 0 && (
+        {totalAll > 0 && (
           <>
             <header className="flex flex-wrap items-start justify-between gap-2">
               <div className="flex flex-1 flex-wrap gap-2">
@@ -88,7 +91,7 @@ export function Tasks() {
           </>
         )}
 
-        {totalAll > 0 && tasks.length > 0 && (
+        {totalAll > 0 && (
           <div className="flex gap-2">
             <h1 className="flex items-baseline gap-2 text-2xl font-medium">
               Todas as tarefas
@@ -118,9 +121,7 @@ export function Tasks() {
           <TasksCard table={table} />
         )}
 
-        {!isTasksLoading && (totalAll === 0 || tasks.length === 0) && (
-          <EmptyTasks />
-        )}
+        {!isTasksLoading && totalAll === 0 && <EmptyTasks />}
 
         {!isTasksLoading && totalAll > 0 && totalFiltered === 0 && (
           <EmptyFilteredTasks searchInput={q ?? ''} />
