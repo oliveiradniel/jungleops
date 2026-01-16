@@ -6,6 +6,7 @@ import {
   CalendarClock,
   CalendarPlus,
   Pencil,
+  SendIcon,
   Trash2,
 } from 'lucide-react';
 import {
@@ -65,34 +66,39 @@ export function Task() {
         <header className="mt-6 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Button
+              aria-label="Voltar"
               onClick={() => router.history.back()}
               className="text-primary-foreground"
             >
-              <ArrowLeft className="size-6" />
+              <ArrowLeft className="size-4 sm:size-6" />
             </Button>
 
-            <h1 className="text-4xl break-all">
+            <h1 className="text-xl break-all sm:text-2xl md:text-3xl lg:text-4xl">
               {isTaskLoading ? 'Carregando...' : task?.title}
             </h1>
           </div>
 
           <div className="flex items-center gap-2">
             <Button
+              aria-label="Editar tarefa"
+              title="Editar tarefa"
               variant="ghost"
               disabled={isTaskLoading}
               onClick={handleOpenUpdateTaskSheet}
             >
               <Pencil className="size-4" />
-              Editar
+              <span className="hidden sm:inline-flex">Editar</span>
             </Button>
 
             <Button
+              aria-label="Excluir tarefa"
+              title="Excluir tarefa"
               variant="destructive"
               disabled={isTaskLoading}
               onClick={() => handleOpenDeleteTaskDialog(task!, currentPage)}
             >
               <Trash2 className="size-4" />
-              Excluir
+              <span className="hidden sm:inline-flex">Excluir</span>
             </Button>
           </div>
         </header>
@@ -104,7 +110,7 @@ export function Task() {
 
           {!isTaskLoading && <p>{task?.description}</p>}
 
-          <div className="mt-16 flex items-center justify-between gap-4">
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-8">
             <div className="flex flex-col gap-4">
               {isTaskLoading && <span>Carregando...</span>}
               {isTaskLoading && <span>Carregando...</span>}
@@ -114,9 +120,7 @@ export function Task() {
                   <CalendarPlus className="text-primary size-4" />
                   <span>
                     Criado em:{' '}
-                    <span className="text-primary font-medium">
-                      {task?.createdAt}
-                    </span>
+                    <span className="text-primary">{task?.createdAt}</span>
                   </span>
                 </div>
               )}
@@ -126,9 +130,7 @@ export function Task() {
                   <CalendarClock className="text-primary size-4" />
                   <span>
                     Prazo para término:{' '}
-                    <span className="text-primary font-medium">
-                      {task?.term}
-                    </span>
+                    <span className="text-primary">{task?.term}</span>
                   </span>
                 </div>
               )}
@@ -178,8 +180,8 @@ export function Task() {
 
             <TabsContent value="comments">
               <div className="space-y-6">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="text-3xl">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h2 className="text-xl break-all sm:text-2xl md:text-3xl">
                     Comentários ({isTaskLoading ? '...' : totalCommentsCount})
                   </h2>
 
@@ -257,6 +259,7 @@ export function Task() {
                       disabled={isCreateCommentLoading}
                       isLoading={isCreateCommentLoading}
                     >
+                      <SendIcon className="size-4" />
                       Enviar
                     </Button>
                   </InputGroupAddon>
@@ -266,14 +269,14 @@ export function Task() {
 
             <TabsContent value="participants">
               <div className="flex flex-col gap-6">
-                <h2 className="text-3xl">
+                <h2 className="text-xl break-all sm:text-2xl md:text-3xl">
                   Participantes (
                   {isParticipantsLoading ? '...' : participants?.length})
                 </h2>
 
                 <Separator />
 
-                <div className="flex flex-wrap gap-2">
+                <div className="mb-8 flex flex-wrap gap-2">
                   {participants?.map((participant) => (
                     <div
                       key={participant.id}
