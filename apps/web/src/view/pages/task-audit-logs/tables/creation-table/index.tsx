@@ -42,28 +42,30 @@ export function TaskCreationAuditLogTable() {
         pagination={{ pageIndex: 0, pageSize: 5 }}
       >
         {taskCreationAuditLogsList.length > 0 && (
-          <div className="mb-2 flex items-center gap-4">
-            <DataTableTextFilter placeholder="Procurar por autor ou título" />
+          <div className="mb-2 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-1 flex-wrap items-center gap-2">
+              <DataTableTextFilter placeholder="Procurar por autor ou título" />
 
-            <div className="flex items-center gap-1">
-              <DataTableUniqueFacetedFilter<TaskStatus>
-                placeholder="Status"
-                column="status"
-                labels={statusLabels}
-              />
+              <div className="flex items-center gap-1">
+                <DataTableUniqueFacetedFilter<TaskStatus>
+                  placeholder="Status"
+                  column="status"
+                  labels={statusLabels}
+                />
 
-              <DataTableUniqueFacetedFilter<TaskPriority>
-                placeholder="Prioridade"
-                column="priority"
-                labels={priorityLabels}
-              />
+                <DataTableUniqueFacetedFilter<TaskPriority>
+                  placeholder="Prioridade"
+                  column="priority"
+                  labels={priorityLabels}
+                />
 
-              <DataTableColumnsVisibilityDropdown />
+                <DataTableColumnsVisibilityDropdown />
+              </div>
             </div>
+
+            {taskCreationAuditLogsList.length > 0 && <DataTablePagination />}
           </div>
         )}
-
-        {taskCreationAuditLogsList.length > 0 && <DataTablePagination />}
 
         {!isTaskCreationAuditLogsLoading &&
           taskCreationAuditLogsList.length > 0 && <DataTableContent />}

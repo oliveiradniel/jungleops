@@ -44,22 +44,24 @@ export function TaskUpdateAuditLogTable() {
         pagination={{ pageIndex: 0, pageSize: 5 }}
       >
         {taskUpdateAuditLogsList.length > 0 && (
-          <div className="mb-2 flex items-center gap-4">
-            <DataTableTextFilter placeholder="Procure por autor, título, campo ou valores" />
+          <div className="mb-2 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-1 flex-wrap items-center gap-2">
+              <DataTableTextFilter placeholder="Procure por autor, título, campo ou valores" />
 
-            <div className="flex items-center gap-1">
-              <DataTableUniqueFacetedFilter<FieldName>
-                placeholder="Campo"
-                column="fieldName"
-                labels={fieldLabels}
-              />
+              <div className="flex items-center gap-1">
+                <DataTableUniqueFacetedFilter<FieldName>
+                  placeholder="Campo"
+                  column="fieldName"
+                  labels={fieldLabels}
+                />
 
-              <DataTableColumnsVisibilityDropdown />
+                <DataTableColumnsVisibilityDropdown />
+              </div>
             </div>
+
+            {taskUpdateAuditLogsList.length > 0 && <DataTablePagination />}
           </div>
         )}
-
-        {taskUpdateAuditLogsList.length > 0 && <DataTablePagination />}
 
         {!isTaskUpdateAuditLogsLoading &&
           taskUpdateAuditLogsList.length > 0 && <DataTableContent />}

@@ -35,7 +35,7 @@ export function DataTableTextFilter({
     const value = tableColumn?.getFilterValue() as string;
 
     return (
-      <InputGroup>
+      <InputGroup className="max-w-[400px] min-w-[250px] sm:min-w-[350px]">
         <InputGroupInput
           placeholder={placeholder}
           value={value}
@@ -56,7 +56,7 @@ export function DataTableTextFilter({
   }
 
   return (
-    <InputGroup>
+    <InputGroup className="max-w-[400px] min-w-[250px] sm:min-w-[350px]">
       <InputGroupInput
         placeholder={placeholder}
         onChange={(event) => t.setGlobalFilter(event.target.value)}
