@@ -40,7 +40,6 @@ Com ele é possível:
 - [![TanStack Table](https://img.shields.io/badge/TanStack_Table-FF4154?style=for-the-badge&logo=tanstack&logoColor=white)](https://tanstack.com/table/latest)
 - [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 - [![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)](https://axios-http.com/)
-- [![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)](https://reactrouter.com/)
 - [![React Hook Form](https://img.shields.io/badge/React_Hook_Form-EC3C4D?style=for-the-badge&logo=react&logoColor=white)](https://react-hook-form.com/)
 - [![Zod](https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white)](https://zod.dev/)
 - [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
@@ -70,6 +69,7 @@ Com ele é possível:
 - [![TurboRepo](https://img.shields.io/badge/TurboRepo-2277CF?style=for-the-badge&logo=turborepo&logoColor=white)](https://turborepo.com/)
 - [![Docker](https://img.shields.io/badge/Docker-428BFF?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 - [![Docker Compose](https://img.shields.io/badge/Docker_Compose-428BFF?style=for-the-badge&logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+- [![Nginx](https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)](https://docs.docker.com/compose/)
 
 ---
 
@@ -97,20 +97,6 @@ Com ele é possível:
 - Centraliza autenticação.
 - Permite aplicar políticas, guards e throttling em um ponto só.
 - Trade-off: se ele cair toda aplicação para, um load balancer com múltiplas instâncias resolveria.
-
----
-
-## 🧩 Implementações
-
-- [x]  Autenticação: Register/Login, JWT access & refresh token com passport, hash de senha com bcrypt
-- [x]  CRUD de Tarefas: Título, descrição, prazo, prioridade, status, atribuição múltipla
-- [x]  Comentários: Criar/listar por tarefa
-- [x]  Audit Logs: Histórico simplificado de criação, alterações e exclusão
-- [x]  Notificações: Tarefas (criar, atualizar, alterar status ou prioridade, excluir) e comentários via RabbitMQ + WebSocket
-- [x]  Docker Compose: Levanta frontend, API Gateway, microservices, banco e RabbitMQ
-- [x]  Swagger: Documentação disponível em /api/docs
-- [x]  Validações: class-transformer e class-validator no backend (API Gateway), react-hook-form + zod no frontend
-- [x]  UI: 5+ componentes shadcn/ui, skeleton loaders, toast notifications (21 no total)
 
 ---
 
@@ -169,6 +155,12 @@ Isso sobe:
 - Notifications Service
 
 [Frontend](http://localhost:3000/auth) | [Swagger Docs](http://localhost:3001/docs)
+
+⚠️ Caso queira subir com o Nginx como gateway e única porta de entrada, basta executar o docker compose feito para tal propósito:
+
+```bash
+docker compose -f docker-compose.nginx.yml up -d
+```
 
 ---
 
