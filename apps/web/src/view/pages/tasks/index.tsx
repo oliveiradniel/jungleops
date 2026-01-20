@@ -34,10 +34,6 @@ export function Tasks() {
 
   const disabled = totalAll <= 0 || totalFiltered <= 0;
 
-  console.log(table.getRowCount());
-  console.log({ totalAll });
-  console.log({ totalFiltered });
-
   return (
     <div
       className={cn(
