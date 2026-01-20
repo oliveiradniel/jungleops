@@ -10,7 +10,7 @@ export const Route = createFileRoute('/_public')({
         : (search.redirect as string);
 
     return {
-      redirect: destination,
+      redirect: destination ?? 'tasks',
     };
   },
   beforeLoad: async ({ context, search }) => {
